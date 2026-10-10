@@ -4,8 +4,8 @@
 
 ## Now
 
-- **In progress:** nothing yet
-- **Next:** step 1, scaffold
+- **In progress:** step 1, scaffold (built; waiting for Jared's review)
+- **Next:** step 2, foundations
 - **Notes:** —
 
 ## Phase 0 — Setup
