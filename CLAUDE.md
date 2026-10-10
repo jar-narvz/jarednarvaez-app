@@ -4,7 +4,14 @@ Jared's personal portfolio site, being rebuilt from scratch. The design is decid
 
 ## Read first
 
-`docs/design.md` is the source of truth for principles and current state. Read it at the start of every session. Open the others only when the task needs them:
+This file is the only steering doc for building; follow it over anything that conflicts.
+
+Read these two at the start of every session:
+
+- `docs/design.md` — the main design doc: principles and current state, one line per decision.
+- `docs/build-plan.md` — what's done, what's in progress, and what's next.
+
+Open the others only when the task needs them:
 
 | File | Open when |
 |---|---|
@@ -13,16 +20,19 @@ Jared's personal portfolio site, being rebuilt from scratch. The design is decid
 | `docs/discovery.md` | Revisiting why a direction was chosen, or looking at reference sites. Early answers there (Fern palette, Manrope) are superseded. |
 | `docs/formal-design-doc.md` | Writing or reviewing the formal design doc sections 1–7. |
 
-The docs are a snapshot exported from Jared's Notion "personal website planning doc". Notion stays the source of truth while design is still happening. Don't edit `docs/` unless Jared asks; if code reveals a design question or a needed decision, raise it with him instead.
+The design docs are a snapshot exported from Jared's Notion "personal website planning doc". Notion stays the source of truth while design is still happening. Don't edit them unless Jared asks; if code reveals a design question or a needed decision, raise it with him instead.
+
+**The exception is `docs/build-plan.md`.** Keep its "Now" line current, and tick a step only after Jared has reviewed and approved it. Don't add, remove, or reorder steps without asking.
 
 ## How we work
 
-- **One step at a time.** Do only the step Jared asked for, then stop and tell him what changed and how to see it (which URL, what to scroll to). Never build ahead into the next section.
+- **One step at a time.** Do only the step Jared asked for (usually the next one in `docs/build-plan.md`), then stop and tell him what changed and how to see it (which URL, what to scroll to). Never build ahead into the next step.
+- **Build only what's designed.** If a step needs a section or detail that isn't designed yet (see "Not designed yet" in `docs/design.md`), stop and say so. Don't invent a layout to fill the gap; design happens with Jared first.
 - **Plan before coding** anything bigger than a small fix: say which files you'll touch and what you'll add, and wait for a yes.
 - **Options, then react.** When a design question isn't answered by the docs, don't pick for him. Build 2–3 options he can see in the browser (for example on a temporary `/lab` page), give a short lean with reasons, and let him choose.
 - **Never write copy in Jared's voice.** Hero line, bios, captions, taglines, project descriptions: use obvious placeholders like `[hero line]` or `[about paragraph]`. Copy comes in a later content pass with him.
 - **Use the specs exactly.** Colors, fonts, sizes and timings come from `docs/visual-system.md`. Don't invent new colors or "improve" values. If a needed value isn't specified, say so and propose one.
-- **Readability first.** Text must stay readable at every point of the sky. Check golden hour (the brightest sky) first, then dusk and night, on desktop and a phone-width viewport.
+- **Readability first.** Text must stay readable at every point of the sky. Check golden hour (the brightest sky) first, then dusk and night, on desktop and a phone-width viewport. Remind Jared to check visual steps on his real phone too.
 - **Everything traces back to golden hour.** Justify choices with the metaphor or a principle in `docs/design.md`. Flag choices that look inherited rather than decided.
 - **Keep what's rejected rejected.** Don't re-propose anything the decisions log rules out.
 

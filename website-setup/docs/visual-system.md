@@ -20,6 +20,19 @@ The site is one evening. The background is fixed and shifts as you scroll: golde
 
 Daytime keyframes (dawn, sunrise, midday, afternoon, deeper midnight) are not approved yet; see "Still open" in `design.md`.
 
+## Sky timing and modes
+
+- **Scroll timing (default mode):** the sky follows overall page scroll progress, not individual sections. Hero is always golden hour, connect is always full night, and everything between stretches to fit the page length.
+- **Three modes, the visitor's choice:**
+  1. **Scroll** (default): golden hour to night as you scroll.
+  2. **Pick the time:** a circular 24-hour dial plus light (midday) and dark (night) buttons.
+  3. **Local time:** a toggle that sets the sky to the visitor's clock.
+- **Nav controls:** a single light/dark button (sun and moon swap on click) with the local-time toggle next to it. Where the dial lives is still open.
+- **Returning to default:** when the visitor leaves scroll mode, a small "sunset" pill slides in beside those controls to return to it, and hides again once back. Leaving a fixed mode animates the sky back to golden hour.
+- **Fixed modes:** modes 2 and 3 keep the sky fixed while scrolling, with no forced stars at connect.
+- **Full 24-hour cycle** is needed for modes 2 and 3. Text fades navy ↔ cream at mid-tone sky moments (see Day theme under Color).
+- Golden hour stays the default and the heart of the metaphor; the rest of the day is something visitors can visit.
+
 ## Color
 
 - **Text:** crisp warm cream `#FFF6EA` with a soft plum shadow, over a gentle darker vignette on the left side of the sky.
