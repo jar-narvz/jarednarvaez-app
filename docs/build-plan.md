@@ -4,13 +4,13 @@
 
 ## Now
 
-- **In progress:** step 1, scaffold (built; waiting for Jared's review)
-- **Next:** step 2, foundations
+- **In progress:** step 2, foundations (built; waiting for Jared's review)
+- **Next:** step 3, static golden hour
 - **Notes:** —
 
 ## Phase 0 — Setup
 
-- [ ] **1. Scaffold.** `rebuild` branch; fresh Next.js (App Router, TypeScript, Tailwind, ESLint) replacing the old scaffold, keeping `CLAUDE.md` and `docs/`; Motion and MDX installed. Done when `npm run dev` shows a blank page and `npm run build` passes.
+- [x] **1. Scaffold.** `rebuild` branch; fresh Next.js (App Router, TypeScript, Tailwind, ESLint) replacing the old scaffold, keeping `CLAUDE.md` and `docs/`; Motion and MDX installed. Done when `npm run dev` shows a blank page and `npm run build` passes.
 - [ ] **2. Foundations.** Newsreader + Schibsted Grotesk via `next/font`; golden-hour color values as CSS variables; root layout, page title, placeholder favicon. Done when a test heading and paragraph render in the right fonts and colors.
 
 ## Phase 1 — Sky
