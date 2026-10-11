@@ -1,8 +1,9 @@
 // TEMP test content for step 2 (fonts and colors). Replaced by the hero in step 7.
 // Sizes borrow from the hero spec: name 72px, hero line 18px, 96px left margin.
+// Phone margin (24px below 768px wide) is a placeholder; the real one is decided in step 7.
 export default function Home() {
   return (
-    <main className="p-24">
+    <main className="px-6 py-24 md:px-24">
       <h1 className="font-serif text-[72px] leading-[0.95] tracking-[-0.045em]">
         [test heading] <em>italic</em>
       </h1>

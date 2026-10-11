@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Newsreader, Schibsted_Grotesk } from "next/font/google";
+import Sky from "@/components/Sky";
 import "./globals.css";
 
 // Headings and the hero name. Italic is loaded for the surname.
@@ -25,7 +26,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${newsreader.variable} ${schibstedGrotesk.variable} antialiased`}
     >
-      <body className="font-sans text-ink">{children}</body>
+      <body className="font-sans text-ink">
+        <Sky />
+        {children}
+      </body>
     </html>
   );
 }

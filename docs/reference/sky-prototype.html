@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sky Prototype Reference</title>
+<!--
+  PROTOTYPE REFERENCE — the golden hour sky Jared approved in the design chat (2026-10-08).
+  Recovered verbatim from the chat widget; only changes: standalone page wrapper,
+  play button uses text instead of icons, and default texture set to "Grain · lighter when bright"
+  (the one chosen; hybrid kept as backup).
+  All scene geometry is in a 680×380 design space (landscape). Body font here is Manrope;
+  the site has since chosen Schibsted Grotesk. Use this for the sky, not the type.
+-->
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&family=Manrope:wght@400&display=swap" rel="stylesheet">
+<style>
+body{margin:0;padding:24px;background:#16121f;color:#e9e2ee;font-family:system-ui,sans-serif;max-width:760px}
+button{background:#241d30;color:inherit;border:1px solid #3a3148;border-radius:6px;padding:6px 10px;font:inherit;font-size:13px;cursor:pointer}
+.tb{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0 0}
+.tb button[aria-pressed="true"]{background:#3a3148;border-color:#6a5a80}
+</style>
+</head>
+<body>
+<canvas id="cv" width="680" height="380" style="width:100%;display:block;border-radius:10px;image-rendering:pixelated"></canvas>
+<div class="tb">
+<button id="play" aria-label="Pause">Pause</button>
+<input type="range" id="tr" min="0" max="100" step="1" value="0" style="flex:1;min-width:160px" aria-label="Time of evening">
+<span id="lbl" style="font-size:13px;opacity:.7;min-width:84px">golden hour</span>
+</div>
+<div class="tb">
+<span style="font-size:13px;opacity:.7">Texture</span>
+<button data-m="H" aria-pressed="false">Hybrid · dither to grain</button>
+<button data-m="B" aria-pressed="true">Grain · lighter when bright</button>
+<button data-m="C" aria-pressed="false">Dither · calmer at night</button>
+</div>
+<script>
+const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+const W=680,H=380,LW=170,LH=95;
+const tiny=document.createElement('canvas');tiny.width=48;tiny.height=27;const tc=tiny.getContext('2d');
+const mid=document.createElement('canvas');mid.width=96;mid.height=54;const mc=mid.getContext('2d');
+const low=document.createElement('canvas');low.width=LW;low.height=LH;const lc=low.getContext('2d');
+const hx=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+const K=[
+{sky:['#3A2E62','#A4527A','#E8846A','#F7C27E','#FBD9A0'],cl:['#8C4A78','#FFD7A0','#F4A57A','#FFE0B0','#E8846A'],sun:'#FFE9B8',sy:268,w:['#A85A78','#5E3A66','#36284F'],land:'#7E4A6E',near:'#241A30',ref:1,st:0},
+{sky:['#1E1C44','#4E3270','#A24E78','#E2846E','#F0A070'],cl:['#3E2A5E','#7A3E6E','#A24E78','#C46A7A','#B85A70'],sun:'#F2A070',sy:300,w:['#5E3A66','#2E2448','#1E1A38'],land:'#4A2E5A',near:'#15111F',ref:.3,st:.3},
+{sky:['#0B0C20','#141634','#1C1D44','#2E2A56','#3A2C5E'],cl:['#1E1E40','#26244E','#2A2856','#262450','#2E2858'],sun:'#3A2C5E',sy:330,w:['#1E1A3A','#120F28','#0B0B1C'],land:'#251D3E',near:'#08070F',ref:0,st:1}];
+const mixc=(a,b,u)=>{const A=hx(a),B=hx(b);return `rgb(${Math.round(A[0]+(B[0]-A[0])*u)},${Math.round(A[1]+(B[1]-A[1])*u)},${Math.round(A[2]+(B[2]-A[2])*u)})`};
+function key(t){const i=t<.5?0:1,u=t<.5?t*2:(t-.5)*2,a=K[i],b=K[i+1];const f=(x,y)=>x+(y-x)*u;
+return{sky:a.sky.map((c,j)=>mixc(c,b.sky[j],u)),cl:a.cl.map((c,j)=>mixc(c,b.cl[j],u)),sun:mixc(a.sun,b.sun,u),sy:f(a.sy,b.sy),w:a.w.map((c,j)=>mixc(c,b.w[j],u)),land:mixc(a.land,b.land,u),near:mixc(a.near,b.near,u),ref:f(a.ref,b.ref),st:f(a.st,b.st)}}
+const ss=(t,a,b)=>{const x=Math.min(1,Math.max(0,(t-a)/(b-a)));return x*x*(3-2*x)};
+const clouds=[[150,80,190,22],[520,108,170,20],[300,150,210,22],[600,190,140,16],[420,210,190,16]];
+function scene(k,time){tc.setTransform(48/W,0,0,27/H,0,0);
+const g=tc.createLinearGradient(0,0,0,272);[0,.35,.55,.85,1].forEach((p,j)=>g.addColorStop(p,k.sky[j]));tc.fillStyle=g;tc.fillRect(0,0,W,272);
+clouds.forEach((c,j)=>{tc.fillStyle=k.cl[j];tc.beginPath();tc.ellipse(c[0]+Math.sin(time*.15+j)*14,c[1],c[2],c[3],0,0,6.3);tc.fill()});
+tc.fillStyle=k.sun;tc.beginPath();tc.arc(500,k.sy,56,0,6.3);tc.fill();
+tc.fillStyle=k.land;tc.beginPath();tc.moveTo(0,248);tc.bezierCurveTo(60,228,110,236,160,220);tc.bezierCurveTo(210,206,250,228,300,242);tc.bezierCurveTo(340,254,380,262,420,272);tc.lineTo(0,272);tc.fill();
+tc.fillStyle=k.w[0];tc.fillRect(0,272,W,108);tc.fillStyle=k.w[1];tc.fillRect(0,310,W,70);tc.fillStyle=k.w[2];tc.fillRect(0,345,W,35);
+tc.globalAlpha=k.ref;tc.fillStyle='#FFD9A0';tc.beginPath();tc.ellipse(500,320,40,60,0,0,6.3);tc.fill();tc.globalAlpha=1;
+tc.fillStyle=k.near;tc.beginPath();tc.moveTo(0,300);tc.bezierCurveTo(40,290,70,296,110,284);tc.bezierCurveTo(150,272,180,282,220,300);tc.bezierCurveTo(250,314,270,340,290,380);tc.lineTo(0,380);tc.fill();
+const v=tc.createRadialGradient(100,150,0,100,150,380);v.addColorStop(0,'rgba(42,22,48,.45)');v.addColorStop(1,'rgba(42,22,48,0)');tc.fillStyle=v;tc.fillRect(0,0,W,H);
+mc.imageSmoothingEnabled=true;mc.drawImage(tiny,0,0,96,54);lc.imageSmoothingEnabled=true;lc.drawImage(mid,0,0,LW,LH)}
+const bay=[0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5];
+const stars=[];for(let i=0;i<46;i++)stars.push([Math.floor(Math.random()*LW),Math.floor(Math.random()*46),Math.random()*6.28,.5+Math.random()*.5]);
+const grains=[];for(let f=0;f<5;f++){const c=document.createElement('canvas');c.width=340;c.height=190;const x=c.getContext('2d'),d=x.createImageData(340,190);for(let i=0;i<d.data.length;i+=4){const v=Math.random()*255;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255}x.putImageData(d,0,0);grains.push(c)}
+let mode='B',t=0,playing=true,dir=1,last=performance.now(),gf=0,gt=0;
+function ditherW(t){if(mode==='H')return 1-ss(t,.4,.85);if(mode==='C')return 1;return 0}
+function levels(t){return mode==='C'?6+12*ss(t,.4,1):6}
+function grainA(t){if(mode==='H')return .05+.17*ss(t,.35,.9);if(mode==='B')return .07+.15*ss(t,.2,.9);return 0}
+function texture(k,time){const im=lc.getImageData(0,0,LW,LH),d=im.data,w=ditherW(t);
+if(w>0.01){const st=255/levels(t);for(let y=0;y<LH;y++)for(let x=0;x<LW;x++){const i=(y*LW+x)*4,b=(bay[(y%4)*4+x%4]/16-.5)*st;for(let c=0;c<3;c++){const o=d[i+c],q=Math.round((o+b)/st)*st;d[i+c]=o+(q-o)*w}}}
+if(k.st>0)stars.forEach(s=>{const a=k.st*s[3]*(.6+.4*Math.sin(time*1.8+s[2]));const i=(s[1]*LW+s[0])*4;for(let c=0;c<3;c++)d[i+c]=d[i+c]*(1-a)+[255,241,222][c]*a});
+lc.putImageData(im,0,0)}
+const lb=document.getElementById('lbl'),tr=document.getElementById('tr'),pb=document.getElementById('play');
+function phase(t){return t<.25?'golden hour':t<.55?'sunset':t<.8?'dusk':'night'}
+function draw(now){const dt=(now-last)/1000;last=now;const time=now/1000;
+if(playing){t+=dir*dt/9;if(t>1){t=1;dir=-1}if(t<0){t=0;dir=1}tr.value=Math.round(t*100)}
+const k=key(t);scene(k,time);texture(k,time);
+ctx.imageSmoothingEnabled=false;ctx.drawImage(low,0,0,W,H);
+const ga=grainA(t);if(ga>0){gt+=dt;if(gt>.07){gt=0;gf=(gf+1)%5}ctx.save();ctx.globalAlpha=ga;ctx.globalCompositeOperation='overlay';ctx.drawImage(grains[gf],0,0,W,H);ctx.restore()}
+ctx.save();ctx.shadowColor='rgba(42,18,40,.6)';ctx.shadowBlur=18;ctx.fillStyle='#FFF6EA';ctx.font='58px Newsreader, serif';ctx.fillText('Jared',40,138);ctx.font='italic 58px Newsreader, serif';ctx.fillText('Narvaez',40,194);ctx.font='12px Manrope, sans-serif';ctx.fillText('CS at UC Berkeley · [your line here]',42,222);ctx.restore();
+ctx.fillStyle='rgba(255,241,222,.85)';ctx.font='11px Manrope, sans-serif';ctx.fillText('jn',40,34);ctx.textAlign='right';ctx.fillText('Work    About    Résumé    Contact',640,34);ctx.textAlign='left';
+lb.textContent=phase(t);requestAnimationFrame(draw)}
+pb.onclick=()=>{playing=!playing;pb.textContent=playing?'Pause':'Play';pb.setAttribute('aria-label',playing?'Pause':'Play')};
+tr.oninput=()=>{t=tr.value/100;if(playing)pb.click()};
+document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{mode=b.dataset.m;document.querySelectorAll('[data-m]').forEach(x=>x.setAttribute('aria-pressed',x===b))});
+(document.fonts?document.fonts.load('58px Newsreader'):Promise.resolve()).finally(()=>requestAnimationFrame(draw));
+</script>
+</body>
+</html>

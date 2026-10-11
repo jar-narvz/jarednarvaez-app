@@ -11,6 +11,7 @@
   --ink: var(--cream);
   --accent: var(--starlight);
   --underline: var(--sun-gold);
+  --grain: 0.07; /* film grain opacity; rises toward 0.22 at night */
 }
 
 /* `inline` makes utilities read the live variable directly, so `text-accent`
@@ -23,7 +24,7 @@
   --font-sans: var(--font-schibsted);
 }
 
-/* TEMP until step 3: flat golden-hour rose (#A4527A) standing in for the sky. */
+/* Golden-hour sky top. Only visible for the instant before the sky canvas draws. */
 body {
-  background: #a4527a;
+  background: #3a2e62;
 }

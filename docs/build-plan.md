@@ -4,20 +4,20 @@
 
 ## Now
 
-- **In progress:** step 2, foundations (built; waiting for Jared's review)
-- **Next:** step 3, static golden hour
+- **In progress:** step 3, static golden hour (done; waiting for Jared's commit)
+- **Next:** step 4, scroll blending
 - **Notes:** —
 
 ## Phase 0 — Setup
 
 - [x] **1. Scaffold.** `rebuild` branch; fresh Next.js (App Router, TypeScript, Tailwind, ESLint) replacing the old scaffold, keeping `CLAUDE.md` and `docs/`; Motion and MDX installed. Done when `npm run dev` shows a blank page and `npm run build` passes.
-- [ ] **2. Foundations.** Newsreader + Schibsted Grotesk via `next/font`; golden-hour color values as CSS variables; root layout, page title, placeholder favicon. Done when a test heading and paragraph render in the right fonts and colors.
+- [x] **2. Foundations.** Newsreader + Schibsted Grotesk via `next/font`; golden-hour color values as CSS variables; root layout, page title, placeholder favicon. Done when a test heading and paragraph render in the right fonts and colors.
 
 ## Phase 1 — Sky
 
-- [ ] **3. Static golden hour.** The scene drawn with the tiny-canvas → blur → pixelate pipeline, golden hour only, no scrolling yet.
+- [ ] **3. Static golden hour.** The scene drawn with the tiny-canvas → blur → pixelate pipeline, golden hour only, no scrolling yet. Film grain moved here from step 5 at Jared's request (2026-10-11); the hybrid dither backup was compared and not chosen.
 - [ ] **4. Scroll blending.** Golden hour → dusk → night driven by overall scroll progress, writing live values (ink, accent, vignette, grain level) to CSS variables.
-- [ ] **5. Texture and motion.** Film grain building toward night, stars twinkling in at dusk, slow cloud drift.
+- [ ] **5. Texture and motion.** Stars twinkling in at dusk, slow cloud drift. (Grain itself moved to step 3; its build toward night comes with step 4's grain level.)
 
 ## Phase 2 — Designed sections
 
