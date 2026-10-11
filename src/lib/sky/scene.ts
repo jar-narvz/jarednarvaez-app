@@ -1,6 +1,7 @@
 // The coast scene, ported from the prototype's `scene()` (docs/reference/sky-prototype.html).
 // Everything is in the prototype's 680×380 design space; render.ts scales it down.
 
+import { withAlpha } from "./blend";
 import type { SkyKeyframe } from "./palette";
 
 /** A scene the render pipeline can draw: its design-space size and how to paint it. */
@@ -26,6 +27,23 @@ const CLOUDS: [number, number, number, number][] = [
   [600, 190, 140, 16],
   [420, 210, 190, 16],
 ];
+
+/** Radial vignette fading out from (x, y). Its color, strength and reach come from the keyframe. */
+function drawVignette(
+  ctx: CanvasRenderingContext2D,
+  k: SkyKeyframe,
+  x: number,
+  y: number,
+  radius: number,
+  width: number,
+  height: number,
+) {
+  const vignette = ctx.createRadialGradient(x, y, 0, x, y, radius * k.vignetteReach);
+  vignette.addColorStop(0, withAlpha(k.vignette, k.vignetteStrength));
+  vignette.addColorStop(1, withAlpha(k.vignette, 0));
+  ctx.fillStyle = vignette;
+  ctx.fillRect(0, 0, width, height);
+}
 
 function drawCoast(ctx: CanvasRenderingContext2D, k: SkyKeyframe) {
   const sky = ctx.createLinearGradient(0, 0, 0, HORIZON);
@@ -82,11 +100,7 @@ function drawCoast(ctx: CanvasRenderingContext2D, k: SkyKeyframe) {
   ctx.fill();
 
   // Plum vignette behind the name, so text stays readable.
-  const vignette = ctx.createRadialGradient(100, 150, 0, 100, 150, 380);
-  vignette.addColorStop(0, "rgba(42,22,48,.45)");
-  vignette.addColorStop(1, "rgba(42,22,48,0)");
-  ctx.fillStyle = vignette;
-  ctx.fillRect(0, 0, W, H);
+  drawVignette(ctx, k, 100, 150, 380, W, H);
 }
 
 export const coastScene: SkyScene = { width: W, height: H, draw: drawCoast };
@@ -113,10 +127,10 @@ function drawTallCoast(ctx: CanvasRenderingContext2D, k: SkyKeyframe) {
     ctx.fill();
   });
 
-  // Sits 4 above the horizon, like the landscape sun (268 vs 272).
+  // Same height relative to the horizon as the landscape sun, so it sets the same way.
   ctx.fillStyle = k.sun;
   ctx.beginPath();
-  ctx.arc(SUN_X * NARROW, T_HORIZON - 4, 44, 0, FULL_TURN);
+  ctx.arc(SUN_X * NARROW, k.sunY + DROP, 44, 0, FULL_TURN);
   ctx.fill();
 
   ctx.fillStyle = k.land;
@@ -151,11 +165,7 @@ function drawTallCoast(ctx: CanvasRenderingContext2D, k: SkyKeyframe) {
   ctx.lineTo(0, TH);
   ctx.fill();
 
-  const vignette = ctx.createRadialGradient(56, 300, 0, 56, 300, 300);
-  vignette.addColorStop(0, "rgba(42,22,48,.45)");
-  vignette.addColorStop(1, "rgba(42,22,48,0)");
-  ctx.fillStyle = vignette;
-  ctx.fillRect(0, 0, TW, TH);
+  drawVignette(ctx, k, 56, 300, 300, TW, TH);
 }
 
 export const tallCoastScene: SkyScene = { width: TW, height: TH, draw: drawTallCoast };

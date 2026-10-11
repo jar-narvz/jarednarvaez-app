@@ -15,10 +15,16 @@ const PIXEL = 4;
 /** Tiny-canvas pixels per design unit: the prototype draws 680 units into 48 pixels. */
 const TINY_PER_UNIT = 48 / 680;
 
-function canvas(width: number, height: number) {
-  const c = document.createElement("canvas");
-  c.width = Math.max(1, Math.round(width));
-  c.height = Math.max(1, Math.round(height));
+// Scratch canvases, reused between redraws: the sky redraws on every scroll frame.
+let tiny: HTMLCanvasElement | undefined;
+let mid: HTMLCanvasElement | undefined;
+
+/** Resizes `c` only when needed: changing a canvas's size wipes and reallocates it. */
+function sized(c: HTMLCanvasElement, width: number, height: number) {
+  const w = Math.max(1, Math.round(width));
+  const h = Math.max(1, Math.round(height));
+  if (c.width !== w) c.width = w;
+  if (c.height !== h) c.height = h;
   return c;
 }
 
@@ -42,7 +48,7 @@ export function renderSky(
   const v = view(scene, width, height);
 
   // 1. Tiny canvas: the visible part of the scene at ~48×27.
-  const tiny = canvas(v.w * TINY_PER_UNIT, v.h * TINY_PER_UNIT);
+  tiny = sized(tiny ?? document.createElement("canvas"), v.w * TINY_PER_UNIT, v.h * TINY_PER_UNIT);
   const tc = tiny.getContext("2d")!;
   const sx = tiny.width / v.w;
   const sy = tiny.height / v.h;
@@ -50,13 +56,12 @@ export function renderSky(
   scene.draw(tc, k);
 
   // 2. Blur: ×2 with smoothing, then up to the low-res canvas with smoothing.
-  const mid = canvas(tiny.width * 2, tiny.height * 2);
+  mid = sized(mid ?? document.createElement("canvas"), tiny.width * 2, tiny.height * 2);
   const mc = mid.getContext("2d")!;
   mc.imageSmoothingEnabled = true;
   mc.drawImage(tiny, 0, 0, mid.width, mid.height);
 
-  target.width = Math.ceil(width / PIXEL);
-  target.height = Math.ceil(height / PIXEL);
+  sized(target, Math.ceil(width / PIXEL), Math.ceil(height / PIXEL));
   target.style.width = `${target.width * PIXEL}px`;
   target.style.height = `${target.height * PIXEL}px`;
   const lc = target.getContext("2d")!;
