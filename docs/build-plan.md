@@ -4,8 +4,8 @@
 
 ## Now
 
-- **In progress:** nothing; step 5 done
-- **Next:** step 6, nav (confirm which links it holds first)
+- **In progress:** nothing; step 6 done
+- **Next:** step 7, hero
 - **Notes:** —
 
 ## Phase 0 — Setup
@@ -21,7 +21,7 @@
 
 ## Phase 2 — Designed sections
 
-- [ ] **6. Nav.** Quiet, top-right, per the hero spec. Confirm which links it holds before building.
+- [x] **6. Nav.** Quiet, top-right, per the hero spec. Links: about · experience · projects · résumé · contact. Hides on scroll down, returns on scroll up; full-screen menu on phones; sky controls are inert placeholders until Phase 3.
 - [ ] **7. Hero.** Portrait, stacked name, hero line, "currently" line with sparkle, left vignette. Placeholder copy.
 - [ ] **8. Intro.** Label, lead, paragraph, quick-facts row (2×2 on phones). Placeholder copy.
 - [ ] **9. Tech stack.** Header plus two looping pill rows, edge fade, pause on hover. Placeholder list.
