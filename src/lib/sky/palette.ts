@@ -19,6 +19,8 @@ export type SkyKeyframe = {
   near: string;
   /** Opacity of the sun's reflection on the water. */
   reflection: number;
+  /** How bright the stars are, 0–1 (the prototype's `st`). Each star's own brightness and twinkle multiply this. */
+  stars: number;
   /** Vignette behind the text, painted into the sky so it's blurred and pixelated with it. */
   vignette: string;
   vignetteStrength: number;
@@ -38,6 +40,7 @@ export const goldenHour: SkyKeyframe = {
   land: "#7E4A6E",
   near: "#241A30",
   reflection: 1,
+  stars: 0,
   ...EVENING_VIGNETTE,
 };
 
@@ -50,6 +53,7 @@ export const dusk: SkyKeyframe = {
   land: "#4A2E5A",
   near: "#15111F",
   reflection: 0.3,
+  stars: 0.3,
   ...EVENING_VIGNETTE,
 };
 
@@ -62,6 +66,7 @@ export const night: SkyKeyframe = {
   land: "#251D3E",
   near: "#08070F",
   reflection: 0,
+  stars: 1,
   ...EVENING_VIGNETTE,
 };
 

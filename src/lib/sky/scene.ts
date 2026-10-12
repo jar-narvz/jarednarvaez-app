@@ -4,11 +4,13 @@
 import { withAlpha } from "./blend";
 import type { SkyKeyframe } from "./palette";
 
-/** A scene the render pipeline can draw: its design-space size and how to paint it. */
+/** A scene the render pipeline can draw: its design-space size and how to paint it at `time` (seconds). */
 export type SkyScene = {
   width: number;
   height: number;
-  draw: (ctx: CanvasRenderingContext2D, k: SkyKeyframe) => void;
+  /** Bottom of the star band, in design units. Stars fill the sky from the top down to here. */
+  starBand: number;
+  draw: (ctx: CanvasRenderingContext2D, k: SkyKeyframe, time: number) => void;
 };
 
 const W = 680;
@@ -19,7 +21,11 @@ const SKY_STOPS = [0, 0.35, 0.55, 0.85, 1];
 
 const SUN_X = 500;
 
-// [x, y, radiusX, radiusY] at their base positions. The slow drift comes in step 5.
+// The prototype's stars fill the top 46 of its 95 low-res rows: y=184 here, about the top
+// two-thirds of the sky above the horizon.
+const STAR_BAND = (46 / 95) * H;
+
+// [x, y, radiusX, radiusY] at their base positions; they sway side to side (cloudDrift).
 const CLOUDS: [number, number, number, number][] = [
   [150, 80, 190, 22],
   [520, 108, 170, 20],
@@ -27,6 +33,9 @@ const CLOUDS: [number, number, number, number][] = [
   [600, 190, 140, 16],
   [420, 210, 190, 16],
 ];
+
+/** How far cloud `i` has drifted sideways at `time`: up to 14 units, one sway every ~42s (the prototype's). */
+const cloudDrift = (time: number, i: number) => Math.sin(time * 0.15 + i) * 14;
 
 /** Radial vignette fading out from (x, y). Its color, strength and reach come from the keyframe. */
 function drawVignette(
@@ -45,7 +54,7 @@ function drawVignette(
   ctx.fillRect(0, 0, width, height);
 }
 
-function drawCoast(ctx: CanvasRenderingContext2D, k: SkyKeyframe) {
+function drawCoast(ctx: CanvasRenderingContext2D, k: SkyKeyframe, time: number) {
   const sky = ctx.createLinearGradient(0, 0, 0, HORIZON);
   SKY_STOPS.forEach((stop, i) => sky.addColorStop(stop, k.sky[i]));
   ctx.fillStyle = sky;
@@ -54,7 +63,7 @@ function drawCoast(ctx: CanvasRenderingContext2D, k: SkyKeyframe) {
   CLOUDS.forEach(([x, y, rx, ry], i) => {
     ctx.fillStyle = k.clouds[i];
     ctx.beginPath();
-    ctx.ellipse(x, y, rx, ry, 0, 0, FULL_TURN);
+    ctx.ellipse(x + cloudDrift(time, i), y, rx, ry, 0, 0, FULL_TURN);
     ctx.fill();
   });
 
@@ -103,7 +112,7 @@ function drawCoast(ctx: CanvasRenderingContext2D, k: SkyKeyframe) {
   drawVignette(ctx, k, 100, 150, 380, W, H);
 }
 
-export const coastScene: SkyScene = { width: W, height: H, draw: drawCoast };
+export const coastScene: SkyScene = { width: W, height: H, starBand: STAR_BAND, draw: drawCoast };
 
 // Portrait version for phones (option C, chosen 2026-10-11). The same coast re-laid in a tall
 // 380×760 space: x narrowed (×380/680), the sky stretched (horizon at 600 instead of 272),
@@ -114,7 +123,7 @@ const T_HORIZON = 600;
 const NARROW = TW / W;
 const DROP = T_HORIZON - HORIZON;
 
-function drawTallCoast(ctx: CanvasRenderingContext2D, k: SkyKeyframe) {
+function drawTallCoast(ctx: CanvasRenderingContext2D, k: SkyKeyframe, time: number) {
   const sky = ctx.createLinearGradient(0, 0, 0, T_HORIZON);
   SKY_STOPS.forEach((stop, i) => sky.addColorStop(stop, k.sky[i]));
   ctx.fillStyle = sky;
@@ -123,7 +132,9 @@ function drawTallCoast(ctx: CanvasRenderingContext2D, k: SkyKeyframe) {
   CLOUDS.forEach(([x, y, rx, ry], i) => {
     ctx.fillStyle = k.clouds[i];
     ctx.beginPath();
-    ctx.ellipse(x * NARROW, y * (T_HORIZON / HORIZON), rx * NARROW, ry, 0, 0, FULL_TURN);
+    // The drift narrows with x, so the sway stays in proportion.
+    const cx = (x + cloudDrift(time, i)) * NARROW;
+    ctx.ellipse(cx, y * (T_HORIZON / HORIZON), rx * NARROW, ry, 0, 0, FULL_TURN);
     ctx.fill();
   });
 
@@ -168,4 +179,10 @@ function drawTallCoast(ctx: CanvasRenderingContext2D, k: SkyKeyframe) {
   drawVignette(ctx, k, 56, 300, 300, TW, TH);
 }
 
-export const tallCoastScene: SkyScene = { width: TW, height: TH, draw: drawTallCoast };
+// Stars fill the same share of the sky as on desktop, measured from the top down to the horizon.
+export const tallCoastScene: SkyScene = {
+  width: TW,
+  height: TH,
+  starBand: STAR_BAND * (T_HORIZON / HORIZON),
+  draw: drawTallCoast,
+};

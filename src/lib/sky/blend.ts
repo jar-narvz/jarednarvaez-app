@@ -42,6 +42,7 @@ function mixKeyframes(a: SkyKeyframe, b: SkyKeyframe, u: number): SkyKeyframe {
     land: mixColor(a.land, b.land, u),
     near: mixColor(a.near, b.near, u),
     reflection: mix(a.reflection, b.reflection, u),
+    stars: mix(a.stars, b.stars, u),
     vignette: mixColor(a.vignette, b.vignette, u),
     vignetteStrength: mix(a.vignetteStrength, b.vignetteStrength, u),
     vignetteReach: mix(a.vignetteReach, b.vignetteReach, u),

@@ -1,7 +1,8 @@
 // The render pipeline (docs/visual-system.md → Prototype reference):
 //   1. draw the scene on a tiny canvas (~48×27)
 //   2. enlarge ×2 with smoothing on, then to the low-res canvas with smoothing on (this is the blur)
-//   3. the browser enlarges the low-res canvas ×4 with smoothing off (`image-rendering: pixelated`
+//   3. stars go straight onto the low-res canvas, unblurred, one pixel each (stars.ts)
+//   4. the browser enlarges the low-res canvas ×4 with smoothing off (`image-rendering: pixelated`
 //      on the canvas), which makes the ~4px squares.
 //
 // The prototype's low-res canvas was a fixed 170×95, shown 680px wide (4px squares). Here it's
@@ -9,6 +10,7 @@
 
 import type { SkyKeyframe } from "./palette";
 import type { SkyScene } from "./scene";
+import { drawStars } from "./stars";
 
 /** Size of one visible sky pixel, in CSS pixels. */
 const PIXEL = 4;
@@ -36,13 +38,17 @@ function view(scene: SkyScene, width: number, height: number) {
   return { x: (scene.width - w) / 2, y: (scene.height - h) / 2, w, h };
 }
 
-/** Draws keyframe `k` of `scene` onto `target`, sized to cover a width × height area (CSS pixels). */
+/**
+ * Draws keyframe `k` of `scene` onto `target`, sized to cover a width × height area (CSS pixels).
+ * `time` (seconds) moves the clouds and the star twinkle.
+ */
 export function renderSky(
   target: HTMLCanvasElement,
   width: number,
   height: number,
   scene: SkyScene,
   k: SkyKeyframe,
+  time: number,
 ) {
   if (width <= 0 || height <= 0) return;
   const v = view(scene, width, height);
@@ -53,7 +59,7 @@ export function renderSky(
   const sx = tiny.width / v.w;
   const sy = tiny.height / v.h;
   tc.setTransform(sx, 0, 0, sy, -v.x * sx, -v.y * sy);
-  scene.draw(tc, k);
+  scene.draw(tc, k, time);
 
   // 2. Blur: ×2 with smoothing, then up to the low-res canvas with smoothing.
   mid = sized(mid ?? document.createElement("canvas"), tiny.width * 2, tiny.height * 2);
@@ -68,5 +74,9 @@ export function renderSky(
   lc.imageSmoothingEnabled = true;
   lc.drawImage(mid, 0, 0, target.width, target.height);
 
-  // 3. Pixelate: done by the browser via `image-rendering: pixelated` on the target canvas.
+  // 3. Stars, in the rows of the low-res canvas that show the scene's star band.
+  const starRows = Math.round(((scene.starBand - v.y) / v.h) * target.height);
+  drawStars(lc, target.width, Math.max(0, starRows), k.stars, time);
+
+  // 4. Pixelate: done by the browser via `image-rendering: pixelated` on the target canvas.
 }

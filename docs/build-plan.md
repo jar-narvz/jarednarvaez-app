@@ -4,8 +4,8 @@
 
 ## Now
 
-- **In progress:** step 4, scroll blending (built; waiting for Jared's review)
-- **Next:** step 5, stars and cloud drift
+- **In progress:** step 5, stars and cloud drift (built; waiting for Jared's review)
+- **Next:** step 6, nav (confirm which links it holds first)
 - **Notes:** —
 
 ## Phase 0 — Setup
@@ -16,7 +16,7 @@
 ## Phase 1 — Sky
 
 - [x] **3. Static golden hour.** The scene drawn with the tiny-canvas → blur → pixelate pipeline, golden hour only, no scrolling yet. Film grain moved here from step 5 at Jared's request (2026-10-11); the hybrid dither backup was compared and not chosen.
-- [ ] **4. Scroll blending.** Golden hour → dusk → night driven by overall scroll progress, writing live values (ink, accent, grain level) to CSS variables. The vignette blends through the sky keyframes instead, so it stays blurred and pixelated with the sky (decided 2026-10-11).
+- [x] **4. Scroll blending.** Golden hour → dusk → night driven by overall scroll progress, writing live values (ink, accent, grain level) to CSS variables. The vignette blends through the sky keyframes instead, so it stays blurred and pixelated with the sky (decided 2026-10-11).
 - [ ] **5. Texture and motion.** Stars twinkling in at dusk, slow cloud drift. (Grain itself moved to step 3; its build toward night comes with step 4's grain level.)
 
 ## Phase 2 — Designed sections

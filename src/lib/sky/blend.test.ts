@@ -34,6 +34,13 @@ describe("keyframeAt", () => {
     expect(keyframeAt(1.3)).toEqual(night);
   });
 
+  it("fades the stars in: none at golden hour, faint at dusk, full at night", () => {
+    expect(keyframeAt(0).stars).toBe(0);
+    expect(keyframeAt(0.5).stars).toBe(0.3);
+    expect(keyframeAt(0.75).stars).toBeCloseTo(0.65);
+    expect(keyframeAt(1).stars).toBe(1);
+  });
+
   it("sets the sun fully below the horizon at night", () => {
     // Horizon at 272, sun radius 56: center at 330 puts the top edge at 274.
     expect(keyframeAt(1).sunY - 56).toBeGreaterThan(272);
