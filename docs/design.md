@@ -27,6 +27,7 @@ The main design doc: principles and current state, one line per decision. Full s
 - **Type:** Newsreader headings + Schibsted Grotesk body. Hero name stacked with italic surname, tight spacing.
 - **Motion:** slow cloud drift, stars twinkle in at dusk. Reduce Motion freezes grain, stars and clouds; scroll blending stays on.
 - **Hero:** one focal point, the name. Editorial left: small round portrait above the stacked name, hero line and "currently" line below, on the left vignette. Right side open to the sun. No medium or large images.
+- **Nav:** about · experience · projects · résumé · contact (lowercase), top-right. Hides while scrolling down and returns on scroll up; on phones a "menu" button opens the links full screen. Sky controls sit beside the links (placeholders until the sky modes are built).
 - **Intro:** lead + paragraph on the left, quick facts (studying, leading, outside code, based in) as a row of four short columns underneath, left of the sun.
 - **Tech stack section:** label + heading + one line on the left; two looping rows (languages, then frameworks/tools) of logo + name pills, centered margin to margin, edges fading out. Pause on hover.
 - **Build stack:** Next.js (App Router) + TypeScript, Tailwind + CSS variables, Canvas 2D sky, Motion, content as TS data files + MDX, on Vercel.

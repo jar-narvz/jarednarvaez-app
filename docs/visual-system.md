@@ -59,6 +59,7 @@ Daytime keyframes (dawn, sunrise, midday, afternoon, deeper midnight) are not ap
 - **Placement:** editorial left, text block starts at the 96px left margin, vertically centered (slightly above middle). Sits on the left-side vignette. Right side left open to the sun and horizon.
 - **Order (top to bottom):** small round portrait (~84px, 2px cream border) → stacked name → hero line → "currently" line with sparkle.
 - **Supporting text (prototype values, tune later):** hero line Schibsted Grotesk 18px, cream at ~78%; "currently" line 14px in the accent color; nav top-right, 14px weight 500, cream at ~82%, no monogram.
+- **Nav:** about · experience · projects · résumé · contact, lowercase, 28px apart; sky controls (16px line icons) after a wider gap; right edge on the 96px margin, 40px from the top (24px side margin on phones); hides on scroll down, returns on scroll up (250ms slide); phone menu full screen, Newsreader 36px links over plum `#2A1630` at 60% with blur.
 - **Rule:** the name is the only focal point. Nothing in the hero should be bigger or brighter than it.
 - **Phone margin:** 24px side margin, a placeholder until the hero step.
 
@@ -79,6 +80,8 @@ Daytime keyframes (dawn, sunrise, midday, afternoon, deeper midnight) are not ap
 ## Motion
 
 - Animation responds to the visitor; slow cloud drift; stars twinkle in at dusk; the accent sparkle twinkles slowly.
+- **Stars:** one crisp pixel each (a 4px square, drawn after the blur), warm white `#FFF1DE`, in the top ~two-thirds of the sky above the horizon on desktop and phones. About 1 in 240 low-res pixels holds a star (~165 on a 1440px-wide screen), in fixed positions. Brightness 0 → 0.3 → 1 from golden hour to night; each star twinkles between 20% and 100% of its own brightness (0.5–1).
+- **Cloud drift:** each cloud sways sideways up to 14 units (in the 680-wide design space), one sway about every 42s; narrowed in proportion on the phone coast.
 - **Reduce Motion:** grain freezes on a single frame; stars and cloud drift follow the same rule (shown, not moving). Scroll blending stays on, since it only moves when the visitor scrolls.
 
 ## Prototype reference (for building)
