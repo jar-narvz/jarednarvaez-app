@@ -99,9 +99,10 @@ function RoleRow({
   const detailsId = `experience-role-${index}`;
   const starDelayMs = sectionOpen ? delayMs - STAR_LEAD_MS : delayMs;
 
-  // Star: accent fill. Current twinkles; past roles sit at 55%; an open role is full and glows.
+  // Star: accent fill. Current twinkles; past roles sit at 55%; an open role is full and glows
+  // (the star-glow utility in globals.css).
   const starState = open
-    ? "opacity-100 drop-shadow-[0_0_4px_var(--accent)]"
+    ? "opacity-100 star-glow"
     : role.current
       ? ""
       : "opacity-55";

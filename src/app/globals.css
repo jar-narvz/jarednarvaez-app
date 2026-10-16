@@ -60,6 +60,13 @@
   }
 }
 
+/* Glow on an open role's timeline star: a tight core plus a wider soft halo, both in the accent.
+   Brighter than the spec's single 4px glow (Jared's pick, option B, 2026-10-16). */
+@utility star-glow {
+  filter: drop-shadow(0 0 3px var(--accent))
+    drop-shadow(0 0 8px color-mix(in srgb, var(--accent) 60%, transparent));
+}
+
 /* Reduce Motion: the sparkle and the tech stack rows stay still. */
 @media (prefers-reduced-motion: reduce) {
   .animate-twinkle,
