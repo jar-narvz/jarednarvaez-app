@@ -4,7 +4,7 @@
 
 ## Now
 
-- **In progress:** step 7, hero (built, waiting for Jared's review)
+- **In progress:** nothing; step 7 done
 - **Next:** step 8, intro
 - **Notes:** Plan re-aimed at the MVP on 2026-10-16 (see `design.md` → Launch plan). Goal: launch as soon as possible.
 
@@ -28,7 +28,7 @@ The whole home page in scroll mode, with real content, deployed. Everything afte
 Every section uses placeholder copy (`[like this]`) and its own data file, and ships with every animation listed for it in `visual-system.md` → Motion inventory. Specs: the matching section in `visual-system.md`; working reference: `docs/reference/home-mockup.html`.
 
 - [x] **6. Nav.** Quiet, top-right, per the hero spec. Links: about · experience · projects · résumé · contact. Hides on scroll down, returns on scroll up; full-screen menu on phones; sky controls are inert placeholders.
-- [ ] **7. Hero.** Portrait, stacked name, hero line, "currently" line with sparkle (twinkle), left vignette, plum text shadow, phone type sizes and the real phone margin. Replaces the temporary test content in `src/app/page.tsx`.
+- [x] **7. Hero.** Portrait, stacked name, hero line, "currently" line with sparkle (twinkle), left vignette, plum text shadow, phone type sizes and the real phone margin. Replaces the temporary test content in `src/app/page.tsx`.
 - [ ] **8. Intro.** Label, lead, paragraph, quick-facts row (2×2 on phones).
 - [ ] **9. Tech stack.** Header plus two looping pill rows, edge fade, pause on hover. Placeholder list.
 - [ ] **10. Experience.** Build the shared collapsible pieces here (round "+" toggle, section open/close with stagger, independent row expand, `inert` when closed, Reduce Motion) so projects can reuse them. Timeline with star markers, three placeholder roles.

@@ -138,11 +138,12 @@ function SkyControls() {
 }
 
 // Phone menu timings (Motion inventory): the backdrop fades in over 250ms and out over 200ms;
-// each link rises 10px and fades in over 350ms, one after another (60ms, then 40ms apart).
+// each link rises 10px and fades in, one after another. The links run a little slower than the
+// inventory's 350ms / 60 + 40·i ms, at Jared's request after testing on his phone (2026-10-16).
 const MENU_OPEN_S = 0.25;
 const MENU_CLOSE_S = 0.2;
-const LINK_S = 0.35;
-const linkDelay = (i: number) => (60 + 40 * i) / 1000;
+const LINK_S = 0.45;
+const linkDelay = (i: number) => (80 + 60 * i) / 1000;
 const CSS_EASE = [0.25, 0.1, 0.25, 1] as const; // CSS `ease`, as in the mockup
 
 // Phones: big links stacked on the left over a darkened, blurred sky.
