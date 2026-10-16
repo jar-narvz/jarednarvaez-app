@@ -81,18 +81,17 @@ All are logged in Notion (decisions log + visual system) and, except for the ste
 - **VS Code can overwrite files with a stale copy.** If a file "un-changes", check open editor tabs.
 
 **Not done yet / housekeeping**
-- **`docs/` is behind Notion:** the step 5 decisions (decisions log row + visual system "Stars" and "Cloud drift" bullets) were added to Notion on 2026-10-11 but `docs/` hasn't been re-exported yet.
 - **Step 4 scroll smoothness on a real phone:** Jared tested step 5 on his iPhone and found it smooth, which covers this; no separate step 4 check needed.
 - **Vercel** is unchecked (parked by Jared). Before relying on preview deploys: confirm the project is linked to `jar-narvz/jarednarvaez-app`, production branch = `main`, Node 22.x.
 - **Notion hub status line** still reads "2026-10-08: discovery" (left for Jared).
 - **Notion visual system page** lacks the "Sky timing and modes" section and day-theme color line that `docs/visual-system.md` keeps; copy them into Notion so the next export doesn't drop them.
-- **`CLAUDE.md`** still says Claude commits after each step; worth updating to match how we actually work.
 - **GitHub MCP connection** failed this session ("Authorization header is badly formatted"). Doesn't affect anything (Jared pushes with `git`), but fix it if GitHub tools are ever needed.
 - **Testing limitation:** Claude's Chrome automation tab counts as hidden, so animation and timers are paused there. It can only check snapshots and can't record performance; Jared's browser (DevTools → Performance, "reload and record") is the real test.
 
 ## Next steps
 
-1. **Step 6 — nav.** First confirm with Jared which links it holds. The prototype's "Work · About · Résumé · Contact" was never decided, and the sky controls (light/dark button, local-time toggle, "sunset" pill) are meant to live in the nav, though the sky modes themselves are Phase 3. Plan before building.
-2. **Steps 7–9 — hero, intro, tech stack** (the only designed sections). Hero brings the text shadow, phone type sizes and the real phone margin. Placeholder copy only.
-3. **Phase 3 sections need design first** (experience, projects, beyond code, fun, connect, sky modes 2–3, live widgets). If a session reaches one, stop and say it needs design.
-4. Before launch (Phase 4): content pass, real-phone and friends test, performance check (re-test the extension load hitch), accessibility, then Jared merges `rebuild` into `main`.
+Updated 2026-10-16: the plan was re-aimed at launching an MVP as soon as possible. `docs/` was re-exported from Notion with every section spec (experience, projects, beyond code, connect, 24-hour sky, motion inventory), and `docs/reference/home-mockup.html` was added.
+
+1. **Steps 7–13:** hero, intro, tech stack, experience (build the shared collapsible here), projects, beyond code, connect's contact block. All are designed now; specs are in `docs/visual-system.md`. Placeholder copy only.
+2. **Steps 14–16:** content pass, pre-launch checks (including hiding the nav's placeholder sky controls), go live.
+3. **After launch (Phase 4):** sky modes, leave a star, then the pages that still need design (/projects, project detail, /scrapbook), live widgets, easter eggs.

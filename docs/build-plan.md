@@ -6,7 +6,11 @@
 
 - **In progress:** nothing; step 6 done
 - **Next:** step 7, hero
-- **Notes:** —
+- **Notes:** Plan re-aimed at the MVP on 2026-10-16 (see `design.md` → Launch plan). Goal: launch as soon as possible.
+
+## MVP (decided 2026-10-16)
+
+The whole home page in scroll mode, with real content, deployed. Everything after Phase 3 waits until the site is live. Links to pages that don't exist yet ("view project →", "all projects →", "open the scrapbook →") stay hidden until those pages are built.
 
 ## Phase 0 — Setup
 
@@ -19,28 +23,32 @@
 - [x] **4. Scroll blending.** Golden hour → dusk → night driven by overall scroll progress, writing live values (ink, accent, grain level) to CSS variables. The vignette blends through the sky keyframes instead, so it stays blurred and pixelated with the sky (decided 2026-10-11).
 - [x] **5. Texture and motion.** Stars twinkling in at dusk, slow cloud drift. (Grain itself moved to step 3; its build toward night comes with step 4's grain level.)
 
-## Phase 2 — Designed sections
+## Phase 2 — Home page sections (MVP)
 
-- [x] **6. Nav.** Quiet, top-right, per the hero spec. Links: about · experience · projects · résumé · contact. Hides on scroll down, returns on scroll up; full-screen menu on phones; sky controls are inert placeholders until Phase 3.
-- [ ] **7. Hero.** Portrait, stacked name, hero line, "currently" line with sparkle, left vignette. Placeholder copy.
-- [ ] **8. Intro.** Label, lead, paragraph, quick-facts row (2×2 on phones). Placeholder copy.
+Every section uses placeholder copy (`[like this]`) and its own data file, and ships with every animation listed for it in `visual-system.md` → Motion inventory. Specs: the matching section in `visual-system.md`; working reference: `docs/reference/home-mockup.html`.
+
+- [x] **6. Nav.** Quiet, top-right, per the hero spec. Links: about · experience · projects · résumé · contact. Hides on scroll down, returns on scroll up; full-screen menu on phones; sky controls are inert placeholders.
+- [ ] **7. Hero.** Portrait, stacked name, hero line, "currently" line with sparkle (twinkle), left vignette, plum text shadow, phone type sizes and the real phone margin. Replaces the temporary test content in `src/app/page.tsx`.
+- [ ] **8. Intro.** Label, lead, paragraph, quick-facts row (2×2 on phones).
 - [ ] **9. Tech stack.** Header plus two looping pill rows, edge fade, pause on hover. Placeholder list.
+- [ ] **10. Experience.** Build the shared collapsible pieces here (round "+" toggle, section open/close with stagger, independent row expand, `inert` when closed, Reduce Motion) so projects can reuse them. Timeline with star markers, three placeholder roles.
+- [ ] **11. Projects.** Reuses step 10's collapsible. Numbered index, cells with screenshot focus pull, three placeholder projects from one data list (`featured`). "view project →" and "all projects →" hidden for the MVP.
+- [ ] **12. Beyond code.** Framed drag zone with crop marks, 6 placeholder prints, drag + drop tilt, drop-in on first view and reset, hint line; fixed scatter with no drag on phones. "open the scrapbook →" hidden for the MVP.
+- [ ] **13. Connect (contact block).** Label, heading, one line, email with copy pill ("copied" for 1.4s), LinkedIn · GitHub · Résumé links. Connect pinned to full night. No leave a star yet.
 
-## Phase 3 — Needs design first
+## Phase 3 — Launch
 
-Each of these gets designed (in the design chat, logged in Notion, re-exported to `docs/`) before it's built. If a session reaches one, stop and tell Jared it needs design.
+- [ ] **14. Content pass.** Real copy, portrait, photos and captions, the ~3 featured projects with screenshots, real tech stack list, roles and bullets, links, résumé PDF. Copy is written with Jared in the design chat, then dropped into the data files here.
+- [ ] **15. Pre-launch checks.** Hide the nav's placeholder sky controls (they come back with sky modes). Page metadata (title, description, social preview image). Accessibility pass (keyboard, focus, `alt` text, Reduce Motion). Performance on a real phone (re-test the extension load hitch). Jared tests on his phone and sends it to friends.
+- [ ] **16. Go live.** Confirm Vercel is linked to `jar-narvz/jarednarvaez-app` (production branch `main`, Node 22.x) and a preview deploy of `rebuild` works. Jared moves the old site to a `legacy` branch, merges `rebuild` into `main`, and connects the domain. Done when the live URL shows the new site.
 
-- [ ] Experience
-- [ ] Projects + project detail pages (MDX)
-- [ ] Beyond code (draggable scrapbook)
-- [ ] Fun / experimental / interactive
-- [ ] Connect (visitor globe / ticket)
-- [ ] Sky modes 2 and 3 (needs the full 24-hour keyframes approved)
-- [ ] Live widgets (now playing, location)
+## Phase 4 — After launch (in this order)
 
-## Phase 4 — Launch
+- [ ] **Sky modes 2 and 3.** Mini dial + full 24-hour dial, light/dark button, "my time", "sunset" pill, day text theme, transitions around the clock. Spec: `visual-system.md` → 24-hour sky.
+- [ ] **Leave a star.** Storage, `/api/stars`, pixel-cross stars in the sky canvas, placing and hover in connect, privacy rules. Spec: `visual-system.md` → Connect. Pick the storage service with Jared first.
+- [ ] **/projects page + project detail pages (MDX).** Needs design first. Then turn on "view project →" and "all projects →".
+- [ ] **/scrapbook page.** Needs design first. Then turn on "open the scrapbook →".
+- [ ] **Live widgets** (now playing, location) in the hero "currently" line. Needs design first.
+- [ ] **Easter eggs.** Needs design first.
 
-- [ ] Content pass: real copy, photos, tech stack list
-- [ ] Test on a real phone and send to friends
-- [ ] Performance check (sky smoothness on phones), accessibility, page metadata
-- [ ] Merge `rebuild` into `main` and deploy on Vercel
+If a session reaches anything marked "needs design first", stop and tell Jared it needs design.

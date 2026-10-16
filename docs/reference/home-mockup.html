@@ -1,0 +1,530 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Golden Hour Homepage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&family=Schibsted+Grotesk:wght@400;500&display=swap">
+<style>
+/* Layout: one evening. Fixed pixel sky behind everything, editorial left column on a plum vignette, sections in decided order. */
+:root{
+  --cream:#FFF6EA;
+  --plum:#2A1630;
+  --ink:#3A2840;
+  --gold:#FFD48A;
+  --starlight:#E3E8FF;
+  --accent:#E3E8FF;
+  --ink:#FFF6EA;
+  --inkrgb:255,246,234;
+  --tint:42,22,48;
+  --uline:#FFD48A;
+  --night:#141634;
+  --display:'Newsreader',Georgia,'Times New Roman',serif;
+  --body:'Schibsted Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --margin:clamp(24px,6.7vw,96px);
+  --shadow:0 1px 12px rgba(42,22,48,.55);
+  --glow:42,22,48;
+  color-scheme:dark;
+}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--night);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+#sky{position:fixed;inset:0;width:100vw;height:100vh;image-rendering:pixelated;z-index:0;display:block}
+#vig,#vigDay{position:fixed;inset:0;z-index:1;pointer-events:none}
+#vig{background:linear-gradient(90deg,rgba(42,22,48,.45) 0%,rgba(42,22,48,.3) 38%,rgba(42,22,48,0) 72%)}
+#vigDay{opacity:0;background:linear-gradient(90deg,rgba(255,246,234,.72) 0%,rgba(255,246,234,.5) 45%,rgba(255,246,234,0) 88%)}
+main,footer{position:relative;z-index:2}
+.wrap{padding-inline:var(--margin)}
+.tx{text-shadow:var(--shadow)}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:1.5px solid var(--gold);outline-offset:3px;border-radius:4px}
+.sparkle{width:12px;height:12px;flex:none;display:inline-block}
+.twinkle{animation:tw 2.4s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:1}50%{opacity:.5}}
+.label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--accent);letter-spacing:.02em}
+.h2{font-family:var(--display);font-weight:400;font-size:clamp(32px,4vw,40px);line-height:1.1;letter-spacing:-.02em;margin:6px 0 0;text-wrap:balance}
+.ulink{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--uline);padding-bottom:1px;font-weight:500;font-size:15px;cursor:pointer;background:none;border-top:0;border-left:0;border-right:0}
+section{padding-block:clamp(72px,12vh,140px)}
+
+/* nav */
+#nav{position:fixed;top:0;right:0;left:0;z-index:20;display:flex;justify-content:flex-end;align-items:center;gap:40px;padding:calc(40px + env(safe-area-inset-top,0px)) var(--margin) 0;transition:transform .25s ease;pointer-events:none}
+#nav.hide:not(.dialopen){transform:translateY(-120%)}
+#nav>*{pointer-events:auto}
+.links{display:flex;gap:28px;font-size:14px;font-weight:500;text-shadow:var(--shadow)}
+.links a{text-decoration:none;opacity:.82;transition:opacity .2s}
+.links a:hover{opacity:1}
+.skyctl{display:flex;align-items:center;gap:12px}
+.icobtn{background:none;border:0;padding:4px;display:grid;place-items:center;cursor:pointer;opacity:.82;color:var(--ink);filter:drop-shadow(0 1px 6px rgba(var(--glow),.6))}
+.icobtn:hover,.icobtn[aria-pressed="true"]{opacity:1}
+.icobtn svg{width:16px;height:16px;animation:iconIn .35s cubic-bezier(.3,1.4,.5,1)}
+@keyframes iconIn{from{opacity:0;transform:rotate(-90deg) scale(.6)}to{opacity:1;transform:none}}
+#sunsetPill{font-size:12px;font-weight:500;padding:4px 10px;border-radius:99px;border:1px solid rgba(255,212,138,.55);background:rgba(var(--tint),.4);color:var(--gold);cursor:pointer;transform:translateX(8px);opacity:0;transition:opacity .3s,transform .3s}
+#sunsetPill.on{opacity:1;transform:none}
+#menuBtn{display:none;background:none;border:0;font-size:14px;font-weight:500;cursor:pointer;text-shadow:var(--shadow)}
+#dialPanel{position:absolute;right:var(--margin);top:calc(100% + 10px);display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--ink);text-shadow:var(--shadow);transform-origin:top right;animation:dialIn .45s cubic-bezier(.3,1.3,.5,1)}
+@keyframes dialIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+#dialPanel.closing{animation:dialOut .22s ease-in forwards}
+@keyframes dialOut{to{transform:scale(0);opacity:0}}
+#dial{touch-action:none;cursor:grab;display:block;filter:drop-shadow(0 1px 8px rgba(var(--glow),.5))}
+.dbtns{display:flex;gap:8px}
+.dbtns button{font-size:12px;font-weight:500;padding:4px 11px;border-radius:99px;border:1px solid rgba(var(--inkrgb),.4);background:rgba(var(--tint),.35);cursor:pointer}
+.dbtns button[aria-pressed="true"]{border-color:var(--uline);color:var(--accent)}
+.dbtns .ghost{background:none;border-color:transparent;opacity:.8}
+@media (max-width:760px){#menuBtn{order:0}}
+#menu{position:fixed;inset:0;z-index:30;background:rgba(42,22,48,.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:flex;flex-direction:column;justify-content:center;gap:12px;padding-inline:var(--margin)}
+#menu a{font-family:var(--display);font-size:36px;text-decoration:none;animation:menuLink .35s ease both}
+#menu{animation:menuIn .25s ease}
+#menu.closing{animation:menuOut .2s ease forwards}
+@keyframes menuIn{from{opacity:0}to{opacity:1}}@keyframes menuOut{to{opacity:0}}
+@keyframes menuLink{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+#menu .close{position:absolute;top:calc(40px + env(safe-area-inset-top,0px));right:var(--margin);background:none;border:0;font-size:14px;font-weight:500;cursor:pointer}
+@media (max-width:760px){.links,#nav .skyctl .lbl{display:none}#menuBtn{display:block}#nav{gap:18px;padding-top:calc(24px + env(safe-area-inset-top,0px))}}
+
+/* hero */
+#hero{min-height:100svh;display:flex;align-items:center;padding-block:120px 80px}
+.hero-in{display:flex;flex-direction:column;gap:22px;max-width:640px;transform:translateY(-4vh)}
+.portrait{width:84px;height:84px;border-radius:50%;border:2px solid var(--cream);color:var(--cream);background:radial-gradient(circle at 35% 35%,#F7C27E,#A4527A 60%,#3A2E62);display:grid;place-items:center;font-family:var(--display);font-size:28px;box-shadow:0 6px 20px rgba(42,22,48,.4)}
+.name{font-family:var(--display);font-weight:400;font-size:clamp(52px,7.5vw,72px);line-height:.95;letter-spacing:-.045em;margin:0}
+.name em{display:block;font-style:italic}
+.heroline{font-size:18px;opacity:.78;max-width:46ch;margin:0}
+.currently{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--accent);margin:0}
+
+/* intro */
+.lead{font-family:var(--display);font-size:clamp(26px,3vw,32px);line-height:1.25;letter-spacing:-.015em;max-width:30ch;margin:14px 0 0;text-wrap:balance}
+.lead u{text-decoration:none;border-bottom:1.5px solid var(--uline)}
+.para{max-width:62ch;line-height:1.65;margin:18px 0 0;opacity:.92}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;max-width:760px;margin-top:36px}
+.fact{border-top:1px solid rgba(var(--inkrgb),.4);padding-top:10px}
+.fact .k{font-size:13px;opacity:.72}
+.fact .v{font-size:15px;margin-top:2px}
+@media (max-width:640px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* tech */
+.techhead p{margin:10px 0 0;max-width:55ch;opacity:.9}
+.rows{margin-top:36px;display:flex;flex-direction:column;gap:22px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);overflow:hidden}
+.track{display:flex;gap:14px;width:max-content;animation:marq 42s linear infinite}
+.track.rev{animation-duration:48s;animation-direction:reverse}
+.rows:hover .track{animation-play-state:paused}
+@keyframes marq{to{transform:translateX(calc(-50% - 7px))}}
+.pill{display:flex;align-items:center;gap:10px;padding:10px 18px;border-radius:999px;border:1px solid rgba(var(--inkrgb),.38);background:rgba(var(--tint),.34);font-weight:500;font-size:18px;white-space:nowrap}
+.glyph{width:24px;height:24px;border-radius:6px;display:grid;place-items:center;font-size:11px;font-weight:500;background:rgba(var(--inkrgb),.14);border:1px solid rgba(var(--inkrgb),.25)}
+
+/* shared collapsible */
+.colhead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;max-width:640px}
+.tog{color:var(--ink);width:30px;height:30px;border-radius:50%;border:1px solid rgba(var(--inkrgb),.45);background:transparent;display:grid;place-items:center;cursor:pointer;flex:none;transition:transform .4s cubic-bezier(.3,1.4,.5,1),border-color .3s;position:relative}
+.tog::after{content:"";position:absolute;inset:-7px}
+.tog svg{width:12px;height:12px}
+.tog[aria-expanded="true"]{transform:rotate(45deg);border-color:var(--accent)}
+.grow{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s cubic-bezier(.4,0,.2,1)}
+.grow.open{grid-template-rows:1fr}
+.grow>div{overflow:hidden;min-height:0}
+
+/* experience */
+.rail{position:relative;margin-top:22px;padding-left:24px;max-width:560px}
+.rail .line{position:absolute;left:5px;top:22px;bottom:22px;width:1px;background:rgba(var(--inkrgb),.3);transform:scaleY(0);transform-origin:top;transition:transform .7s cubic-bezier(.4,0,.2,1)}
+.rail.on .line{transform:scaleY(1)}
+.role{position:relative;padding:10px 0;opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s ease}
+.rail.on .role{opacity:1;transform:none}
+.role .mk{position:absolute;left:-24px;top:17px;width:12px;height:12px;transform:scale(0);transition:transform .5s cubic-bezier(.3,1.6,.5,1)}
+.rail.on .role .mk{transform:scale(1)}
+.role .mk svg{display:block;width:12px;height:12px;transition:filter .3s,opacity .3s}
+.role.past .mk svg{opacity:.55}
+.role.cur .mk svg{animation:tw 2.4s ease-in-out infinite}
+.role.open .mk svg{opacity:1;filter:drop-shadow(0 0 4px var(--accent))}
+.rowtop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;cursor:pointer}
+.rt{font-weight:500;font-size:17px}
+.org{color:var(--accent)}
+.meta{font-size:14px;opacity:.75;font-variant-numeric:tabular-nums;letter-spacing:.02em;margin-top:2px}
+.bul ul{margin:8px 0 2px;padding-left:18px;font-size:15px;line-height:1.6;opacity:0;transform:translateY(-4px);transition:opacity .3s ease .1s,transform .3s ease .1s}
+.role.open .bul ul{opacity:.92;transform:none}
+
+/* projects */
+.plist{max-width:640px;margin-top:16px}
+.rule{height:1px;background:rgba(var(--inkrgb),.22);transform:scaleX(0);transform-origin:left;transition:transform .6s cubic-bezier(.4,0,.2,1)}
+.plist.on .rule{transform:scaleX(1)}
+.proj{opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s ease}
+.plist.on .proj{opacity:1;transform:none}
+.phd{display:grid;grid-template-columns:36px minmax(0,1fr) auto 30px;gap:14px;align-items:center;padding:14px 0;cursor:pointer}
+.pn{font-size:13px;opacity:.6;font-variant-numeric:tabular-nums}
+.pt{font-family:var(--display);font-size:clamp(24px,3vw,30px);letter-spacing:-.015em;line-height:1.15;transition:color .3s}
+.phd:hover .pt,.proj.open .pt{color:var(--accent)}
+.pm{font-size:13px;opacity:.7;text-align:right;line-height:1.4}
+.cell{display:flex;gap:18px;margin:2px 0 18px 50px;padding:14px;border-radius:14px;background:rgba(var(--tint),.34);border:1px solid rgba(var(--inkrgb),.3);opacity:0;transform:translateY(-4px);transition:opacity .3s ease .12s,transform .3s ease .12s}
+.proj.open .cell{opacity:1;transform:none}
+.shot{width:200px;aspect-ratio:16/10;max-width:100%;border-radius:8px;flex:none;filter:blur(5px) brightness(1.15);transition:filter .8s ease .2s;display:grid;place-items:center;font-size:12px;opacity:.95}
+.proj.open .shot{filter:none}
+.cell p{margin:0;font-size:15px;line-height:1.55}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.tag{font-size:12px;padding:3px 10px;border-radius:99px;border:1px solid rgba(var(--inkrgb),.38);background:rgba(var(--tint),.3)}
+.allp{margin-top:18px;opacity:0;transition:opacity .4s ease}
+.plist.on .allp{opacity:1}
+@media (max-width:640px){.phd{grid-template-columns:28px minmax(0,1fr) 30px}.pm{grid-column:2;grid-row:2;text-align:left}.cell{flex-direction:column;margin-left:0}.shot{width:100%}}
+
+/* beyond code */
+#zone{position:relative;height:520px;margin-top:8px}
+.zr{position:absolute;left:0;right:0;height:1px;background:rgba(var(--inkrgb),.28)}
+.cm{position:absolute;width:14px;height:14px;border:0 solid rgba(var(--inkrgb),.7)}
+.btext{position:absolute;left:28px;top:50%;transform:translateY(-50%);width:min(320px,80%);z-index:1}
+.btext p{margin:10px 0 14px;opacity:.9}
+.print{position:absolute;width:var(--w);background:var(--cream);padding:6px 6px 0;box-shadow:0 6px 16px rgba(30,10,30,.35);z-index:2;cursor:grab;touch-action:none;user-select:none;transition:box-shadow .2s,transform .3s cubic-bezier(.3,1.4,.5,1),opacity .3s}
+.print .img{aspect-ratio:5/4;display:grid;place-items:center;color:rgba(var(--inkrgb),.8);font-family:var(--display);font-style:italic;font-size:14px}
+.print .cap{font-family:var(--display);font-style:italic;font-size:14px;color:var(--ink);padding:6px 2px 9px}
+.print:hover{box-shadow:0 10px 22px rgba(30,10,30,.42)}
+.print.drag{cursor:grabbing;box-shadow:0 18px 32px rgba(30,10,30,.5);transition:box-shadow .2s}
+.print.pre{opacity:0}
+.hint{display:flex;justify-content:center;align-items:center;gap:8px;font-size:13px;opacity:.75;margin-top:16px}
+.hint button{background:none;border:0;border-bottom:1px solid var(--uline);color:var(--accent);cursor:pointer;padding:0}
+@media (max-width:760px){#zone{height:auto;padding-block:28px}.btext{position:relative;left:auto;top:auto;transform:none;width:auto;padding-inline:4px}.pile{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:24px}.print{position:relative;left:auto!important;top:auto!important;--w:clamp(110px,40vw,150px)!important;cursor:default}.hint{display:none}}
+
+/* connect */
+#contact{min-height:100svh;display:flex;align-items:center;position:relative}
+#contact.live{cursor:crosshair}
+.cblock{width:min(320px,100%);cursor:default;position:relative;z-index:3}
+.cblock p{margin:10px 0 0;opacity:.88}
+.mail{display:flex;align-items:center;gap:10px;margin-top:18px;font-weight:500;font-size:17px;flex-wrap:wrap}
+.copy{font-size:12px;color:var(--accent);border:1px solid var(--uline);border-radius:99px;padding:3px 10px;background:rgba(var(--tint),.3);cursor:pointer}
+.clinks{display:flex;gap:16px;margin-top:14px;font-size:14px}
+.clinks a{text-decoration:none;border-bottom:1px solid var(--uline);padding-bottom:1px}
+#starHint{position:absolute;right:var(--margin);bottom:48px;font-size:13px;opacity:.85;text-align:right;pointer-events:none;transition:opacity .4s}
+#starHint b{font-weight:500;color:var(--accent)}
+#tip,#youLbl{position:fixed;z-index:15;pointer-events:none;font-size:12px;white-space:nowrap;text-shadow:var(--shadow)}
+#tip{transform:translate(-50%,-170%);opacity:0;transition:opacity .2s}
+#tip.on{opacity:1}
+#youLbl{color:var(--accent);transform:translate(12px,-50%);font-size:13px}
+footer{padding:0 var(--margin) calc(28px + env(safe-area-inset-bottom,0px));font-size:12px;opacity:.6;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+#toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);z-index:40;background:rgba(42,22,48,.85);border:1px solid rgba(var(--inkrgb),.25);padding:8px 14px;border-radius:99px;font-size:13px;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){.track{animation:none}.twinkle,.role.cur .mk svg{animation:none}*{transition-duration:0s!important;transition-delay:0s!important}#dialPanel,#dialPanel.closing,#menu,#menu.closing,#menu a,.icobtn svg{animation:none!important}}
+</style>
+
+<canvas id="sky" aria-hidden="true"></canvas>
+<div id="vig" aria-hidden="true"></div><div id="vigDay" aria-hidden="true"></div>
+
+<nav id="nav" aria-label="Main">
+  <div class="links">
+    <a href="#about">about</a><a href="#experience">experience</a><a href="#projects">projects</a><a href="#" data-toast="Résumé link goes here">résumé</a><a href="#contact">contact</a>
+  </div>
+  <button id="menuBtn" type="button" aria-expanded="false" aria-controls="menu">menu</button>
+  <div class="skyctl">
+    <button id="sunsetPill" type="button" tabindex="-1">sunset</button>
+    <button class="icobtn" id="darkBtn" type="button" aria-pressed="false" aria-label="Switch to night sky">
+      <svg id="moonIco" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M13.5 9.8A5.8 5.8 0 0 1 6.2 2.5a5.8 5.8 0 1 0 7.3 7.3Z"/></svg>
+      <svg id="sunIco" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" hidden><circle cx="8" cy="8" r="3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6 13 13M3 13l1.4-1.4M11.6 4.4 13 3"/></svg>
+    </button>
+    <button class="icobtn" id="dialBtn" type="button" aria-expanded="false" aria-controls="dialPanel" aria-label="Open sky time dial">
+      <svg width="22" height="22" viewBox="0 0 48 48" style="width:22px;height:22px"><circle cx="24" cy="24" r="22" fill="rgba(var(--tint),.45)" stroke="rgba(var(--inkrgb),.6)" stroke-width="2.4"/><circle cx="24" cy="24" r="13" fill="none" stroke="currentColor" stroke-opacity=".55" stroke-width="2.4"/><circle id="mdot" cx="24" cy="11" r="5.5" fill="var(--accent)"/></svg>
+    </button>
+  </div>
+  <div id="dialPanel" hidden>
+    <svg id="dial" width="190" height="190" viewBox="0 0 190 190" role="slider" aria-label="Sky time" aria-valuemin="0" aria-valuemax="24" tabindex="0"><circle cx="95" cy="95" r="70" fill="none" stroke="currentColor" stroke-opacity=".45"/><line x1="95.0" y1="25.0" x2="95.0" y2="34.0" stroke="currentColor" stroke-opacity="0.8"/><line x1="113.1" y1="27.4" x2="111.8" y2="32.2" stroke="currentColor" stroke-opacity="0.4"/><line x1="130.0" y1="34.4" x2="127.5" y2="38.7" stroke="currentColor" stroke-opacity="0.4"/><line x1="144.5" y1="45.5" x2="141.0" y2="49.0" stroke="currentColor" stroke-opacity="0.4"/><line x1="155.6" y1="60.0" x2="151.3" y2="62.5" stroke="currentColor" stroke-opacity="0.4"/><line x1="162.6" y1="76.9" x2="157.8" y2="78.2" stroke="currentColor" stroke-opacity="0.4"/><line x1="165.0" y1="95.0" x2="156.0" y2="95.0" stroke="currentColor" stroke-opacity="0.8"/><line x1="162.6" y1="113.1" x2="157.8" y2="111.8" stroke="currentColor" stroke-opacity="0.4"/><line x1="155.6" y1="130.0" x2="151.3" y2="127.5" stroke="currentColor" stroke-opacity="0.4"/><line x1="144.5" y1="144.5" x2="141.0" y2="141.0" stroke="currentColor" stroke-opacity="0.4"/><line x1="130.0" y1="155.6" x2="127.5" y2="151.3" stroke="currentColor" stroke-opacity="0.4"/><line x1="113.1" y1="162.6" x2="111.8" y2="157.8" stroke="currentColor" stroke-opacity="0.4"/><line x1="95.0" y1="165.0" x2="95.0" y2="156.0" stroke="currentColor" stroke-opacity="0.8"/><line x1="76.9" y1="162.6" x2="78.2" y2="157.8" stroke="currentColor" stroke-opacity="0.4"/><line x1="60.0" y1="155.6" x2="62.5" y2="151.3" stroke="currentColor" stroke-opacity="0.4"/><line x1="45.5" y1="144.5" x2="49.0" y2="141.0" stroke="currentColor" stroke-opacity="0.4"/><line x1="34.4" y1="130.0" x2="38.7" y2="127.5" stroke="currentColor" stroke-opacity="0.4"/><line x1="27.4" y1="113.1" x2="32.2" y2="111.8" stroke="currentColor" stroke-opacity="0.4"/><line x1="25.0" y1="95.0" x2="34.0" y2="95.0" stroke="currentColor" stroke-opacity="0.8"/><line x1="27.4" y1="76.9" x2="32.2" y2="78.2" stroke="currentColor" stroke-opacity="0.4"/><line x1="34.4" y1="60.0" x2="38.7" y2="62.5" stroke="currentColor" stroke-opacity="0.4"/><line x1="45.5" y1="45.5" x2="49.0" y2="49.0" stroke="currentColor" stroke-opacity="0.4"/><line x1="60.0" y1="34.4" x2="62.5" y2="38.7" stroke="currentColor" stroke-opacity="0.4"/><line x1="76.9" y1="27.4" x2="78.2" y2="32.2" stroke="currentColor" stroke-opacity="0.4"/>
+      <text x="95" y="17" text-anchor="middle" font-size="10" fill="currentColor" opacity=".75">noon</text><text x="95" y="181" text-anchor="middle" font-size="10" fill="currentColor" opacity=".75">midnight</text><text x="19" y="98" text-anchor="end" font-size="10" fill="currentColor" opacity=".75">6a</text><text x="171" y="98" font-size="10" fill="currentColor" opacity=".75">6p</text>
+      <text id="dRead" x="95" y="93" text-anchor="middle" font-family="Newsreader,Georgia,serif" font-size="22" fill="currentColor"></text><text id="dName" x="95" y="111" text-anchor="middle" font-size="11" fill="currentColor" opacity=".8"></text>
+      <g id="dHand"><circle r="11" fill="var(--accent)"/><circle id="dHandC" r="5" fill="#FFF6EA"/></g></svg>
+    <div class="dbtns"><button type="button" id="myTime">my time</button><button type="button" id="dialClose" class="ghost">close</button></div>
+  </div>
+</nav>
+<div id="menu" hidden>
+  <button class="close" type="button" id="menuClose">close</button>
+  <a href="#about">about</a><a href="#experience">experience</a><a href="#projects">projects</a><a href="#" data-toast="Résumé link goes here">résumé</a><a href="#contact">contact</a>
+</div>
+
+<main>
+  <section id="hero" class="wrap">
+    <div class="hero-in tx">
+      <div class="portrait" aria-label="Portrait placeholder">JN</div>
+      <h1 class="name">Jared<em>Narvaez</em></h1>
+      <p class="heroline">Hero line in your own voice goes here, written in the content pass.</p>
+      <p class="currently"><svg class="sparkle twinkle" viewBox="-7 -7 14 14"><path d="M0,-6.5C.9,-1 1,-1 6.5,0C1,1 .9,.9 0,6.5C-.9,1 -1,1 -6.5,0C-1,-1 -.9,-.9 0,-6.5Z" fill="currentColor"/></svg>currently · live widget placeholder (now playing, location)</p>
+    </div>
+  </section>
+
+  <section id="about" class="wrap tx">
+    <div class="label"><svg class="sparkle" viewBox="-7 -7 14 14"><path d="M0,-6.5C.9,-1 1,-1 6.5,0C1,1 .9,.9 0,6.5C-.9,1 -1,1 -6.5,0C-1,-1 -.9,-.9 0,-6.5Z" fill="currentColor"/></svg>about</div>
+    <p class="lead">A lead sentence about you, with <u>one warm phrase</u> underlined.</p>
+    <p class="para">A short paragraph introducing who you are, what you study, and what you care about. This is placeholder text until the content pass, sized to show the line length and rhythm of the real thing.</p>
+    <div class="facts">
+      <div class="fact"><div class="k">studying</div><div class="v">CS + Data Science, UC Berkeley</div></div>
+      <div class="fact"><div class="k">leading</div><div class="v">External VP, PASAE</div></div>
+      <div class="fact"><div class="k">outside code</div><div class="v">Dance</div></div>
+      <div class="fact"><div class="k">based in</div><div class="v">Berkeley, CA</div></div>
+    </div>
+  </section>
+
+  <section id="tech">
+    <div class="wrap techhead tx">
+      <div class="label"><svg class="sparkle" viewBox="-7 -7 14 14"><path d="M0,-6.5C.9,-1 1,-1 6.5,0C1,1 .9,.9 0,6.5C-.9,1 -1,1 -6.5,0C-1,-1 -.9,-.9 0,-6.5Z" fill="currentColor"/></svg>tech stack</div>
+      <h2 class="h2">Tools I build with</h2>
+      <p>One line about the stack. Placeholder list below until the real one is chosen.</p>
+    </div>
+    <div class="wrap"><div class="rows tx" id="rows"></div></div>
+  </section>
+
+  <section id="experience" class="wrap tx">
+    <div class="colhead">
+      <div><div class="label"><svg class="sparkle" viewBox="-7 -7 14 14"><path d="M0,-6.5C.9,-1 1,-1 6.5,0C1,1 .9,.9 0,6.5C-.9,1 -1,1 -6.5,0C-1,-1 -.9,-.9 0,-6.5Z" fill="currentColor"/></svg>experience</div><h2 class="h2">Where I've worked</h2></div>
+      <button class="tog" id="expTog" type="button" aria-expanded="false" aria-controls="expBody" aria-label="Show experience"><svg viewBox="0 0 12 12"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.3" fill="none"/></svg></button>
+    </div>
+    <div class="grow" id="expBody"><div><div class="rail" id="rail"><div class="line"></div></div></div></div>
+  </section>
+
+  <section id="projects" class="wrap tx">
+    <div class="colhead">
+      <div><div class="label"><svg class="sparkle" viewBox="-7 -7 14 14"><path d="M0,-6.5C.9,-1 1,-1 6.5,0C1,1 .9,.9 0,6.5C-.9,1 -1,1 -6.5,0C-1,-1 -.9,-.9 0,-6.5Z" fill="currentColor"/></svg>projects</div><h2 class="h2">Things I've built</h2></div>
+      <button class="tog" id="projTog" type="button" aria-expanded="false" aria-controls="projBody" aria-label="Show projects"><svg viewBox="0 0 12 12"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.3" fill="none"/></svg></button>
+    </div>
+    <div class="grow" id="projBody"><div><div class="plist" id="plist"></div></div></div>
+  </section>
+
+  <section id="beyond" class="wrap">
+    <div id="zone">
+      <div class="zr" style="top:0"></div><div class="zr" style="bottom:0"></div>
+      <div class="cm" style="left:-6px;top:-6px;border-left-width:1px;border-top-width:1px"></div>
+      <div class="cm" style="right:-6px;top:-6px;border-right-width:1px;border-top-width:1px"></div>
+      <div class="cm" style="left:-6px;bottom:-6px;border-left-width:1px;border-bottom-width:1px"></div>
+      <div class="cm" style="right:-6px;bottom:-6px;border-right-width:1px;border-bottom-width:1px"></div>
+      <div class="btext tx">
+        <div class="label"><svg class="sparkle" viewBox="-7 -7 14 14"><path d="M0,-6.5C.9,-1 1,-1 6.5,0C1,1 .9,.9 0,6.5C-.9,1 -1,1 -6.5,0C-1,-1 -.9,-.9 0,-6.5Z" fill="currentColor"/></svg>beyond code</div>
+        <h2 class="h2">Off the clock</h2>
+        <p>A short intro line about who you are outside school and work.</p>
+        <button class="ulink" type="button" data-toast="The full scrapbook page comes later">open the scrapbook →</button>
+      </div>
+      <div class="pile" id="pile"></div>
+    </div>
+    <div class="hint tx"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 8V3.5a1 1 0 0 1 2 0V7m0-1.5a1 1 0 0 1 2 0V7m0-1a1 1 0 0 1 2 0v1.5m0-.5a1 1 0 0 1 2 0V10a4.5 4.5 0 0 1-4.5 4.5H8A4 4 0 0 1 4.6 12.6L3 10a1 1 0 0 1 1.7-1L5 9.5"/></svg>drag the photos around · <button type="button" id="reset">reset</button></div>
+  </section>
+
+  <section id="contact" class="wrap">
+    <div class="cblock tx" id="cblock">
+      <div class="label"><svg class="sparkle" viewBox="-7 -7 14 14"><path d="M0,-6.5C.9,-1 1,-1 6.5,0C1,1 .9,.9 0,6.5C-.9,1 -1,1 -6.5,0C-1,-1 -.9,-.9 0,-6.5Z" fill="currentColor"/></svg>connect</div>
+      <h2 class="h2">Say hello</h2>
+      <p>One line inviting people to reach out. Placeholder.</p>
+      <div class="mail"><span id="addr">your.email@example.com</span><button class="copy" type="button" id="copyBtn">copy</button></div>
+      <div class="clinks"><a href="#" data-toast="LinkedIn link goes here">LinkedIn</a><a href="#" data-toast="GitHub link goes here">GitHub</a><a href="#" data-toast="Résumé link goes here">Résumé</a></div>
+    </div>
+    <div id="starHint" class="tx"><b>click the sky</b> to leave a star</div>
+  </section>
+</main>
+<footer class="tx"><span>designed and built by Jared Narvaez</span><span>mockup · placeholder copy and photos</span></footer>
+<div id="tip"></div><div id="youLbl" hidden>you</div>
+<div id="toast" role="status"></div>
+
+<script>
+(()=>{
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $=s=>document.querySelector(s);
+const SP=`<svg viewBox="-7 -7 14 14"><path d="M0,-6.5C.9,-1 1,-1 6.5,0C1,1 .9,.9 0,6.5C-.9,1 -1,1 -6.5,0C-1,-1 -.9,-.9 0,-6.5Z" fill="currentColor"/></svg>`;
+const PLUS=`<svg viewBox="0 0 12 12"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.3" fill="none"/></svg>`;
+const toastEl=$('#toast');let tt;
+function toast(m){toastEl.textContent=m;toastEl.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>toastEl.classList.remove('on'),2200)}
+document.querySelectorAll('[data-toast]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();toast(a.dataset.toast)}));
+
+/* ---------- sky ---------- */
+const hex=h=>[1,3,5].map(i=>parseInt(h.substr(i,2),16));
+/* 24-hour keyframes drafted 2026-10-09: [hour, sky top→horizon, water, cloud, headland] */
+const K24=[
+ [0,['#07081A','#0E1030','#161840','#22244C','#2C2650'],['#16142E','#0E0C22','#08081A'],'#1E1E40','#06061A'],
+ [5.3,['#1C2550','#3A4A7A','#7A6A94','#C08A9A','#E8B0A0'],['#4A4870','#2C2E50','#1A1C38'],'#6A6088','#1E1E36'],
+ [6.8,['#4A6A9E','#8A9AC4','#E8B4B0','#FAD0A8','#FFE6C0'],['#C49AA8','#7A7098','#3E4470'],'#F4C8C0','#3A3050'],
+ [12,['#4F86C6','#74A4D8','#9CC2E6','#C4DDF0','#E2EEF6'],['#6E9CC4','#3F6E9C','#2A4E78'],'#F6F4F0','#4A5A6E'],
+ [16,['#5A7FB8','#86A2CC','#B8C4D8','#E6D8C4','#F4E2C4'],['#8AA0BC','#566E92','#344868'],'#F4E6D8','#4A4458'],
+ [18.5,['#3A2E62','#A4527A','#E8846A','#F7C27E','#FBD9A0'],['#A85A78','#5E3A66','#36284F'],'#F2A88A','#4A2A52'],
+ [19.6,['#1E1C44','#4E3270','#A24E78','#E2846E','#F0A070'],['#5E3A66','#2E2448','#1E1A38'],'#8A4E7A','#241838'],
+ [21,['#0B0C20','#141634','#1C1D44','#2E2A56','#3A2C5E'],['#1E1A3A','#120F28','#0B0B1C'],'#2A2850','#08081A'],
+ [24,['#07081A','#0E1030','#161840','#22244C','#2C2650'],['#16142E','#0E0C22','#08081A'],'#1E1E40','#06061A']
+].map(k=>({h:k[0],sky:k[1].map(hex),water:k[2].map(hex),cloud:hex(k[3]),hd:hex(k[4])}));
+const mixc=(a,b,f)=>a.map((v,i)=>v+(b[i]-v)*f);
+const rgb=(c,a=1)=>`rgba(${c[0]|0},${c[1]|0},${c[2]|0},${a})`;
+const clamp=v=>Math.max(0,Math.min(1,v));
+const smooth=x=>{x=clamp(x);return x*x*(3-2*x)};
+function keyAt(h){h=((h%24)+24)%24;let i=0;while(K24[i+1].h<=h)i++;const A=K24[i],B=K24[i+1],u=(h-A.h)/(B.h-A.h);
+ const f=(h-6)/14.5,hi=Math.sin(Math.PI*clamp(f)),up=f>-.05&&f<1.05;
+ const sunY=330-hi*148,sunX=85+482*clamp(f);
+ const sun=mixc(hex('#FFE0A8'),hex('#FFFBEE'),clamp(hi*1.6-.3));
+ return{sky:A.sky.map((c,j)=>mixc(c,B.sky[j],u)),water:A.water.map((c,j)=>mixc(c,B.water[j],u)),cloud:mixc(A.cloud,B.cloud,u),hd:mixc(A.hd,B.hd,u),
+  sunX,sunY,sun,sunOn:up&&sunY<322,refl:clamp((322-sunY)/50)*(hi>.6?.55:1)}}
+const starA=h=>{h=((h%24)+24)%24;if(h>=21||h<4.8)return 1;if(h>=19.6)return(h-19.6)/1.4;if(h<6.2)return 1-(h-4.8)/1.4;return 0};
+const dayness=h=>{h=((h%24)+24)%24;if(h<6.2||h>17.6)return 0;if(h<7.2)return h-6.2;if(h>16.6)return 17.6-h;return 1};
+const sToHour=s=>s<.5?18.5+1.1*(s/.5):19.6+1.4*((s-.5)/.5);
+const cv=$('#sky'),cx=cv.getContext('2d');
+const tiny=document.createElement('canvas'),tc=tiny.getContext('2d');
+const mid=document.createElement('canvas'),mc=mid.getContext('2d');
+let LW,LH,geo,grain=[],stars=[];
+function rng(seed){return()=>{seed=(seed*16807)%2147483647;return(seed-1)/2147483646}}
+function layout(){
+ LW=Math.ceil(innerWidth/4);LH=Math.ceil(innerHeight/4);cv.width=LW;cv.height=LH;
+ const tw=Math.max(24,Math.round(LW/7)),th=Math.max(16,Math.round(LH/7));
+ tiny.width=tw;tiny.height=th;mid.width=tw*2;mid.height=th*2;
+ const sc=Math.max(LW/680,LH/380),dw=680*sc,dh=380*sc;
+ let ox=LW*.7-490*sc;ox=Math.min(0,Math.max(LW-dw,ox));const oy=LH-dh;
+ geo={sc,ox,oy,hz:oy+300*sc,tw,th};
+ grain=[];for(let f=0;f<4;f++){const g=document.createElement('canvas');g.width=LW;g.height=LH;const gc=g.getContext('2d'),im=gc.createImageData(LW,LH);
+  for(let i=0;i<im.data.length;i+=4){const v=128+(Math.random()-.5)*255;im.data[i]=im.data[i+1]=im.data[i+2]=v;im.data[i+3]=255}gc.putImageData(im,0,0);grain.push(g)}
+ const r=rng(7),n=Math.round(LW*geo.hz*.67/240);stars=[];for(let i=0;i<n;i++)stars.push([r(),r()*.67,.5+r()*.5,r()*9]);
+}
+function scene(k,time){
+ const {tw}=geo,f=tw/LW;
+ tc.setTransform(geo.sc*f,0,0,geo.sc*f,geo.ox*f,geo.oy*f);
+ const g=tc.createLinearGradient(0,-400,0,300);[0,.35,.62,.86,1].forEach((p,i)=>g.addColorStop(p,rgb(k.sky[i])));
+ tc.fillStyle=g;tc.fillRect(-2000,-2000,5000,2300);
+ if(k.sunOn){const rg=tc.createRadialGradient(k.sunX,k.sunY,0,k.sunX,k.sunY,190);rg.addColorStop(0,rgb(k.sun,.6));rg.addColorStop(1,rgb(k.sun,0));tc.fillStyle=rg;tc.fillRect(-2000,-2000,5000,2300);
+  tc.save();tc.beginPath();tc.rect(-2000,-2000,5000,2300);tc.clip();tc.fillStyle=rgb(k.sun);tc.beginPath();tc.arc(k.sunX,k.sunY,22,0,7);tc.fill();tc.restore()}
+ const d=RM?0:Math.sin(time/42*Math.PI*2)*14;
+ tc.fillStyle=rgb(k.cloud,.6);[[170,140,140,20,1],[420,96,120,16,-1],[620,170,100,13,1],[300,210,90,10,-1]].forEach(c=>{tc.beginPath();tc.ellipse(c[0]+d*c[4],c[1],c[2],c[3],0,0,7);tc.fill()});
+ const wg=tc.createLinearGradient(0,300,0,400);k.water.forEach((c,i)=>wg.addColorStop(i/2,rgb(c)));tc.fillStyle=wg;tc.fillRect(-2000,300,5000,2000);
+ if(k.sunOn){tc.fillStyle=rgb(k.sun,.4*k.refl);tc.fillRect(k.sunX-20,300,40,90)}
+ tc.fillStyle=rgb(k.hd);tc.beginPath();tc.moveTo(560,300);tc.lineTo(598,287);tc.lineTo(640,281);tc.lineTo(700,284);tc.lineTo(700,300);tc.fill();
+ tc.fillStyle=rgb(mixc(k.hd,[0,0,0],.2));tc.beginPath();tc.moveTo(-40,352);tc.lineTo(110,340);tc.lineTo(210,358);tc.lineTo(270,400);tc.lineTo(-40,400);tc.fill();
+}
+const GOLD=[255,212,138],WH=[255,241,222],STARL=[227,232,255],PLUM=[78,50,112],NAVY=[31,26,58],CREAM=[255,246,234];
+function dot(x,y,c,a){if(a<=0)return;cx.fillStyle=rgb(c,Math.min(1,a));cx.fillRect(x|0,y|0,1,1)}
+function vstar(fx,fy,a,me){const x=Math.round(fx*LW),y=Math.round(fy*geo.hz);dot(x,y,GOLD,a);[[1,0],[-1,0],[0,1],[0,-1]].forEach(o=>dot(x+o[0],y+o[1],GOLD,a*.38));if(me)[[2,0],[-2,0],[0,2],[0,-2]].forEach(o=>dot(x+o[0],y+o[1],GOLD,a*.25))}
+const starB=s=>s<=.5?.3*s/.5:.3+.7*(s-.5)/.5;
+
+/* visitor stars (sample data; real ones come from /api/stars) */
+const VS=[[.52,.2,'Berkeley, CA','9:41 pm'],[.6,.42,'San Jose, CA','11:02 pm'],[.71,.12,'Manila, PH','8:15 pm'],[.84,.3,'Seattle, WA','10:30 pm'],[.66,.62,'Los Angeles, CA','12:07 am'],[.56,.7,'New York, NY','7:58 pm'],[.9,.52,'Quezon City, PH','9:12 pm'],[.46,.1,'Austin, TX','10:45 pm'],[.95,.18,'Toronto, ON','8:33 pm'],[.62,.06,'Oakland, CA','11:50 pm'],[.78,.68,'Daly City, CA','9:05 pm'],[.88,.08,'Chicago, IL','10:18 pm'],[.74,.38,'Sacramento, CA','8:47 pm']].map((v,i)=>({x:v[0],y:v[1],label:`${v[2]} · Oct 2026 · ${v[3]}`,ph:i*1.7}));
+let mineT=-1e9;let mine=null;try{mine=JSON.parse(localStorage.getItem('gh-star')||'null')}catch(e){}
+
+/* modes: scroll (default), fixed hour (light/dark button), local time */
+let mode='scroll',fixedHour=0,curHour=18.5,anim=null,lastStarB=0;
+function progress(){const m=document.documentElement.scrollHeight-innerHeight;return m>0?clamp(scrollY/m):0}
+function localHour(){const d=new Date();return d.getHours()+d.getMinutes()/60}
+function targetHour(){return mode==='scroll'?sToHour(progress()):mode==='local'?localHour():fixedHour}
+function go(m,h){const from=curHour;mode=m;if(m==='hour')fixedHour=h;const to=targetHour();
+ let delta=((to-from)%24+24)%24;if(delta>12)delta-=24;anim=RM?null:{from,delta,k:0};uiModes()}
+let frame=0,last=0;
+function draw(now){
+ requestAnimationFrame(draw);if(now-last<66)return;last=now;frame++;
+ if(anim){anim.k=Math.min(1,anim.k+.045);curHour=anim.from+anim.delta*smooth(anim.k);if(anim.k>=1){anim=null;curHour=targetHour()}}else curHour=targetHour();
+ const time=now/1000,k=keyAt(curHour);scene(k,time);
+ mc.imageSmoothingEnabled=true;mc.clearRect(0,0,mid.width,mid.height);mc.drawImage(tiny,0,0,mid.width,mid.height);
+ cx.imageSmoothingEnabled=true;cx.globalCompositeOperation='source-over';cx.globalAlpha=1;cx.drawImage(mid,0,0,LW,LH);
+ const night=starA(curHour),day=dayness(curHour);
+ const b=(mode==='scroll'&&!anim)?starB(progress()):night;lastStarB=b;
+ cx.globalCompositeOperation='overlay';cx.globalAlpha=.07+.15*Math.max(night,mode==='scroll'&&!anim?progress():0);cx.drawImage(grain[RM?0:frame%4],0,0);cx.globalCompositeOperation='source-over';cx.globalAlpha=1;
+ if(b>0){stars.forEach(st=>dot(st[0]*LW,st[1]*geo.hz,WH,b*st[2]*(RM?1:.6+.4*Math.sin(time*1.4+st[3]))));
+  VS.forEach(v=>vstar(v.x,v.y,b*(RM?1:.65+.35*Math.sin(time*1.1+v.ph)),false));
+  if(mine){const pp=RM?1:Math.min(1,(now-mineT)/900);
+   vstar(mine.x,mine.y,b*(RM?1:.88+.12*Math.sin(time*2))*(1+.9*(1-pp)*(pp<.15?pp/.15:1)),true);
+   if(pp<1){const r=2+4*pp,x0=Math.round(mine.x*LW),y0=Math.round(mine.y*geo.hz);for(let i=0;i<8;i++){const a=i*Math.PI/4;dot(x0+Math.round(Math.cos(a)*r),y0+Math.round(Math.sin(a)*r),GOLD,b*.7*(1-pp))}}}}
+ /* text theme: cream evening ink <-> navy day ink */
+ const evAcc=(mode==='scroll'&&!anim)?mixc(STARL,GOLD,smooth(progress()*3)):GOLD;
+ const ink=mixc(CREAM,NAVY,day),acc=mixc(evAcc,PLUM,day),ul=mixc(GOLD,PLUM,day),tint=mixc([42,22,48],CREAM,day),glow=mixc([42,22,48],CREAM,day);
+ const st=document.documentElement.style;
+ st.setProperty('--ink',rgb(ink));st.setProperty('--inkrgb',ink.map(v=>v|0).join(','));st.setProperty('--accent',rgb(acc));st.setProperty('--uline',rgb(ul));
+ st.setProperty('--tint',tint.map(v=>v|0).join(','));st.setProperty('--glow',glow.map(v=>v|0).join(','));
+ st.setProperty('--shadow',`0 1px 12px ${rgb(glow,.55+.15*day)}`);
+ $('#vig').style.opacity=1-day;$('#vigDay').style.opacity=day;
+ updateStarUI(b);updDial(curHour);
+}
+layout();addEventListener('resize',()=>{layout()});requestAnimationFrame(draw);
+setInterval(()=>{if(mode==='local'&&!anim)curHour=localHour()},30000);
+
+/* nav hide and sky controls */
+let lastY=scrollY;const nav=$('#nav');
+addEventListener('scroll',()=>{const y=scrollY;if(y>lastY+4&&y>80)nav.classList.add('hide');else if(y<lastY-4)nav.classList.remove('hide');lastY=y},{passive:true});
+function isDarkView(){return mode!=='scroll'&&starA(targetHour())>.5}
+function uiModes(){const dark=isDarkView();$('#moonIco').hidden=dark;$('#sunIco').hidden=!dark;
+ $('#darkBtn').setAttribute('aria-label',dark?'Switch to day sky':'Switch to night sky');$('#darkBtn').setAttribute('aria-pressed',mode==='hour');
+ $('#myTime').setAttribute('aria-pressed',mode==='local');
+ const pill=$('#sunsetPill');pill.classList.toggle('on',mode!=='scroll');pill.tabIndex=mode!=='scroll'?0:-1}
+$('#darkBtn').onclick=()=>{const dark=mode==='scroll'?false:isDarkView();go('hour',dark?12:0);toast(dark?'Midday':'Night')};
+$('#sunsetPill').onclick=()=>go('scroll');
+const dialBtn=$('#dialBtn'),dialPanel=$('#dialPanel'),dial=$('#dial');
+function setDial(o){dialBtn.setAttribute('aria-expanded',o);nav.classList.toggle('dialopen',o);
+ if(o){dialPanel.classList.remove('closing');dialPanel.hidden=false;return}
+ if(dialPanel.hidden)return;if(RM){dialPanel.hidden=true;return}dialPanel.classList.add('closing');setTimeout(()=>{dialPanel.hidden=true;dialPanel.classList.remove('closing')},220)}
+dialBtn.onclick=()=>setDial(dialPanel.hidden);$('#dialClose').onclick=()=>setDial(false);
+$('#myTime').onclick=()=>{if(mode==='local'){go('scroll')}else{go('local');toast('Sky set to your local time · '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}).toLowerCase())}};
+let dragging=false;
+function dialSet(e){const r=dial.getBoundingClientRect(),x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2;let th=Math.atan2(x,-y)*180/Math.PI;if(th<0)th+=360;
+ const h=Math.round(((12+th/15)%24)*4)/4;mode='hour';fixedHour=h;anim=null;uiModes()}
+dial.addEventListener('pointerdown',e=>{dragging=true;dial.setPointerCapture(e.pointerId);dialSet(e)});
+dial.addEventListener('pointermove',e=>{if(dragging)dialSet(e)});dial.addEventListener('pointerup',()=>dragging=false);
+dial.addEventListener('keydown',e=>{const st={ArrowRight:.25,ArrowUp:.25,ArrowLeft:-.25,ArrowDown:-.25}[e.key];if(st){e.preventDefault();mode='hour';fixedHour=(((targetHour()+st)%24)+24)%24;anim=null;uiModes()}});
+document.addEventListener('pointerdown',e=>{if(!dialPanel.hidden&&!dialPanel.contains(e.target)&&!dialBtn.contains(e.target))setDial(false)});
+const NAMES=[[0,'midnight'],[4.2,'dawn'],[6.1,'sunrise'],[9.4,'midday'],[14,'afternoon'],[17.6,'golden hour'],[19.1,'dusk'],[20.3,'night']];
+function hourName(h){let n='midnight';NAMES.forEach(x=>{if(h>=x[0])n=x[1]});return n}
+function fmtH(h){h=((h%24)+24)%24;let H=Math.floor(h),M=Math.round((h-H)*60);if(M===60){H=(H+1)%24;M=0}return (H%12||12)+':'+String(M).padStart(2,'0')+' '+(H<12?'am':'pm')}
+function updDial(h){h=((h%24)+24)%24;const ang=(h-12)*15*Math.PI/180;
+ $('#mdot').setAttribute('cx',24+Math.sin(ang)*13);$('#mdot').setAttribute('cy',24-Math.cos(ang)*13);
+ if(!dialPanel.hidden){$('#dHand').setAttribute('transform',`translate(${95+Math.sin(ang)*70},${95-Math.cos(ang)*70})`);$('#dHandC').setAttribute('fill',starA(h)>.5?'#2A2850':'#FFF6EA');
+  $('#dRead').textContent=fmtH(h);$('#dName').textContent=hourName(h);dial.setAttribute('aria-valuenow',h.toFixed(2));dial.setAttribute('aria-valuetext',fmtH(h))}}
+const menu=$('#menu');menu.querySelectorAll('a').forEach((a,i)=>a.style.animationDelay=(60+i*40)+'ms');
+$('#menuBtn').onclick=()=>{menu.classList.remove('closing');menu.hidden=false;$('#menuBtn').setAttribute('aria-expanded','true')};
+function closeMenu(){$('#menuBtn').setAttribute('aria-expanded','false');if(RM){menu.hidden=true;return}menu.classList.add('closing');setTimeout(()=>{menu.hidden=true;menu.classList.remove('closing')},200)}
+$('#menuClose').onclick=closeMenu;menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMenu));
+
+/* tech rows (placeholder list) */
+const R1=['Python','Java','TypeScript','JavaScript','C','SQL','HTML/CSS','R'],R2=['React','Next.js','Tailwind','Node.js','Git','Figma','Tableau','pandas'];
+const pill=n=>`<span class="pill"><span class="glyph" aria-hidden="true">${n.replace(/[^A-Za-z]/g,'').slice(0,2)}</span>${n}</span>`;
+$('#rows').innerHTML=[R1,R2].map((r,i)=>`<div class="track${i?' rev':''}">${[...r,...r].map(pill).join('')}</div>`).join('');
+
+/* experience */
+const ROLES=[{t:'Multi-agent systems intern',o:'Company name',d:'Month 20XX – Present',l:'City, CA',cur:1},{t:'Data assistant',o:'VSPA, UC Berkeley',d:'Month 20XX – Present',l:'Berkeley, CA'},{t:'External vice president',o:'PASAE',d:'Month 20XX – Present',l:'Berkeley, CA'}];
+const rail=$('#rail');
+rail.insertAdjacentHTML('beforeend',ROLES.map((r,i)=>`<div class="role ${r.cur?'cur':'past'}"><span class="mk" style="color:var(--accent)">${SP}</span><div class="rowtop"><div><div class="rt">${r.t} <span class="org">@ ${r.o}</span></div><div class="meta">${r.d} · ${r.l}</div></div><button class="tog" type="button" aria-expanded="false" aria-controls="rb${i}" aria-label="Show details for ${r.t}">${PLUS}</button></div><div class="grow bul" id="rb${i}"><div><ul><li>Placeholder bullet: what you built.</li><li>Placeholder bullet: the result or impact.</li></ul></div></div></div>`).join(''));
+const roles=[...rail.querySelectorAll('.role')];
+function toggleRow(row,btn,body,open){row.classList.toggle('open',open);btn.setAttribute('aria-expanded',open);body.classList.toggle('open',open);btn.setAttribute('aria-label',btn.getAttribute('aria-label').replace(/^(Show|Hide)/,open?'Hide':'Show'))}
+roles.forEach(r=>{const btn=r.querySelector('.tog'),body=r.querySelector('.bul');r.querySelector('.rowtop').addEventListener('click',()=>toggleRow(r,btn,body,!r.classList.contains('open')))});
+function section(togSel,bodySel,wrapEl,rows,opts){
+ const tog=$(togSel),body=$(bodySel);body.inert=true;
+ tog.onclick=()=>{const open=tog.getAttribute('aria-expanded')!=='true';
+  rows.forEach((r,i)=>{const d=open?opts.base+i*opts.step:(rows.length-1-i)*60;r.style.transitionDelay=d+'ms';opts.extra&&opts.extra(r,d,open)});
+  if(!open)rows.forEach(r=>{const b=r.querySelector('button.tog,.tog'),g=r.querySelector('.grow');if(r.classList.contains('open'))toggleRow(r,b,g,false)});
+  tog.setAttribute('aria-expanded',open);tog.setAttribute('aria-label',tog.getAttribute('aria-label').replace(/^(Show|Hide)/,open?'Hide':'Show'));
+  body.classList.toggle('open',open);wrapEl.classList.toggle('on',open);body.inert=!open;opts.after&&opts.after(open)};
+}
+section('#expTog','#expBody',rail,roles,{base:250,step:180,extra:(r,d,open)=>{r.querySelector('.mk').style.transitionDelay=(open?d-80:d)+'ms'}});
+
+/* projects */
+const PROJ=[{t:'Project title one',k:'Class project',y:'20XX',d:'One or two lines on what it is, what you built, and what it does.',g:['Java','Data structures'],c:['#5E3A66','#A4527A']},{t:'Project title two',k:'Game dev',y:'20XX',d:'One or two lines on what it is, what you built, and what it does.',g:['Unity','C#'],c:['#2E2A56','#E8846A']},{t:'Project title three',k:'Web',y:'20XX',d:'One or two lines on what it is, what you built, and what it does.',g:['React','Figma'],c:['#A4527A','#F7C27E']}];
+const plist=$('#plist');
+plist.innerHTML=PROJ.map((p,i)=>`<div class="proj"><div class="rule"></div><div class="phd"><span class="pn">0${i+1}</span><span class="pt">${p.t}</span><span class="pm">${p.k}<br>${p.y}</span><button class="tog" type="button" aria-expanded="false" aria-controls="pb${i}" aria-label="Show details for ${p.t}">${PLUS}</button></div><div class="grow" id="pb${i}"><div><div class="cell"><div class="shot" style="background:linear-gradient(135deg,${p.c[0]},${p.c[1]})" role="img" aria-label="Screenshot placeholder">screenshot</div><div style="min-width:0"><p>${p.d}</p><div class="tags">${p.g.map(x=>`<span class="tag">${x}</span>`).join('')}</div><div style="margin-top:12px"><button class="ulink" type="button" data-toast="Project detail pages come later">view project →</button></div></div></div></div></div></div>`).join('')+`<div class="rule" id="lastRule"></div><div class="allp"><button class="ulink" type="button" data-toast="The full projects page comes later">all projects →</button></div>`;
+plist.querySelectorAll('[data-toast]').forEach(a=>a.addEventListener('click',e=>{e.stopPropagation();toast(a.dataset.toast)}));
+const projs=[...plist.querySelectorAll('.proj')];
+projs.forEach(r=>{const btn=r.querySelector('.tog'),body=r.querySelector('.grow');r.querySelector('.phd').addEventListener('click',()=>toggleRow(r,btn,body,!r.classList.contains('open')))});
+section('#projTog','#projBody',plist,projs,{base:150,step:160,extra:(r,d,open)=>{r.querySelector('.rule').style.transitionDelay=(open?d-100:d)+'ms'},
+ after:open=>{$('#lastRule').style.transitionDelay=(open?150+projs.length*160-100:0)+'ms';plist.querySelector('.allp').style.transitionDelay=(open?150+projs.length*160+100:0)+'ms'}});
+
+/* beyond code: draggable prints */
+const zone=$('#zone'),pile=$('#pile');
+const PR=[{x:3.2,y:1.2,r:-6,s:1,c:['#A4527A','#E8846A']},{x:25.6,y:0,r:4,s:1,c:['#4E3270','#A24E78']},{x:6.4,y:66,r:3,s:1,c:['#E8846A','#FBD9A0']},{x:30.4,y:67,r:-5,s:1,c:['#2E2A56','#5E3A66']},{x:52.9,y:2.9,r:-3,s:2,c:['#A85A78','#F7C27E']},{x:72,y:52,r:6,s:1.5,c:['#5E3A66','#E2846E']}];
+const els=PR.map((p,i)=>{const d=document.createElement('div');d.className='print pre';d.style.setProperty('--w',`calc(clamp(100px,9.5vw,148px) * ${p.s})`);
+ d.innerHTML=`<div class="img" style="background:linear-gradient(135deg,${p.c[0]},${p.c[1]})">photo</div><div class="cap">caption here</div>`;pile.appendChild(d);return d});
+let z=10;
+function place(anim){els.forEach((d,i)=>{const p=PR[i];d.dataset.r=p.r;d.style.left=p.x+'%';d.style.top=p.y+'%';d.style.zIndex=2+i;
+ if(anim&&!RM){d.classList.add('pre');d.style.transform=`rotate(${p.r}deg) translateY(-24px)`;setTimeout(()=>{d.classList.remove('pre');d.style.transform=`rotate(${p.r}deg)`},120+i*90)}else{d.classList.remove('pre');d.style.transform=`rotate(${p.r}deg)`}})}
+const narrow=()=>innerWidth<=760;
+els.forEach(el=>{let sx,sy,ox,oy,on=false;
+ el.addEventListener('pointerdown',e=>{if(narrow())return;e.preventDefault();el.setPointerCapture(e.pointerId);on=true;sx=e.clientX;sy=e.clientY;ox=el.offsetLeft;oy=el.offsetTop;el.style.zIndex=++z;el.classList.add('drag');el.style.transform=`rotate(${el.dataset.r}deg) scale(1.05)`});
+ el.addEventListener('pointermove',e=>{if(!on)return;let x=ox+e.clientX-sx,y=oy+e.clientY-sy;x=Math.max(0,Math.min(zone.clientWidth-el.offsetWidth,x));y=Math.max(0,Math.min(zone.clientHeight-el.offsetHeight,y));el.style.left=x+'px';el.style.top=y+'px'});
+ const up=()=>{if(!on)return;on=false;el.classList.remove('drag');const r=(Math.random()*12-6).toFixed(1);el.dataset.r=r;el.style.transform=`rotate(${r}deg)`};
+ el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up)});
+$('#reset').onclick=()=>place(true);
+place(false);
+new IntersectionObserver((en,ob)=>{if(en[0].isIntersecting){place(true);ob.disconnect()}},{threshold:.25}).observe(zone);
+
+/* connect: leave a star */
+const contact=$('#contact'),cblock=$('#cblock'),tip=$('#tip'),you=$('#youLbl'),hint=$('#starHint');
+let inContact=false,ptr=null;
+contact.addEventListener('pointermove',e=>{ptr=e;inContact=!cblock.contains(e.target)});
+contact.addEventListener('pointerleave',()=>{inContact=false;ptr=null;tip.classList.remove('on')});
+function skyPos(cX,cY){return{x:cX/innerWidth,y:(cY/4)/geo.hz}}
+function nearest(e){const p=skyPos(e.clientX,e.clientY);let best=null,bd=3.2;[...VS,...(mine?[mine]:[])].forEach(v=>{const d=Math.hypot((v.x-p.x)*LW,(v.y-p.y)*geo.hz);if(d<bd){bd=d;best=v}});return best}
+function updateStarUI(b){
+ const dark=b>=.95;contact.classList.toggle('live',dark&&!mine&&inContact);
+ hint.innerHTML=dark?'<b>click the sky</b> to leave a star':'stars come out at night';hint.style.opacity=mine&&dark?0:.85;
+ if(mine&&b>.25){you.hidden=false;you.style.left=(mine.x*innerWidth)+'px';you.style.top=(mine.y*geo.hz*4)+'px';you.style.opacity=Math.min(1,b)*(RM?1:clamp((performance.now()-mineT-350)/300));
+  const r=contact.getBoundingClientRect();you.style.visibility=(r.bottom>0&&r.top<innerHeight)?'visible':'hidden'}else you.hidden=true;
+ if(ptr&&inContact&&b>.25){const v=nearest(ptr);if(v){tip.textContent=v===mine?`you · ${mine.when}`:v.label;tip.style.left=(v.x*innerWidth)+'px';tip.style.top=(v.y*geo.hz*4)+'px';tip.classList.add('on');contact.style.cursor='pointer'}else{tip.classList.remove('on');contact.style.cursor=''}}else tip.classList.remove('on');
+}
+contact.addEventListener('click',e=>{if(cblock.contains(e.target)||mine)return;if(lastStarB<.95)return;if(nearest(e))return;
+ const p=skyPos(e.clientX,e.clientY);if(p.y>.9||p.y<0)return;
+ mineT=performance.now();const d=new Date();mine={x:p.x,y:p.y,when:`your city · ${d.toLocaleString('en-US',{month:'short'})} ${d.getFullYear()} · ${d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}).toLowerCase()}`};
+ try{localStorage.setItem('gh-star',JSON.stringify(mine))}catch(err){}});
+
+/* copy */
+$('#copyBtn').onclick=async e=>{const b=e.currentTarget,a=$('#addr').textContent;try{await navigator.clipboard.writeText(a);b.textContent='copied'}catch(err){const r=document.createRange();r.selectNodeContents($('#addr'));const sel=getSelection();sel.removeAllRanges();sel.addRange(r);b.textContent='selected'}setTimeout(()=>b.textContent='copy',1400)};
+})();
+</script>
+
+</body></html>

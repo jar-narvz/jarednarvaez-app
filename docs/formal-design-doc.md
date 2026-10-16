@@ -1,6 +1,6 @@
 # Formal design doc
 
-> Exported from Notion ("formal design doc", under the personal website planning doc) on 2026-10-09. The formal design doc in the standard structure; sections are still mostly empty. Fill sections from decisions in `design.md` and `visual-system.md`, with justifications.
+> Exported from Notion ("formal design doc", under the personal website planning doc) on 2026-10-16. The formal design doc in the standard structure; sections are still mostly empty. Fill sections from decisions in `design.md` and `visual-system.md`, with justifications.
 
 ## 1. Abstract
 
@@ -66,4 +66,18 @@
 
 ### MVP
 
+The whole home page in scroll mode, with real content, deployed on Vercel as soon as possible: the sky (golden hour → night with grain, stars and cloud drift, desktop and phone coasts), nav, hero, intro, tech stack, experience, projects, beyond code, and connect's contact block. Links to pages that don't exist yet stay hidden.
+
+Why this cut: every piece is already fully specified and none needs a backend, so it can ship quickly for recruiting. The deferred features are self-contained and can land after launch without reworking the MVP.
+
 ### Phases
+
+| Phase | What | Status |
+|---|---|---|
+| 0. Setup | Fresh Next.js scaffold on `rebuild`, fonts, color variables | Done |
+| 1. Sky | Static golden hour, scroll blending, stars, cloud drift, grain | Done |
+| 2. Home page sections | Nav (done), hero, intro, tech stack, experience, projects, beyond code, connect contact block | In progress |
+| 3. Launch | Content pass, pre-launch checks, go live (old site to `legacy`, `rebuild` → `main`) | — |
+| 4. After launch | Sky modes 2 and 3 → leave a star → /projects, project detail and /scrapbook pages (design first) → live widgets → easter eggs | — |
+
+Step-by-step tracking lives in `build-plan.md`.

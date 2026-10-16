@@ -19,6 +19,7 @@ Open the others only when the task needs them:
 | `docs/decisions-log.md` | Before proposing anything, to check it wasn't already rejected. |
 | `docs/discovery.md` | Revisiting why a direction was chosen, or looking at reference sites. Early answers there (Fern palette, Manrope) are superseded. |
 | `docs/formal-design-doc.md` | Writing or reviewing the formal design doc sections 1–7. |
+| `docs/reference/home-mockup.html` | Building any home page section: the approved full mockup, with working code for every animation. Its sky is approximate; `docs/reference/sky-prototype.html` and `src/lib/sky/` win for the sky. |
 
 The design docs are a snapshot exported from Jared's Notion "personal website planning doc". Notion stays the source of truth while design is still happening. Don't edit them unless Jared asks; if code reveals a design question or a needed decision, raise it with him instead.
 
@@ -32,6 +33,7 @@ The design docs are a snapshot exported from Jared's Notion "personal website pl
 - **Options, then react.** When a design question isn't answered by the docs, don't pick for him. Build 2–3 options he can see in the browser (for example on a temporary `/lab` page), give a short lean with reasons, and let him choose.
 - **Never write copy in Jared's voice.** Hero line, bios, captions, taglines, project descriptions: use obvious placeholders like `[hero line]` or `[about paragraph]`. Copy comes in a later content pass with him.
 - **Use the specs exactly.** Colors, fonts, sizes and timings come from `docs/visual-system.md`. Don't invent new colors or "improve" values. If a needed value isn't specified, say so and propose one.
+- **Animations are part of the spec.** Build every animation listed for a section in `docs/visual-system.md` → Motion inventory, with its exact timing, easing and Reduce Motion behavior, and check it in the browser before calling the step done. Never drop, simplify or add one.
 - **Readability first.** Text must stay readable at every point of the sky. Check golden hour (the brightest sky) first, then dusk and night, on desktop and a phone-width viewport. Remind Jared to check visual steps on his real phone too.
 - **Everything traces back to golden hour.** Justify choices with the metaphor or a principle in `docs/design.md`. Flag choices that look inherited rather than decided.
 - **Keep what's rejected rejected.** Don't re-propose anything the decisions log rules out.
@@ -44,7 +46,7 @@ The design docs are a snapshot exported from Jared's Notion "personal website pl
 - **Motion** (formerly Framer Motion) for the scrapbook drag and small UI transitions; plain CSS animation for simple loops (tech-stack rows, sparkle twinkle)
 - **Content in the repo:** TypeScript data files for structured content (tech stack, experience, quick facts) and **MDX** for project detail pages. No CMS.
 - **Fonts:** Newsreader (headings) and Schibsted Grotesk (body), loaded with `next/font/google`
-- Backend pieces (Spotify now-playing, visitor globe storage) are not decided yet. Don't add them until Jared reaches those sections.
+- **No backend in the MVP.** Leave a star (a small store + `/api/stars`) and live widgets come after launch; don't add them, or any service account, until Jared reaches those steps.
 
 ## Architecture rules
 
@@ -55,21 +57,21 @@ The design docs are a snapshot exported from Jared's Notion "personal website pl
 
 ## Git
 
-- Work on the `rebuild` branch. `main` holds the old site until the new one is ready.
-- Small commits, one per finished step, with a clear message.
-- Never push, merge into `main`, or force-push without asking Jared first.
+- Work on the `rebuild` branch. `main` holds the old site until launch (step 16), when Jared moves it to a `legacy` branch and merges `rebuild` into `main`.
+- **Jared commits, pushes, and does everything on GitHub himself.** Never run `git commit`, `push`, `pull`, `merge` or `rebase`. At the end of a step, give him the exact commands and a commit message (one commit per finished step), with the build-plan tick included in the same commit. Commits are authored by Jared; end the message with a `Co-Authored-By: Claude <noreply@anthropic.com>` line.
+- Stage with `git add -A -- . ':!.vscode'` (his editor settings stay out of the repo).
 - Never commit secrets. API keys go in `.env.local`, which stays git-ignored.
 
 ## Commands
 
-<!-- Fill in once the project is scaffolded -->
 - `npm run dev` — local dev server at http://localhost:3000
 - `npm run build` — production build (run before saying a step is done)
 - `npm run lint` — lint
+- `npm test` — Vitest (sky color math and stars)
+- `npm run dev:phone` — dev server reachable from a phone on the same Wi-Fi; open the "Network:" URL it prints
 
 ## Open questions to raise, not decide
 
 These aren't settled in the design docs. Ask Jared when the work touches them:
 
-- Reduced motion: how the sky, grain, and loops should behave when a visitor has "reduce motion" turned on
 - Everything listed under "still open" in `docs/design.md`
