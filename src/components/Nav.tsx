@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { links } from "@/data/links";
 
 // The site nav: top-right, quiet (docs/visual-system.md → Hero layout: 14px, weight 500,
 // cream at ~82%, no monogram). Links in page order, lowercase. The sky controls are inert
@@ -11,13 +12,11 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 // scroll up, so the controls stay reachable without covering text; on phones the links open
 // in a full-screen menu.
 
-const RESUME_HREF = "#resume"; // [résumé link] placeholder: PDF or external link not decided yet
-
 const LINKS = [
   { label: "about", href: "#about" },
   { label: "experience", href: "#experience" },
   { label: "projects", href: "#projects" },
-  { label: "résumé", href: RESUME_HREF },
+  { label: "résumé", href: links.resume },
   { label: "contact", href: "#contact" },
 ];
 
