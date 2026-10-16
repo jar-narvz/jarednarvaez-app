@@ -21,9 +21,9 @@ const LINKS = [
   { label: "contact", href: "#contact" },
 ];
 
-// The plum text shadow from the prototype (rgba(42,18,40,.6), 18px blur), brought forward
-// from step 7 for the nav so it stays readable when it sits over dusk and night.
-const SHADOW = "[text-shadow:0_0_18px_rgba(42,18,40,0.6)]";
+// The plum text shadow (shared with the hero in globals.css), so the nav stays readable
+// when it sits over dusk and night.
+const SHADOW = "[text-shadow:var(--text-shadow)]";
 
 // Always shown near the top; tiny scroll jitter is ignored.
 const SHOW_NEAR_TOP = 80;
@@ -76,7 +76,7 @@ export default function Nav() {
   return (
     <>
       <motion.header
-        className={`fixed inset-x-0 top-0 z-20 pointer-events-none px-6 pt-10 md:px-24`}
+        className={`fixed inset-x-0 top-0 z-20 pointer-events-none px-(--margin) pt-10`}
         // -100% of the header's own height, which includes the 40px top offset.
         animate={{ y: isHidden ? "-100%" : 0 }}
         transition={transition}
@@ -144,7 +144,7 @@ function PhoneMenu({ transition, onPick }: { transition: Transition; onPick: () 
   return (
     <motion.div
       id="phone-menu"
-      className="fixed inset-0 z-10 bg-[#2A1630]/60 px-6 pt-32 backdrop-blur-md md:hidden"
+      className="fixed inset-0 z-10 bg-[#2A1630]/60 px-(--margin) pt-32 backdrop-blur-md md:hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
