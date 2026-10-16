@@ -4,8 +4,8 @@
 
 ## Now
 
-- **In progress:** step 11, projects (built, waiting for Jared's review)
-- **Next:** step 12, beyond code
+- **In progress:** step 12, beyond code (built, waiting for Jared's review)
+- **Next:** step 13, connect
 - **Notes:** Plan re-aimed at the MVP on 2026-10-16 (see `design.md` → Launch plan). Goal: launch as soon as possible.
 
 ## MVP (decided 2026-10-16)
@@ -32,7 +32,7 @@ Every section uses placeholder copy (`[like this]`) and its own data file, and s
 - [x] **8. Intro.** Label, lead, paragraph, quick-facts row (2×2 on phones).
 - [x] **9. Tech stack.** Header plus two looping pill rows, edge fade, pause on hover. Placeholder list.
 - [x] **10. Experience.** Build the shared collapsible pieces here (round "+" toggle, section open/close with stagger, independent row expand, `inert` when closed, Reduce Motion) so projects can reuse them. Timeline with star markers, three placeholder roles.
-- [ ] **11. Projects.** Reuses step 10's collapsible. Numbered index, cells with screenshot focus pull, three placeholder projects from one data list (`featured`). "view project →" and "all projects →" hidden for the MVP.
+- [x] **11. Projects.** Reuses step 10's collapsible. Numbered index, cells with screenshot focus pull, three placeholder projects from one data list (`featured`). "view project →" and "all projects →" hidden for the MVP.
 - [ ] **12. Beyond code.** Framed drag zone with crop marks, 6 placeholder prints, drag + drop tilt, drop-in on first view and reset, hint line; fixed scatter with no drag on phones. "open the scrapbook →" hidden for the MVP.
 - [ ] **13. Connect (contact block).** Label, heading, one line, email with copy pill ("copied" for 1.4s), LinkedIn · GitHub · Résumé links. Connect pinned to full night. No leave a star yet.
 

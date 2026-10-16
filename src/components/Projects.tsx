@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import Collapse from "@/components/Collapse";
 import CollapsibleHeader from "@/components/CollapsibleHeader";
 import ToggleButton from "@/components/ToggleButton";
+import UnderlineLink from "@/components/UnderlineLink";
 import {
   featuredProjects,
   projectsSection,
@@ -33,9 +33,6 @@ const PLACEHOLDER_GRADIENTS = [
   "linear-gradient(135deg,#2E2A56,#E8846A)",
   "linear-gradient(135deg,#A4527A,#F7C27E)",
 ];
-
-const LINK =
-  "border-b border-underline pb-px text-[15px] font-medium text-accent";
 
 export default function Projects() {
   const projects = featuredProjects();
@@ -96,9 +93,7 @@ export default function Projects() {
                 open ? "opacity-100" : "opacity-0"
               }`}
             >
-              <Link href="/projects" className={LINK}>
-                all projects →
-              </Link>
+              <UnderlineLink href="/projects">all projects →</UnderlineLink>
             </p>
           )}
         </div>
@@ -196,9 +191,7 @@ function ProjectRow({
               </ul>
               {showProjectPages && (
                 <p className="mt-3">
-                  <Link href={`/projects/${project.slug}`} className={LINK}>
-                    view project →
-                  </Link>
+                  <UnderlineLink href={`/projects/${project.slug}`}>view project →</UnderlineLink>
                 </p>
               )}
             </div>
