@@ -4,8 +4,8 @@
 
 ## Now
 
-- **In progress:** nothing; step 9 done
-- **Next:** step 10, experience
+- **In progress:** step 10, experience (built, waiting for Jared's review)
+- **Next:** step 11, projects
 - **Notes:** Plan re-aimed at the MVP on 2026-10-16 (see `design.md` → Launch plan). Goal: launch as soon as possible.
 
 ## MVP (decided 2026-10-16)
