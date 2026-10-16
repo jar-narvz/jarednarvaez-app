@@ -19,6 +19,10 @@
 
   /* Soft plum shadow on all text over the sky (prototype value). */
   --text-shadow: 0 0 18px rgba(42, 18, 40, 0.6);
+
+  /* Tinted fill behind pills (and later cells and the copy pill): dark plum, used at ~34%.
+     Fixed in scroll mode; sky modes will blend it toward cream for the day theme. */
+  --tint: #2a1630;
 }
 
 /* `inline` makes utilities read the live variable directly, so `text-accent`
@@ -29,6 +33,7 @@
   --color-underline: var(--underline);
   --color-cream: var(--cream);
   --color-sun-gold: var(--sun-gold);
+  --color-tint: var(--tint);
   --font-serif: var(--font-newsreader);
   --font-sans: var(--font-schibsted);
 
@@ -43,11 +48,22 @@
       opacity: 0.5;
     }
   }
+
+  /* Tech stack rows (Motion inventory): linear, 42s per loop (row 2 overrides to 48s, reversed).
+     The track holds --copies copies of the list with 14px gaps. Each loop slides exactly one
+     copy plus one gap, so the next copy lands where the first began and the restart is seamless. */
+  --animate-marquee: marquee 42s linear infinite;
+  @keyframes marquee {
+    to {
+      transform: translateX(calc((-100% - 14px) / var(--copies)));
+    }
+  }
 }
 
-/* Reduce Motion: the sparkle stays still. */
+/* Reduce Motion: the sparkle and the tech stack rows stay still. */
 @media (prefers-reduced-motion: reduce) {
-  .animate-twinkle {
+  .animate-twinkle,
+  .animate-marquee {
     animation: none;
   }
 }
