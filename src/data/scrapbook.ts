@@ -1,3 +1,4 @@
+// PARKED (2026-10-16): not used on the site until beyond code is designed (see BeyondCode.tsx).
 // Scrapbook content (docs/visual-system.md → Beyond code → Data shape). One list feeds the home
 // page preview (items with `home`) and, after launch, the full /scrapbook page. Bracketed text is
 // placeholder copy, written with Jared in the content pass (build step 14). Which 6 photos go on

@@ -1,5 +1,9 @@
 "use client";
 
+// PARKED (2026-10-16): not on the site. Beyond code moved out of the MVP until its design is
+// fleshed out (docs/build-plan.md → Phase 4). Nothing renders this except the dev-only /lab page,
+// which has live controls for the open questions (height, print size, frame width, frame).
+
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import SectionHeading from "@/components/SectionHeading";
@@ -149,9 +153,12 @@ export default function BeyondCode() {
       id="beyond-code"
       className="px-(--margin) py-[clamp(72px,12vh,140px)]"
     >
+      {/* LAB: --bc-* variables let /lab tune height, width, print size and frame (2026-10-16).
+          Defaults are the current values; bake the chosen ones in and remove the variables. */}
+      <div className="max-w-[var(--bc-zone-max,none)]">
       <div
         ref={zoneRef}
-        className="relative mt-2 h-130 max-[760px]:h-auto max-[760px]:py-7"
+        className="relative mt-2 h-[var(--bc-zone-h,520px)] max-[760px]:h-auto max-[760px]:py-7"
       >
         <FrameMarks />
 
@@ -179,7 +186,7 @@ export default function BeyondCode() {
               onPointerCancel={onPointerUp}
               style={
                 {
-                  "--w": `calc(clamp(100px, 9.5vw, 148px) * ${SIZE_SCALE[photo.home.size]})`,
+                  "--w": `calc(clamp(100px, 9.5vw, 148px) * ${SIZE_SCALE[photo.home.size]} * var(--bc-print-scale, 1))`,
                   left: `${photo.home.x}%`,
                   top: `${photo.home.y}%`,
                   zIndex: 2 + i,
@@ -207,17 +214,18 @@ export default function BeyondCode() {
           reset
         </button>
       </p>
+      </div>
     </section>
   );
 }
 
 /** Top and bottom rules (1px ink at 28%) plus 14px corner crop marks (ink at 70%), 6px outside. */
 function FrameMarks() {
-  const mark = "absolute size-3.5 border-ink/70";
+  const mark = "absolute size-3.5 border-ink/70 opacity-(--bc-marks,1)";
   return (
     <div aria-hidden="true">
-      <span className="absolute inset-x-0 top-0 h-px bg-ink/28" />
-      <span className="absolute inset-x-0 bottom-0 h-px bg-ink/28" />
+      <span style={{ opacity: "var(--bc-rules, 1)" }} className="absolute inset-x-0 top-0 h-px bg-ink/28" />
+      <span style={{ opacity: "var(--bc-rules, 1)" }} className="absolute inset-x-0 bottom-0 h-px bg-ink/28" />
       <span className={`${mark} -top-1.5 -left-1.5 border-t border-l`} />
       <span className={`${mark} -top-1.5 -right-1.5 border-t border-r`} />
       <span className={`${mark} -bottom-1.5 -left-1.5 border-b border-l`} />

@@ -4,8 +4,8 @@
 
 ## Now
 
-- **In progress:** step 12, beyond code (built, waiting for Jared's review)
-- **Next:** step 13, connect
+- **In progress:** nothing; step 11 done
+- **Next:** step 13, connect (step 12 moved after launch)
 - **Notes:** Plan re-aimed at the MVP on 2026-10-16 (see `design.md` → Launch plan). Goal: launch as soon as possible.
 
 ## MVP (decided 2026-10-16)
@@ -33,7 +33,7 @@ Every section uses placeholder copy (`[like this]`) and its own data file, and s
 - [x] **9. Tech stack.** Header plus two looping pill rows, edge fade, pause on hover. Placeholder list.
 - [x] **10. Experience.** Build the shared collapsible pieces here (round "+" toggle, section open/close with stagger, independent row expand, `inert` when closed, Reduce Motion) so projects can reuse them. Timeline with star markers, three placeholder roles.
 - [x] **11. Projects.** Reuses step 10's collapsible. Numbered index, cells with screenshot focus pull, three placeholder projects from one data list (`featured`). "view project →" and "all projects →" hidden for the MVP.
-- [ ] **12. Beyond code.** Framed drag zone with crop marks, 6 placeholder prints, drag + drop tilt, drop-in on first view and reset, hint line; fixed scatter with no drag on phones. "open the scrapbook →" hidden for the MVP.
+- [ ] ~~**12. Beyond code.**~~ *Moved after launch on 2026-10-16: the layout felt awkward and needs more design. The build is parked in the repo (see Phase 4).* Framed drag zone with crop marks, 6 placeholder prints, drag + drop tilt, drop-in on first view and reset, hint line; fixed scatter with no drag on phones. "open the scrapbook →" hidden for the MVP.
 - [ ] **13. Connect (contact block).** Label, heading, one line, email with copy pill ("copied" for 1.4s), LinkedIn · GitHub · Résumé links. Connect pinned to full night. No leave a star yet.
 
 ## Phase 3 — Launch
@@ -47,6 +47,7 @@ Every section uses placeholder copy (`[like this]`) and its own data file, and s
 - [ ] **Sky modes 2 and 3.** Mini dial + full 24-hour dial, light/dark button, "my time", "sunset" pill, day text theme, transitions around the clock. Spec: `visual-system.md` → 24-hour sky.
 - [ ] **Leave a star.** Storage, `/api/stars`, pixel-cross stars in the sky canvas, placing and hover in connect, privacy rules. Spec: `visual-system.md` → Connect. Pick the storage service with Jared first.
 - [ ] **/projects page + project detail pages (MDX).** Needs design first. Then turn on "view project →" and "all projects →".
+- [ ] **Beyond code (home scrapbook preview).** Needs design first. A working build is parked in the repo (`src/components/BeyondCode.tsx`, `src/data/scrapbook.ts`) with a dev-only tuning page at `/lab` (height, print size, frame width, frame). Re-add it to `src/app/page.tsx` after projects once designed.
 - [ ] **/scrapbook page.** Needs design first. Then turn on "open the scrapbook →".
 - [ ] **Live widgets** (now playing, location) in the hero "currently" line. Needs design first.
 - [ ] **Easter eggs.** Needs design first.
