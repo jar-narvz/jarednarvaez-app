@@ -115,7 +115,7 @@ export default function Nav() {
           inside a transformed parent would be pinned to the header instead of the screen. It sits
           under the header (z-10 vs z-20) so the "close" button stays on top. */}
       <AnimatePresence>
-        {open && <PhoneMenu transition={transition} onPick={() => setOpen(false)} />}
+        {open && <PhoneMenu reduceMotion={!!reduceMotion} onPick={() => setOpen(false)} />}
       </AnimatePresence>
     </>
   );
@@ -137,26 +137,38 @@ function SkyControls() {
   );
 }
 
-type Transition = { duration: number; ease: "easeOut" };
+// Phone menu timings (Motion inventory): the backdrop fades in over 250ms and out over 200ms;
+// each link rises 10px and fades in over 350ms, one after another (60ms, then 40ms apart).
+const MENU_OPEN_S = 0.25;
+const MENU_CLOSE_S = 0.2;
+const LINK_S = 0.35;
+const linkDelay = (i: number) => (60 + 40 * i) / 1000;
+const CSS_EASE = [0.25, 0.1, 0.25, 1] as const; // CSS `ease`, as in the mockup
 
 // Phones: big links stacked on the left over a darkened, blurred sky.
-function PhoneMenu({ transition, onPick }: { transition: Transition; onPick: () => void }) {
+function PhoneMenu({ reduceMotion, onPick }: { reduceMotion: boolean; onPick: () => void }) {
+  // Reduce Motion: the menu and its links appear and disappear instantly.
+  const instant = { duration: 0 };
   return (
     <motion.div
       id="phone-menu"
       className="fixed inset-0 z-10 bg-[#2A1630]/60 px-(--margin) pt-32 backdrop-blur-md md:hidden"
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={transition}
+      animate={{ opacity: 1, transition: reduceMotion ? instant : { duration: MENU_OPEN_S, ease: "easeOut" } }}
+      exit={{ opacity: 0, transition: reduceMotion ? instant : { duration: MENU_CLOSE_S, ease: "easeOut" } }}
     >
       <ul className={`flex flex-col gap-5 font-serif text-[36px] leading-none text-ink ${SHADOW}`}>
-        {LINKS.map((link) => (
-          <li key={link.label}>
+        {LINKS.map((link, i) => (
+          <motion.li
+            key={link.label}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={reduceMotion ? instant : { duration: LINK_S, ease: CSS_EASE, delay: linkDelay(i) }}
+          >
             <a href={link.href} onClick={onPick}>
               {link.label}
             </a>
-          </li>
+          </motion.li>
         ))}
       </ul>
     </motion.div>
