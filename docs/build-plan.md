@@ -4,7 +4,7 @@
 
 ## Now
 
-- **In progress:** step 11, projects (planning)
+- **In progress:** step 11, projects (built, waiting for Jared's review)
 - **Next:** step 12, beyond code
 - **Notes:** Plan re-aimed at the MVP on 2026-10-16 (see `design.md` → Launch plan). Goal: launch as soon as possible.
 
