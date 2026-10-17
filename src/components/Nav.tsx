@@ -6,7 +6,7 @@ import { links } from "@/data/links";
 
 // The site nav: top-right, quiet (docs/visual-system.md → Hero layout: 14px, weight 500,
 // cream at ~82%, no monogram). Links in page order, lowercase. The sky controls are inert
-// placeholders until the sky modes are built in Phase 3.
+// placeholders, hidden for launch (step 15) until the sky modes are built after launch.
 //
 // Chosen on /lab (step 6, 2026-10-11): it hides while you scroll down and comes back when you
 // scroll up, so the controls stay reachable without covering text; on phones the links open
@@ -33,6 +33,10 @@ const SHOW_NEAR_TOP = 80;
 const SCROLL_JITTER = 6;
 
 const SLIDE_S = 0.25;
+
+// Off for the MVP (docs/design.md: the nav shows no sky controls until sky modes 2 and 3).
+// Turn back on when the sky modes are built.
+const SHOW_SKY_CONTROLS = false;
 
 export default function Nav() {
   const reduceMotion = useReducedMotion();
@@ -83,6 +87,9 @@ export default function Nav() {
         // -100% of the header's own height, which includes the 40px top offset.
         animate={{ y: isHidden ? "-100%" : 0 }}
         transition={transition}
+        // Keyboard users tabbing into the nav while it's slid away would focus links they can't
+        // see, so it comes back as soon as anything inside it gets focus (step 15).
+        onFocus={() => setHidden(false)}
       >
         <div className="flex items-center justify-end">
           <nav aria-label="Main" className={`pointer-events-auto text-[14px] font-medium text-ink/82 ${SHADOW}`}>
@@ -99,7 +106,7 @@ export default function Nav() {
           </nav>
 
           <div className={`pointer-events-auto flex items-center gap-4 text-[14px] font-medium text-ink/82 md:ml-10 ${SHADOW}`}>
-            <SkyControls />
+            {SHOW_SKY_CONTROLS && <SkyControls />}
             {/* Phones: the links live behind this button. */}
             <button
               type="button"
