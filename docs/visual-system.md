@@ -114,7 +114,7 @@ Blend channel by channel (straight RGB) between neighboring keyframes. Golden ho
 ## Tech stack section
 
 - **Header (left, 96px margin):** "tech stack" label with sparkle (13px, accent) → Newsreader heading (~40px) → one Schibsted line (17px).
-- **Rows:** two rows, 96px from each side (centered, ~1088px wide at 1280). Row 1 languages, row 2 frameworks/tools. Opposite directions, ~42s and ~48s per loop, edges fade over the outer 7%. 22px between rows.
+- **Rows:** four rows (two until 2026-10-16), 96px from each side (centered, ~1088px wide at 1280). Row 1 languages, row 2 web & design, row 3 ML & data, row 4 tools. Directions alternate row to row, ~42s and ~48s per loop for rows 1–2, ~45s and ~51s for rows 3–4 (tune in the build so no two rows line up), edges fade over the outer 7%. 22px between rows.
 - **Items:** logo (~24px) + name (Schibsted 500, 18px) in a pill: 10px × 18px padding, full radius, 1px ink border at ~38%, fill tinted ~34% (dark plum in the evening, cream in the day). 14px gap.
 - **Behavior:** loops on its own (accepted exception, like the cloud drift); pauses on hover.
 
@@ -230,7 +230,7 @@ Sparkle path (12px, `viewBox="-7 -7 14 14"`): `M0,-6.5C.9,-1 1,-1 6.5,0C1,1 .9,.
 
 ### What it is
 
-A short, curated overview of the most important projects (about 3) on the home page, laid out as an **editorial numbered index** (01, 02, 03 with big serif titles). Like experience, the **whole section starts collapsed** behind a "+", and **each project expands** with its own "+" to show its details in a soft **cell**. **Several projects can be open at once.** Below the list, an "all projects →" link goes to the full projects page (`/projects`), and each open project has "view project →" linking to its own detail page (MDX). Sits around sunset → dusk on the scroll.
+A short, curated overview of the most important projects (2: Secure File Sharing System and Character-Level GPT, decided 2026-10-16) on the home page, laid out as an **editorial numbered index** (01, 02, 03 with big serif titles). Like experience, the **whole section starts collapsed** behind a "+", and **each project expands** with its own "+" to show its details in a soft **cell**. **Several projects can be open at once.** Below the list, an "all projects →" link goes to the full projects page (`/projects`), and each open project has "view project →" linking to its own detail page (MDX). Sits around sunset → dusk on the scroll.
 
 **MVP:** `/projects` and the detail pages aren't designed yet, so hide "all projects →" and "view project →" until they exist (keep the data fields and a flag to turn them on).
 
@@ -282,7 +282,7 @@ export type Project = {
   summary: string;       // 1–2 lines
   tags: string[];        // tech used
   image: { src: string; alt: string }; // 16:10 screenshot
-  featured?: boolean;    // shown on the home page (about 3)
+  featured?: boolean;    // shown on the home page (2)
   order?: number;        // home page order
 };
 // one list feeds both the home page (featured only) and /projects (all)
@@ -497,7 +497,7 @@ const starBrightness=t=>t<.35?0:t<.65?.3*(t-.35)/.3:.3+.7*(t-.65)/.35;
 | Nav *(after launch)* | Mini dial's gold dot travels around its ring to the current hour | Every frame | Follows the sky | Stays (it shows state) |
 | Nav *(after launch)* | Time dial grows down from the mini dial / shrinks back | Mini dial click / "close" / click outside | Open: scale 0 → 1 from top-right, 450ms `cubic-bezier(.3,1.3,.5,1)`. Close: scale → 0 + fade, 220ms ease-in | Instant |
 | Hero (and labels) | Sparkle twinkle | Always | Opacity 1 ↔ 0.5, 2.4s ease-in-out, infinite | Still |
-| Tech stack | Two pill rows loop in opposite directions; pause on hover | Always / hover | Linear, ~42s and ~48s per loop | Rows stay still |
+| Tech stack | Four pill rows loop, alternating directions; pause on hover | Always / hover | Linear, ~42s, ~48s, ~45s, ~51s per loop (rows 1–4) | Rows stay still |
 | Experience + projects | Round "+" toggles rotate 45° into "×", border turns accent | Click | 400ms `cubic-bezier(.3,1.4,.5,1)` | Instant |
 | Experience | Section opens: rail line draws down, stars pop in one by one, rows fade up; closes in reverse bottom-up | Header "+" | See Experience → Animation (line 700ms; star 500ms pop at 170 + 180·*i*; row 450ms at 250 + 180·*i*; close 60ms stagger) | Instant, all stars lit |
 | Experience | Role opens: details slide open, bullets fade in, its star brightens with a glow; current role's star twinkles | Row "+" | Height 400ms; bullets 300ms after 100ms; twinkle 2.4s | Instant, no twinkle |

@@ -28,10 +28,10 @@ The main design doc: principles and current state, one line per decision. Full s
 - **Motion:** slow cloud drift, stars twinkle in at dusk. Reduce Motion freezes grain, stars and clouds; scroll blending stays on.
 - **Hero:** one focal point, the name. Editorial left: small round portrait above the stacked name, hero line and "currently" line below, on the left vignette. Right side open to the sun. No medium or large images.
 - **Nav:** about · experience · projects · résumé · contact (lowercase), top-right. Hides while scrolling down and returns on scroll up; on phones a "menu" button opens the links full screen. Sky controls sit beside the links (not shown until the sky modes are built).
-- **Intro:** lead + paragraph on the left, quick facts (studying, leading, outside code, based in) as a row of four short columns underneath, left of the sun.
-- **Tech stack:** label + heading + one line on the left; two looping rows (languages, then frameworks/tools) of logo + name pills, centered margin to margin, edges fading out. Pause on hover.
+- **Intro:** lead + paragraph on the left, quick facts (studying, leading, currently @, based in) as a row of four short columns underneath, left of the sun.
+- **Tech stack:** label + heading + one line on the left; four looping rows (languages, web & design, ML & data, tools; two rows until 2026-10-16) of logo + name pills, centered margin to margin, edges fading out. Pause on hover.
 - **Experience:** collapsed by default; "+" opens a vertical timeline with four-point star markers (current role twinkles), animated as the line draws down and stars pop in one by one. Each role opens with its own "+", several at once.
-- **Projects (home):** about 3 featured projects as an editorial numbered index, collapsible like experience; each expands into a soft cell with a screenshot, summary, tags and "view project →" (detail page). "all projects →" leads to a separate /projects page.
+- **Projects (home):** 2 featured projects (Secure File Sharing System, Character-Level GPT; decided 2026-10-16) as an editorial numbered index, collapsible like experience; each expands into a soft cell with a screenshot, summary, tags and "view project →" (detail page). "all projects →" leads to a separate /projects page.
 - **Beyond code (home):** a small scrapbook preview: left text block with one intro line and "open the scrapbook →"; 6 draggable prints clustered around it (larger on the right) inside a framed area with crop marks, plus a drag hint and reset. Not collapsible.
 - **Connect:** contact block on the left (email with copy, LinkedIn · GitHub · Résumé) + leave a star: click open night sky to leave one gold "pixel cross" star; hover shows city + time; yours says "you". Needs a small database + one API route; stores city only, never IP.
 - **Sky modes (visitor's choice):** (1) scroll, the default; (2) pick the time, with a mini dial in the nav that grows into a full 24-hour dial, plus a light/dark button; (3) "my time" inside the dial, the visitor's local clock. A "sunset" pill returns to scroll mode. Navy day text theme. Full spec in `visual-system.md` → 24-hour sky.
@@ -60,10 +60,8 @@ If a step needs one of these, stop and say it needs design.
 - Body text sizes and spacing (tune once real content exists).
 - One-sentence purpose of the site.
 - "Load into focus" idea: page opens at max blur and settles. Don't build it unless decided.
-- Tech stack: real list of languages and tools (placeholders for now).
 - Experience: what goes inside an open role besides bullets (tech tags, link to a related project page?).
-- Which ~3 projects are featured on the home page.
 
 ## Copy
 
-All written copy (hero line, bios, captions, one-sentence purpose) is deferred to the content pass. Use placeholders until then.
+The content pass (build step 14) is under way. Every piece of copy, link, file name, the tech stack list, roles and projects is collected in Jared's **Website content pass** doc (https://claude.ai/code/artifact/c788bec9-eefe-4963-a453-49bb3b2b6750); fill the data files from it, and keep `[placeholders]` for any field still marked `?` there.
