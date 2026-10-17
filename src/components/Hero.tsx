@@ -1,9 +1,11 @@
 import Image from "next/image";
+import HeroLinks from "@/components/HeroLinks";
 import Sparkle from "@/components/Sparkle";
 import { hero } from "@/data/hero";
 
 // The hero (docs/visual-system.md → Hero layout): editorial left on the sky's plum vignette,
-// right side open to the sun. Order: portrait → stacked name → hero line → "currently" line.
+// right side open to the sun. Order: portrait → stacked name → hero line → "currently" line →
+// link buttons (added 2026-10-17).
 // The name is the only focal point; nothing here is bigger or brighter than it.
 // Layout values follow docs/reference/home-mockup.html.
 export default function Hero() {
@@ -32,6 +34,8 @@ export default function Hero() {
           <Sparkle twinkle />
           {hero.currently}
         </p>
+
+        <HeroLinks />
       </div>
     </section>
   );

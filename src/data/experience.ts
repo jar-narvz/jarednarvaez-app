@@ -8,7 +8,7 @@ export type Role = {
   end?: string; // omit for "Present"
   location: string;
   current?: boolean; // twinkling star
-  bullets: string[]; // 1–3
+  bullets: string[]; // 1–3 (the Berkeley entry lists its coursework instead)
   tags?: string[]; // tech tags under the bullets; omit for non-technical roles
 };
 
@@ -66,41 +66,22 @@ export const experience = {
       tags: ["React", "Java", "C++", "Unreal Engine 5", "Web Design"],
     },
     {
-      title: "Computer Science Representative Intern",
-      org: "PASAE",
-      start: "Sep 2023",
-      end: "May 2024",
+      title: "Computer Science Major, Data Science Minor",
+      org: "University of California, Berkeley",
+      start: "Aug 2023",
+      end: "May 2027",
       location: "Berkeley, CA",
+      // Relevant coursework from Jared's résumé, one course per bullet.
       bullets: [
-        "Developed intern projects using C++, React.js, and Java, gaining an understanding of software engineering principles.",
-        "Used Unreal Engine 5 to learn game development fundamentals, gaining hands-on experience with game mechanics and 3D environments.",
-        "Led professional development workshops, such as LinkedIn and LeetCode workshops.",
+        "Structure & Interpretation of Computer Programs (Python, SQL)",
+        "Data Structures (Java)",
+        "Great Ideas of Computer Architecture (Machine Structures)",
+        "Foundations of Data Science",
+        "Principles and Techniques of Data Science",
+        "Computer Security",
+        "Introduction to the Internet: Architecture and Protocols",
+        "Introduction to Artificial Intelligence",
       ],
-      tags: ["C++", "React", "Java", "Unreal Engine 5"],
-    },
-    {
-      title: "Events Coordinator",
-      org: "KOSMOS @ Cal",
-      start: "May 2024",
-      end: "Dec 2024",
-      location: "Berkeley, CA",
-      bullets: [
-        "Partnered with multiple teams in UC Berkeley's dance community to coordinate and host joint socials and events, improving inter-team connectedness.",
-        "Organized and executed 2–3 monthly events, coordinating logistics, timelines, and communication across executives and board members, increasing member participation and engagement.",
-      ],
-      tags: ["Event Planning"],
-    },
-    {
-      title: "Tech Team",
-      org: "KOSMOS @ Cal",
-      start: "Feb 2024",
-      end: "Dec 2024",
-      location: "Berkeley, CA",
-      bullets: [
-        "Edited dance covers and their thumbnails with Lightroom, Premiere Pro, and Final Cut Pro.",
-        "Shadowed filmers during recordings of YouTube dance covers, which amassed 1,000+ views within 6 months.",
-      ],
-      tags: ["Lightroom", "Premiere Pro", "Final Cut Pro"],
     },
   ] satisfies Role[],
 };

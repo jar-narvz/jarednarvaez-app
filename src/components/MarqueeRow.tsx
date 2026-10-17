@@ -44,7 +44,7 @@ export default function MarqueeRow({
           ...(durationS && { animationDuration: `${durationS}s` }),
         } as React.CSSProperties
       }
-      className={`flex w-max gap-3.5 group-hover:[animation-play-state:paused] ${
+      className={`flex w-max gap-3.5 hover:[animation-play-state:paused] ${
         durationS ? "animate-marquee" : ""
       } ${reverse ? "[animation-direction:reverse]" : ""}`}
     >

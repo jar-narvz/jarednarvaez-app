@@ -133,7 +133,9 @@ function RoleRow({
           and its click bubbles up to here. */}
       <div onClick={onToggle} className="flex cursor-pointer items-start justify-between gap-3">
         <div>
-          <p className="text-[17px] font-medium">
+          {/* Always at least two lines tall (Jared, 2026-10-17), so one-line titles keep the same
+              rhythm as the long ones that wrap. */}
+          <p className="min-h-[2lh] text-[17px] font-medium">
             {role.title} <span className="text-accent">@ {role.org}</span>
           </p>
           {/* Tabular numerals on the dates only: in Schibsted they also widen the comma, which

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import Collapse from "@/components/Collapse";
 import CollapsibleHeader from "@/components/CollapsibleHeader";
+import ScreenshotViewer from "@/components/ScreenshotViewer";
 import TagList from "@/components/TagList";
 import ToggleButton from "@/components/ToggleButton";
 import UnderlineLink from "@/components/UnderlineLink";
@@ -194,21 +195,25 @@ function ProjectRow({
   );
 }
 
-/** Screenshot with the focus pull: blur(5px) brightness(1.15) → sharp, 800ms after 200ms. */
+/** Screenshot with the focus pull: blur(5px) brightness(1.15) → sharp, 800ms after 200ms. Click it
+ *  to see it large (ScreenshotViewer). */
 function ProjectImage({ project, index, open }: { project: Project; index: number; open: boolean }) {
-  const className = `aspect-[16/10] w-50 max-w-full flex-none rounded-lg transition-[filter] delay-200 duration-800 ease-[ease] motion-reduce:transition-none max-sm:w-full ${
+  const size = "w-50 max-w-full flex-none rounded-lg max-sm:w-full";
+  const focusPull = `aspect-[16/10] rounded-lg transition-[filter] delay-200 duration-800 ease-[ease] motion-reduce:transition-none ${
     open ? "filter-none" : "blur-[5px] brightness-115"
   }`;
 
   if (project.image.src) {
     return (
-      <Image
-        src={project.image.src}
-        alt={project.image.alt}
-        width={400}
-        height={250}
-        className={`object-cover ${className}`}
-      />
+      <ScreenshotViewer src={project.image.src} alt={project.image.alt} className={size}>
+        <Image
+          src={project.image.src}
+          alt={project.image.alt}
+          width={400}
+          height={250}
+          className={`w-full object-cover ${focusPull}`}
+        />
+      </ScreenshotViewer>
     );
   }
 
@@ -218,7 +223,7 @@ function ProjectImage({ project, index, open }: { project: Project; index: numbe
       role="img"
       aria-label={project.image.alt}
       style={{ background: PLACEHOLDER_GRADIENTS[index % PLACEHOLDER_GRADIENTS.length] }}
-      className={`grid place-items-center text-[12px] ${className}`}
+      className={`grid place-items-center text-[12px] ${size} ${focusPull}`}
     >
       [screenshot]
     </div>

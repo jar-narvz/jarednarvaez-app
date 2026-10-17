@@ -10,8 +10,8 @@ const COPIES = 4;
 
 // The tech stack (docs/visual-system.md → Tech stack section): header on the left, then three
 // logo pill rows looping in alternating directions at about 26, 23 and 25 px/s, edges fading over
-// the outer 7%, paused on hover, still under Reduce Motion. Layout values follow
-// docs/reference/home-mockup.html.
+// the outer 7%; only the row under the pointer pauses (Jared, 2026-10-17); still under Reduce
+// Motion. Layout values follow docs/reference/home-mockup.html.
 export default function TechStack() {
   return (
     <section
@@ -22,7 +22,7 @@ export default function TechStack() {
       <SectionHeading>{techStack.heading}</SectionHeading>
       <p className="mt-2.5 max-w-[55ch] text-[17px] text-ink/90">{techStack.line}</p>
 
-      <div className="group mt-9 flex flex-col gap-5.5 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_7%,#000_93%,transparent)]">
+      <div className="mt-9 flex flex-col gap-5.5 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_7%,#000_93%,transparent)]">
         {techStack.rows.map((row, i) => (
           // The list repeats COPIES times end to end, and each loop slides exactly one copy (see
           // the marquee keyframes in globals.css), so the restart is invisible. Two copies left a
