@@ -137,7 +137,7 @@ Drew's work-section pattern, made ours with star markers: the section starts **c
   - Line 2: dates · location (Schibsted 14px, ~75% cream, tabular numerals, letter-spacing 0.02em). No mono font.
   - Right: the same 30px round "+" toggle as the header.
   - Marker: 12px sparkle centered on the rail, aligned with line 1.
-- **Details (when open):** 2–3 bullets, Schibsted ~15px, line-height 1.6, ~92% cream. What else goes here (tech tags, link to a project page) is still open.
+- **Details (when open):** 2–3 bullets, Schibsted ~15px, line-height 1.6, ~92% cream. Under the bullets, the role's tech tags in the same small pills as projects (decided 2026-10-16). No project link.
 - **Star states:** current role = full opacity + slow twinkle (opacity 1 ↔ 0.5, 2.4s ease-in-out, infinite; reuse the site's sparkle twinkle). Past roles = 55% opacity. Any open role = full opacity + soft glow (`drop-shadow(0 0 4px accent)`).
 - **Order:** newest first.
 
@@ -185,6 +185,7 @@ export type Role = {
   location: string;
   current?: boolean;  // twinkling star
   bullets: string[];  // 2–3, filled in the content pass
+  tags?: string[];    // tech tags under the bullets; omit for non-technical roles
 };
 // roles: internship, VSPA data assistant, PASAE external vice president (newest first)
 ```
@@ -475,6 +476,14 @@ function drawVisitorStar(img,x,y,a,isMine){
 // same brightness rule as the white stars (t = 0 golden hour → 1 night)
 const starBrightness=t=>t<.35?0:t<.65?.3*(t-.35)/.3:.3+.7*(t-.65)/.35;
 ```
+
+## Footer (decided 2026-10-16)
+
+- **What:** one plain line, "designed and built by Jared Narvaez", at the very bottom under connect (full night). No italic, no links, no "back to top".
+- **Placement:** left-aligned on the site's side margin (96px on desktop, the phone margin on phones), lined up with the contact block; 28px from the bottom plus the phone's safe-area inset.
+- **Type:** Schibsted Grotesk 12px, cream at ~60%, with the site's plum text shadow.
+- **Behavior:** static, no animation. Keeps the bottom-right corner clear for the leave-a-star hint.
+- **Reference:** footer options mockup, option A (https://claude.ai/artifact/MKUiG4qex5UYqGdSG4TYRg).
 
 ## Motion
 

@@ -30,9 +30,10 @@ The main design doc: principles and current state, one line per decision. Full s
 - **Nav:** about · experience · projects · résumé · contact (lowercase), top-right. Hides while scrolling down and returns on scroll up; on phones a "menu" button opens the links full screen. Sky controls sit beside the links (not shown until the sky modes are built).
 - **Intro:** lead + paragraph on the left, quick facts (studying, leading, currently @, based in) as a row of four short columns underneath, left of the sun.
 - **Tech stack:** label + heading + one line on the left; three looping rows (languages, web & tools, ML & data; two rows until 2026-10-16) of logo + name pills, centered margin to margin, edges fading out. Pause on hover.
-- **Experience:** collapsed by default; "+" opens a vertical timeline with four-point star markers (current role twinkles), animated as the line draws down and stars pop in one by one. Each role opens with its own "+", several at once.
+- **Experience:** collapsed by default; "+" opens a vertical timeline with four-point star markers (current role twinkles), animated as the line draws down and stars pop in one by one. Each role opens with its own "+", several at once. An open role shows its bullets plus tech tags (decided 2026-10-16).
 - **Projects (home):** 2 featured projects (Secure File Sharing System, Character-Level GPT; decided 2026-10-16) as an editorial numbered index, collapsible like experience; each expands into a soft cell with a screenshot, summary, tags and "view project →" (detail page). "all projects →" leads to a separate /projects page.
 - **Beyond code (home):** a small scrapbook preview: left text block with one intro line and "open the scrapbook →"; 6 draggable prints clustered around it (larger on the right) inside a framed area with crop marks, plus a drag hint and reset. Not collapsible.
+- **Footer:** one plain, quiet line, "designed and built by Jared Narvaez", left-aligned on the margin under connect (decided 2026-10-16).
 - **Connect:** contact block on the left (email with copy, LinkedIn · GitHub · Résumé) + leave a star: click open night sky to leave one gold "pixel cross" star; hover shows city + time; yours says "you". Needs a small database + one API route; stores city only, never IP.
 - **Sky modes (visitor's choice):** (1) scroll, the default; (2) pick the time, with a mini dial in the nav that grows into a full 24-hour dial, plus a light/dark button; (3) "my time" inside the dial, the visitor's local clock. A "sunset" pill returns to scroll mode. Navy day text theme. Full spec in `visual-system.md` → 24-hour sky.
 - **Build stack:** Next.js (App Router) + TypeScript, Tailwind + CSS variables, Canvas 2D sky, Motion, content as TS data files + MDX, on Vercel.
@@ -60,7 +61,6 @@ If a step needs one of these, stop and say it needs design.
 - Body text sizes and spacing (tune once real content exists).
 - One-sentence purpose of the site.
 - "Load into focus" idea: page opens at max blur and settles. Don't build it unless decided.
-- Experience: what goes inside an open role besides bullets (tech tags, link to a related project page?).
 
 ## Copy
 
