@@ -17,7 +17,7 @@ The main design doc: principles and current state, one line per decision. Full s
 ## Decided
 
 - **Structure:** hybrid — home page hub + detail pages per project.
-- **Home order:** hero → intro (about me) → tech stack → experience (internship, VSPA, PASAE) → projects → beyond code (scrapbook preview) → connect. No GitHub activity section. No fun / experimental section (cut 2026-10-12; playful ideas become easter eggs after launch).
+- **Home order:** hero → intro (about me) → tech stack → experience (PhysaFlow, VSPA, PASAE, KOSMOS) → projects → beyond code (scrapbook preview) → connect. No GitHub activity section. No fun / experimental section (cut 2026-10-12; playful ideas become easter eggs after launch).
 - **Signature ideas:** draggable photo scrapbook (beyond code), leave a star (connect: visitors add a gold pixel star to the night sky), live widgets like now playing and location (hero "currently" line).
 - **Sky:** fixed background shifting golden hour → sunset → dusk → night with stars as you scroll.
 - **Scroll sky timing:** follows overall page scroll progress, not sections. Hero is always golden hour, connect is always full night, everything between stretches to fit.
@@ -64,4 +64,4 @@ If a step needs one of these, stop and say it needs design.
 
 ## Copy
 
-The content pass (build step 14) is under way. Every piece of copy, link, file name, the tech stack list, roles and projects is collected in Jared's **Website content pass** doc (https://claude.ai/code/artifact/c788bec9-eefe-4963-a453-49bb3b2b6750); fill the data files from it, and keep `[placeholders]` for any field still marked `?` there.
+The content pass (build step 14) is under way. Every piece of copy, link, file name, the tech stack list, roles and projects is in `docs/content.md` (exported from Jared's **Website content pass** doc, https://claude.ai/code/artifact/c788bec9-eefe-4963-a453-49bb3b2b6750); files it names are in `~/website-content`. Fill the data files from it, and keep `[placeholders]` for any field still marked `?` there.

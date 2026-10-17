@@ -6,7 +6,7 @@
 
 - **In progress:** nothing; step 13 done (Phase 2 complete; step 12 moved after launch)
 - **Next:** step 14, content pass
-- **Content:** all copy and files for step 14 are in Jared's Website content pass doc (https://claude.ai/code/artifact/c788bec9-eefe-4963-a453-49bb3b2b6750).
+- **Content:** all copy for step 14 is in `docs/content.md` (exported from Jared's Website content pass doc); files are in `~/website-content`.
 - **Notes:** Plan re-aimed at the MVP on 2026-10-16 (see `design.md` → Launch plan). Goal: launch as soon as possible.
 
 ## MVP (decided 2026-10-16)
