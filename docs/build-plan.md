@@ -39,7 +39,7 @@ Every section uses placeholder copy (`[like this]`) and its own data file, and s
 
 ## Phase 3 — Launch
 
-- [ ] **14. Content pass.** Real copy, portrait, photos and captions, the 2 featured projects with screenshots, real tech stack list (four rows), roles and bullets, links, résumé PDF. Copy is written with Jared in the design chat, then dropped into the data files here.
+- [ ] **14. Content pass.** Real copy, portrait, photos and captions, the 2 featured projects with screenshots, real tech stack list (three rows), roles and bullets, links, résumé PDF. Copy is written with Jared in the design chat, then dropped into the data files here.
 - [ ] **15. Pre-launch checks.** Hide the nav's placeholder sky controls (they come back with sky modes). Page metadata (title, description, social preview image). Accessibility pass (keyboard, focus, `alt` text, Reduce Motion). Performance on a real phone (re-test the extension load hitch). Jared tests on his phone and sends it to friends.
 - [ ] **16. Go live.** Confirm Vercel is linked to `jar-narvz/jarednarvaez-app` (production branch `main`, Node 22.x) and a preview deploy of `rebuild` works. Jared moves the old site to a `legacy` branch, merges `rebuild` into `main`, and connects the domain. Done when the live URL shows the new site.
 

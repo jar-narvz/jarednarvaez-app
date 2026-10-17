@@ -114,7 +114,7 @@ Blend channel by channel (straight RGB) between neighboring keyframes. Golden ho
 ## Tech stack section
 
 - **Header (left, 96px margin):** "tech stack" label with sparkle (13px, accent) → Newsreader heading (~40px) → one Schibsted line (17px).
-- **Rows:** four rows (two until 2026-10-16), 96px from each side (centered, ~1088px wide at 1280). Row 1 languages, row 2 web & design, row 3 ML & data, row 4 tools. Directions alternate row to row, ~42s and ~48s per loop for rows 1–2, ~45s and ~51s for rows 3–4 (tune in the build so no two rows line up), edges fade over the outer 7%. 22px between rows.
+- **Rows:** three rows (two until 2026-10-16), 96px from each side (centered, ~1088px wide at 1280). Row 1 languages, row 2 web & tools, row 3 ML & data. Directions alternate row to row. Speed is set per row in pixels per second (about 26, 23 and 25 px/s), so the loop time follows the row's length and long rows don't race; slightly different speeds keep rows from lining up, edges fade over the outer 7%. 22px between rows.
 - **Items:** logo (~24px) + name (Schibsted 500, 18px) in a pill: 10px × 18px padding, full radius, 1px ink border at ~38%, fill tinted ~34% (dark plum in the evening, cream in the day). 14px gap.
 - **Behavior:** loops on its own (accepted exception, like the cloud drift); pauses on hover.
 
@@ -497,7 +497,7 @@ const starBrightness=t=>t<.35?0:t<.65?.3*(t-.35)/.3:.3+.7*(t-.65)/.35;
 | Nav *(after launch)* | Mini dial's gold dot travels around its ring to the current hour | Every frame | Follows the sky | Stays (it shows state) |
 | Nav *(after launch)* | Time dial grows down from the mini dial / shrinks back | Mini dial click / "close" / click outside | Open: scale 0 → 1 from top-right, 450ms `cubic-bezier(.3,1.3,.5,1)`. Close: scale → 0 + fade, 220ms ease-in | Instant |
 | Hero (and labels) | Sparkle twinkle | Always | Opacity 1 ↔ 0.5, 2.4s ease-in-out, infinite | Still |
-| Tech stack | Four pill rows loop, alternating directions; pause on hover | Always / hover | Linear, ~42s, ~48s, ~45s, ~51s per loop (rows 1–4) | Rows stay still |
+| Tech stack | Three pill rows loop, alternating directions; pause on hover | Always / hover | Linear, about 26, 23, 25 px/s (rows 1–3); loop time follows row length | Rows stay still |
 | Experience + projects | Round "+" toggles rotate 45° into "×", border turns accent | Click | 400ms `cubic-bezier(.3,1.4,.5,1)` | Instant |
 | Experience | Section opens: rail line draws down, stars pop in one by one, rows fade up; closes in reverse bottom-up | Header "+" | See Experience → Animation (line 700ms; star 500ms pop at 170 + 180·*i*; row 450ms at 250 + 180·*i*; close 60ms stagger) | Instant, all stars lit |
 | Experience | Role opens: details slide open, bullets fade in, its star brightens with a glow; current role's star twinkles | Row "+" | Height 400ms; bullets 300ms after 100ms; twinkle 2.4s | Instant, no twinkle |
