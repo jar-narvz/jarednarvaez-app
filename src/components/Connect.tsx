@@ -10,7 +10,8 @@ import { links } from "@/data/links";
 // so the sky here isn't clickable and there's no star hint). The last section: at least one
 // screen tall, so the bottom of the scroll, which is full night, lands on it. The block sits
 // left on the vignette: label → heading → line → email with a "copy" pill → LinkedIn · GitHub ·
-// Résumé. Layout values follow docs/reference/home-mockup.html.
+// Résumé. Layout values follow docs/reference/home-mockup.html. The footer line sits under it,
+// so its height comes off the screen here and the two share the last screen.
 
 /** How long the pill says "copied" (Motion inventory: instant swap, 1.4s). */
 const COPIED_MS = 1400;
@@ -25,7 +26,7 @@ export default function Connect() {
   return (
     <section
       id="contact"
-      className="flex min-h-svh items-center px-(--margin) [text-shadow:var(--text-shadow)]"
+      className="flex min-h-[calc(100svh-var(--footer-height))] items-center px-(--margin) [text-shadow:var(--text-shadow)]"
     >
       <div className="w-[min(320px,100%)]">
         <SectionLabel>{connect.label}</SectionLabel>

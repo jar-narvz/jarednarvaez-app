@@ -4,6 +4,7 @@ import { useState } from "react";
 import Collapse from "@/components/Collapse";
 import CollapsibleHeader from "@/components/CollapsibleHeader";
 import Sparkle from "@/components/Sparkle";
+import TagList from "@/components/TagList";
 import ToggleButton from "@/components/ToggleButton";
 import { experience, type Role } from "@/data/experience";
 import { staggerDelay } from "@/lib/stagger";
@@ -135,23 +136,32 @@ function RoleRow({
           <p className="text-[17px] font-medium">
             {role.title} <span className="text-accent">@ {role.org}</span>
           </p>
-          <p className="mt-0.5 text-[14px] tracking-[0.02em] text-ink/75 tabular-nums">
-            {role.start} – {role.end ?? "Present"} · {role.location}
+          {/* Tabular numerals on the dates only: in Schibsted they also widen the comma, which
+              reads as "Berkeley , CA" in the location. */}
+          <p className="mt-0.5 text-[14px] tracking-[0.02em] text-ink/75">
+            <span className="tabular-nums">
+              {role.start} – {role.end ?? "Present"}
+            </span>{" "}
+            · {role.location}
           </p>
         </div>
         <ToggleButton open={open} controls={detailsId} label={`details for ${role.title}`} />
       </div>
 
       <Collapse open={open} id={detailsId} durationMs={400}>
-        <ul
-          className={`mt-2 mb-0.5 list-disc pl-4.5 text-[15px] leading-[1.6] transition-[opacity,translate] delay-100 duration-300 ease-[ease] motion-reduce:transition-none ${
+        {/* Bullets, then the role's tech tags (none for non-technical roles). */}
+        <div
+          className={`mt-2 mb-0.5 transition-[opacity,translate] delay-100 duration-300 ease-[ease] motion-reduce:transition-none ${
             open ? "translate-y-0 opacity-92" : "-translate-y-1 opacity-0"
           }`}
         >
-          {role.bullets.map((bullet) => (
-            <li key={bullet}>{bullet}</li>
-          ))}
-        </ul>
+          <ul className="list-disc pl-4.5 text-[15px] leading-[1.6]">
+            {role.bullets.map((bullet) => (
+              <li key={bullet}>{bullet}</li>
+            ))}
+          </ul>
+          {role.tags && <TagList tags={role.tags} className="mt-2.5" />}
+        </div>
       </Collapse>
     </li>
   );

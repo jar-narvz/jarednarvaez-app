@@ -20,6 +20,10 @@ const LINKS = [
   { label: "contact", href: "#contact" },
 ];
 
+/** The résumé PDF opens in a new tab (as in connect) so the site stays open; section links stay put. */
+const newTab = (href: string) =>
+  href.startsWith("#") ? {} : { target: "_blank", rel: "noopener noreferrer" };
+
 // The plum text shadow (shared with the hero in globals.css), so the nav stays readable
 // when it sits over dusk and night.
 const SHADOW = "[text-shadow:var(--text-shadow)]";
@@ -86,7 +90,7 @@ export default function Nav() {
             <ul className="hidden items-center gap-7 md:flex">
               {LINKS.map((link) => (
                 <li key={link.label}>
-                  <a href={link.href} className="transition-colors hover:text-ink">
+                  <a href={link.href} {...newTab(link.href)} className="transition-colors hover:text-ink">
                     {link.label}
                   </a>
                 </li>
@@ -165,7 +169,7 @@ function PhoneMenu({ reduceMotion, onPick }: { reduceMotion: boolean; onPick: ()
             animate={{ opacity: 1, y: 0 }}
             transition={reduceMotion ? instant : { duration: LINK_S, ease: CSS_EASE, delay: linkDelay(i) }}
           >
-            <a href={link.href} onClick={onPick}>
+            <a href={link.href} {...newTab(link.href)} onClick={onPick}>
               {link.label}
             </a>
           </motion.li>

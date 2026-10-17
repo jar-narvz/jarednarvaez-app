@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import Collapse from "@/components/Collapse";
 import CollapsibleHeader from "@/components/CollapsibleHeader";
+import TagList from "@/components/TagList";
 import ToggleButton from "@/components/ToggleButton";
 import UnderlineLink from "@/components/UnderlineLink";
 import {
@@ -179,16 +180,7 @@ function ProjectRow({
             <ProjectImage project={project} index={index} open={open} />
             <div className="min-w-0">
               <p className="text-[15px] leading-[1.55]">{project.summary}</p>
-              <ul role="list" className="mt-2.5 flex flex-wrap gap-1.5">
-                {project.tags.map((tag, t) => (
-                  <li
-                    key={`${tag}-${t}`}
-                    className="rounded-full border border-ink/38 bg-tint/30 px-2.5 py-0.75 text-[12px]"
-                  >
-                    {tag}
-                  </li>
-                ))}
-              </ul>
+              <TagList tags={project.tags} className="mt-2.5" />
               {showProjectPages && (
                 <p className="mt-3">
                   <UnderlineLink href={`/projects/${project.slug}`}>view project →</UnderlineLink>

@@ -1,8 +1,8 @@
-// Connect content (docs/visual-system.md → Connect → Contact block). Bracketed text is placeholder
-// copy, written with Jared in the content pass (build step 14). Addresses live in links.ts.
+// Connect content (docs/visual-system.md → Connect → Contact block; copy from docs/content.md →
+// Connect). Addresses live in links.ts.
 
 export const connect = {
   label: "connect",
-  heading: "[connect heading]",
-  line: "[connect line]",
+  heading: "reach out!",
+  line: "I'd love to chat about anything! Looking for full-time work starting 2027.",
 };

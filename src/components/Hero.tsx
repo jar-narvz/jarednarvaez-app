@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Sparkle from "@/components/Sparkle";
 import { hero } from "@/data/hero";
 
@@ -10,14 +11,15 @@ export default function Hero() {
     <section className="flex min-h-svh items-center px-(--margin) pt-30 pb-20">
       {/* Nudged a little above center, as in the mockup. */}
       <div className="flex max-w-160 -translate-y-[4vh] flex-col gap-5.5 [text-shadow:var(--text-shadow)]">
-        {/* [portrait] placeholder: swap for the real photo in the content pass. */}
-        <div
-          role="img"
-          aria-label={hero.portrait.alt}
-          className="grid size-21 place-items-center rounded-full border-2 border-cream bg-[radial-gradient(circle_at_35%_35%,#F7C27E,#A4527A_60%,#3A2E62)] font-serif text-[28px] text-cream shadow-[0_6px_20px_rgba(42,22,48,0.4)]"
-        >
-          {hero.portrait.initials}
-        </div>
+        {/* 84px round portrait with a 2px cream border. First thing on screen, so it loads eagerly. */}
+        <Image
+          src={hero.portrait.src}
+          alt={hero.portrait.alt}
+          width={84}
+          height={84}
+          preload
+          className="size-21 rounded-full border-2 border-cream object-cover shadow-[0_6px_20px_rgba(42,22,48,0.4)]"
+        />
 
         <h1 className="font-serif text-[clamp(52px,7.5vw,72px)] leading-[0.95] font-normal tracking-[-0.045em]">
           {hero.firstName}

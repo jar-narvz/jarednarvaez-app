@@ -1,6 +1,6 @@
 // Projects content (docs/visual-system.md → Projects → Data shape). One list feeds both the home
-// page (featured only, by `order`) and, after launch, /projects (all). Bracketed text is
-// placeholder copy, written with Jared in the content pass (build step 14).
+// page (featured only, by `order`) and, after launch, /projects (all). Copy from docs/content.md →
+// Projects; the rest of the list ("More projects") joins when /projects is built.
 
 export type Project = {
   slug: string; // detail page: /projects/[slug] (MDX)
@@ -10,7 +10,7 @@ export type Project = {
   summary: string; // 1–2 lines
   tags: string[]; // tech used
   image: { src: string; alt: string }; // 16:10 screenshot; src is a path under /public
-  featured?: boolean; // shown on the home page (about 3)
+  featured?: boolean; // shown on the home page (2 for the MVP)
   order?: number; // home page order
 };
 
@@ -18,47 +18,43 @@ export type Project = {
 // "all projects →" stay hidden. Flip this once those pages exist.
 export const showProjectPages = false;
 
-// [screenshot] placeholders: an empty src shows a labeled gradient box until real
-// screenshots arrive in the content pass.
+// Screenshots are 16:10 PNGs (1600×1000) in public/.
 export const projects: Project[] = [
   {
-    slug: "project-one",
-    title: "[project title]",
-    type: "[type]",
-    year: "[20XX]",
-    summary: "[summary: what it is, what you built, what it does]",
-    tags: ["[tag]", "[tag]"],
-    image: { src: "", alt: "[screenshot alt]" },
+    slug: "secure-file-sharing",
+    title: "Secure File Sharing System",
+    type: "Class project",
+    year: "2025",
+    summary:
+      "An encrypted file store in Go that stays safe on an untrusted server, with sharing, revocation and fast appends",
+    tags: ["Go", "AES-CTR", "HMAC", "RSA"],
+    image: {
+      src: "/secure-file-sharing.png",
+      alt: "Flowchart of the secure file sharing system: user authentication, encrypted file storage as chunks, and sharing and revocation",
+    },
     featured: true,
     order: 1,
   },
   {
-    slug: "project-two",
-    title: "[project title]",
-    type: "[type]",
-    year: "[20XX]",
-    summary: "[summary: what it is, what you built, what it does]",
-    tags: ["[tag]", "[tag]"],
-    image: { src: "", alt: "[screenshot alt]" },
+    slug: "character-gpt",
+    title: "Character-Level GPT",
+    type: "Class project",
+    year: "2026",
+    summary:
+      "Neural nets in PyTorch, from 97%+ MNIST to an RNN language ID and a transformer that writes Shakespeare",
+    tags: ["Python", "PyTorch", "Transformers"],
+    image: {
+      src: "/character-gpt.png",
+      alt: "Flowchart of the character-level GPT: training data, transformer model and sampling, with generated text at iteration 0 and 9,900",
+    },
     featured: true,
     order: 2,
-  },
-  {
-    slug: "project-three",
-    title: "[project title]",
-    type: "[type]",
-    year: "[20XX]",
-    summary: "[summary: what it is, what you built, what it does]",
-    tags: ["[tag]", "[tag]"],
-    image: { src: "", alt: "[screenshot alt]" },
-    featured: true,
-    order: 3,
   },
 ];
 
 export const projectsSection = {
   label: "projects",
-  heading: "[projects heading]",
+  heading: "what i've made",
 };
 
 /** The home page's projects: featured only, in `order`. */

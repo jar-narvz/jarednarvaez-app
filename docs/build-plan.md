@@ -4,8 +4,8 @@
 
 ## Now
 
-- **In progress:** nothing; step 13 done (Phase 2 complete; step 12 moved after launch)
-- **Next:** step 14, content pass
+- **In progress:** step 14, content pass (built 2026-10-17, awaiting Jared's review)
+- **Next:** step 15, pre-launch checks
 - **Content:** all copy for step 14 is in `docs/content.md` (exported from Jared's Website content pass doc); files are in `~/website-content`.
 - **Notes:** Plan re-aimed at the MVP on 2026-10-16 (see `design.md` → Launch plan). Goal: launch as soon as possible.
 

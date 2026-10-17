@@ -17,6 +17,10 @@
      docs/reference/home-mockup.html, chosen for step 7 on 2026-10-16). */
   --margin: clamp(24px, 6.7vw, 96px);
 
+  /* Footer: one 20px line plus 28px below it and the phone's safe-area inset. Connect is one
+     screen minus this, so the last screen at full night holds both (footer mockup, option A). */
+  --footer-height: calc(48px + env(safe-area-inset-bottom, 0px));
+
   /* Soft plum shadow on all text over the sky (prototype value). */
   --text-shadow: 0 0 18px rgba(42, 18, 40, 0.6);
 
