@@ -6,7 +6,7 @@
 // Values chosen with Jared 2026-10-16, not yet in visual-system.md.
 export default function SectionDivider({ wide = false }: { wide?: boolean }) {
   return (
-    <div aria-hidden="true" className="px-(--margin)">
+    <div aria-hidden="true" className="pl-(--content-l) pr-(--content-r)">
       <div className={`h-px bg-ink/22 ${wide ? "" : "max-w-160"}`} />
     </div>
   );

@@ -16,7 +16,7 @@ export default function TechStack() {
   return (
     <section
       id="tech"
-      className="px-(--margin) py-[clamp(72px,12vh,140px)] [text-shadow:var(--text-shadow)]"
+      className="pl-(--content-l) pr-(--content-r) py-[clamp(72px,12vh,140px)] [text-shadow:var(--text-shadow)]"
     >
       <SectionLabel>{techStack.label}</SectionLabel>
       <SectionHeading>{techStack.heading}</SectionHeading>

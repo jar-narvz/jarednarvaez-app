@@ -4,7 +4,7 @@
 // for the leave-a-star hint. Its height is --footer-height (globals.css), which Connect subtracts.
 export default function Footer() {
   return (
-    <footer className="h-(--footer-height) px-(--margin) text-[12px] leading-5 text-ink/60 [text-shadow:var(--text-shadow)]">
+    <footer className="h-(--footer-height) pl-(--content-l) pr-(--content-r) text-[12px] leading-5 text-ink/60 [text-shadow:var(--text-shadow)]">
       designed and built by Jared Narvaez
     </footer>
   );

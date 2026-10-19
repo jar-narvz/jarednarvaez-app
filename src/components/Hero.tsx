@@ -10,7 +10,7 @@ import { hero } from "@/data/hero";
 // Layout values follow docs/reference/home-mockup.html.
 export default function Hero() {
   return (
-    <section className="flex min-h-svh items-center px-(--margin) pt-30 pb-20">
+    <section className="flex min-h-svh items-center pl-(--content-l) pr-(--content-r) pt-30 pb-20">
       {/* Nudged a little above center, as in the mockup. */}
       <div className="flex max-w-160 -translate-y-[4vh] flex-col gap-5.5 [text-shadow:var(--text-shadow)]">
         {/* 84px round portrait with a 2px cream border. First thing on screen, so it loads eagerly. */}

@@ -27,6 +27,7 @@ The main design doc: principles and current state, one line per decision. Full s
 - **Type:** Newsreader headings + Schibsted Grotesk body. Hero name stacked with italic surname, tight spacing.
 - **Motion:** slow cloud drift, stars twinkle in at dusk. Reduce Motion freezes grain, stars and clouds; scroll blending stays on.
 - **Hero:** one focal point, the name. Editorial left: small round portrait above the stacked name, hero line and "currently" line below, on the left vignette. Right side open to the sun. No medium or large images.
+- **Page layout:** every section's content sits in a centered 1000px column, left-aligned inside (like Drew's site); the nav stays at the screen edges. Narrower screens fall back to the side margin (decided 2026-10-19).
 - **Nav:** about · experience · projects · résumé · contact (lowercase), top-right. Hides while scrolling down and returns on scroll up; on phones a "menu" button opens the links full screen. Sky controls sit beside the links (not shown until the sky modes are built).
 - **Intro:** lead + paragraph on the left, quick facts (studying, leading, currently @, based in) as a row of four short columns underneath, left of the sun.
 - **Tech stack:** label + heading + one line on the left; three looping rows (languages, web & tools, ML & data; two rows until 2026-10-16) of logo + name pills, centered margin to margin, edges fading out. Pause on hover.

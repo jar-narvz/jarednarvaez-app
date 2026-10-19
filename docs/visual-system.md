@@ -95,6 +95,13 @@ Blend channel by channel (straight RGB) between neighboring keyframes. Golden ho
 - **Hero name:** Newsreader, stacked ("Jared" over "*Narvaez*" in italic), line-height about 0.95, 72px (desktop), weight 400, letter-spacing `-0.045em`. Word-spacing (`0.18em`) only matters if the name ever sits on one line, e.g. a navbar or footer. Needs a smaller size on phones (e.g. `clamp()`); spacing is in em so it scales with it.
 - **Italic:** used in the surname and in photo captions on scrapbook prints (Newsreader italic, in place of handwriting). Whether it appears anywhere else is still open.
 
+## Page layout
+
+- **Content column (decided 2026-10-19):** every section's content sits in a centered column, max 1000px wide, left-aligned inside (option B, like Drew's site). Built as `max(side margin, (page width − 1000px) / 2)` on each side, so below ~1100px wide it falls back to the side margin (up to 96px on desktop, 24px on phones).
+- **What "the 96px margin" means below:** on wide screens, the column's left and right edges. Tech stack rows run edge to edge of the column.
+- **Nav** stays on the 96px screen margin, outside the column.
+- **Vignette** unchanged (still fades out ~72% across); text toward the column's right edge sits closer to the sun, so check golden hour when widening blocks.
+
 ## Hero layout
 
 - **Placement:** editorial left, text block starts at the 96px left margin, vertically centered (slightly above middle). Sits on the left-side vignette. Right side left open to the sun and horizon.

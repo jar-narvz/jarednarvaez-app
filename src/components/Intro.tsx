@@ -9,7 +9,7 @@ export default function Intro() {
   return (
     <section
       id="about"
-      className="px-(--margin) py-[clamp(72px,12vh,140px)] [text-shadow:var(--text-shadow)]"
+      className="pl-(--content-l) pr-(--content-r) py-[clamp(72px,12vh,140px)] [text-shadow:var(--text-shadow)]"
     >
       <SectionLabel>{intro.label}</SectionLabel>
 
