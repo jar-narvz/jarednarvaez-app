@@ -157,7 +157,9 @@ function RoleRow({
             open ? "translate-y-0 opacity-92" : "-translate-y-1 opacity-0"
           }`}
         >
-          <ul className="list-disc space-y-2 pl-4.5 text-[15px] leading-[1.6]">
+          {/* Bullet text in the dates' grey: cream at 82% inside this 92% block ≈ the dates' 75%
+              (Jared, 2026-10-19). The dots keep the full ink color. */}
+          <ul className="list-disc space-y-2 pl-4.5 text-[15px] leading-[1.6] text-ink/82 marker:text-ink">
             {role.bullets.map((bullet) => (
               <li key={bullet}>{bullet}</li>
             ))}

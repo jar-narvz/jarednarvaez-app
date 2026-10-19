@@ -147,7 +147,7 @@ Drew's work-section pattern, made ours with star markers: the section starts **c
   - Line 2: dates · location (Schibsted 14px, ~75% cream, tabular numerals, letter-spacing 0.02em). No mono font.
   - Right: the same 30px round "+" toggle as the header.
   - Marker: 12px sparkle centered on the rail, aligned with line 1.
-- **Details (when open):** 2–3 bullets, Schibsted ~15px, line-height 1.6, ~92% cream, 8px between bullets (added 2026-10-19 so long bullets don't run together). Under the bullets, the role's tech tags in the same small pills as projects (decided 2026-10-16). No project link.
+- **Details (when open):** 2–3 bullets, Schibsted ~15px, line-height 1.6, text in the same grey as the dates line (~75% cream; changed 2026-10-19 from ~92%) with the dots at full cream, 8px between bullets (added 2026-10-19 so long bullets don't run together). Under the bullets, the role's tech tags in the same small pills as projects (decided 2026-10-16). No project link.
 - **Star states:** current role = full opacity + slow twinkle (opacity 1 ↔ 0.5, 2.4s ease-in-out, infinite; reuse the site's sparkle twinkle). Past roles = 55% opacity. Any open role = full opacity + soft glow (`drop-shadow(0 0 4px accent)`).
 - **Order:** newest first.
 
