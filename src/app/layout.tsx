@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Newsreader, Schibsted_Grotesk } from "next/font/google";
+import { IBM_Plex_Mono, Newsreader, Schibsted_Grotesk } from "next/font/google";
 import Sky from "@/components/Sky";
 import "./globals.css";
 
@@ -14,6 +14,16 @@ const newsreader = Newsreader({
 const schibstedGrotesk = Schibsted_Grotesk({
   variable: "--font-schibsted",
   subsets: ["latin"],
+});
+
+// Tech stack pills only (chosen by Jared in /lab, 2026-10-19). One weight. Not preloaded: the
+// pills sit below the hero, so it shouldn't compete with the hero's fonts; the rows wait for
+// document.fonts.ready before they start looping.
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-plex-mono",
+  subsets: ["latin"],
+  weight: "500",
+  preload: false,
 });
 
 // Page metadata (docs/content.md → Page metadata; title lowercase at Jared's request, 2026-10-17).
@@ -34,7 +44,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${newsreader.variable} ${schibstedGrotesk.variable} antialiased`}
+      className={`${newsreader.variable} ${schibstedGrotesk.variable} ${plexMono.variable} antialiased`}
     >
       <body className="font-sans text-ink">
         <Sky />

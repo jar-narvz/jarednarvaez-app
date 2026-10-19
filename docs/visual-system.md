@@ -92,6 +92,7 @@ Blend channel by channel (straight RGB) between neighboring keyframes. Golden ho
 
 - **Headings:** Newsreader.
 - **Body, nav, labels:** Schibsted Grotesk (replaced Manrope 2026-10-08). Sizes and spacing to be tuned once real content exists.
+- **Code (tech stack pills only, decided 2026-10-19):** IBM Plex Mono 500, the site's only third font. Don't use it anywhere else without a new decision (the experience dates stay Schibsted, per 2026-10-11).
 - **Hero name:** Newsreader, stacked ("Jared" over "*Narvaez*" in italic), line-height about 0.95, 72px (desktop), weight 400, letter-spacing `-0.045em`. Word-spacing (`0.18em`) only matters if the name ever sits on one line, e.g. a navbar or footer. Needs a smaller size on phones (e.g. `clamp()`); spacing is in em so it scales with it.
 - **Italic:** used in the surname and in photo captions on scrapbook prints (Newsreader italic, in place of handwriting). Whether it appears anywhere else is still open.
 
@@ -100,6 +101,7 @@ Blend channel by channel (straight RGB) between neighboring keyframes. Golden ho
 - **Content column (decided 2026-10-19):** every section's content sits in a centered column, max 1000px wide, left-aligned inside (option B, like Drew's site). Built as `max(side margin, (page width − 1000px) / 2)` on each side, so below ~1100px wide it falls back to the side margin (up to 96px on desktop, 24px on phones).
 - **What "the 96px margin" means below:** on wide screens, the column's left and right edges. Tech stack rows run edge to edge of the column.
 - **Block widths (decided 2026-10-19):** dividers, section headers (with the "+"), the projects list and the experience timeline (80px narrower) fill the 1000px column, so their right edges line up with the tech stack rows. The intro quick-facts row is 640px (see intro layout), and reading text (hero line, intro paragraph, section lines) keeps its own widths. The hero block stays 640px.
+- **Vertical spacing (decided 2026-10-19):** sections pad `clamp(72px, 12vh, 140px)` above and below, except experience and projects, which pad 32px so the closed sections and their three dividers read as a compact pair of rows.
 - **Nav** stays on the 96px screen margin, outside the column.
 - **Vignette** unchanged (still fades out ~72% across); text toward the column's right edge sits closer to the sun, so check golden hour when widening blocks.
 
@@ -123,7 +125,7 @@ Blend channel by channel (straight RGB) between neighboring keyframes. Golden ho
 
 - **Header (left, 96px margin):** "tech stack" label with sparkle (13px, accent) → Newsreader heading (~40px) → one Schibsted line (17px).
 - **Rows:** two rows (three from 2026-10-16 to 2026-10-19), running edge to edge of the content column (see page layout). Row 1 languages, row 2 frameworks & tools (web and ML together), 8 items each. Directions alternate row to row. Speed is set per row in pixels per second (about 26 and 23 px/s), so the loop time follows the row's length and long rows don't race; slightly different speeds keep rows from lining up, edges fade over the outer 7%. 22px between rows.
-- **Items:** logo (~24px) + name (Schibsted 500, 18px) in a pill: 10px × 18px padding, full radius, 1px ink border at ~38%, fill tinted ~34% (dark plum in the evening, cream in the day). 14px gap.
+- **Items:** logo + name (IBM Plex Mono 500, 14px; was Schibsted 500, 18px until 2026-10-19) in a pill. Padding, gaps and logo are in em of the text size (0.556em × 1em padding, 1.333em logo slot, 0.778em between pills: about 8px × 14px, 19px and 11px at 14px), full radius, 1px ink border at ~38%, fill tinted ~34% (dark plum in the evening, cream in the day).
 - **Logos (decided 2026-10-16):** single-color, filled with the current text color (`currentColor`, i.e. `--ink`) so they shift with the sky like the words. Source: the `simple-icons` npm package; import each icon by name (e.g. `siPytorch`) so only the used ones ship. Java isn't in Simple Icons: use Devicon's "plain" SVG recolored to `currentColor`, saved in `src/icons/`. SQL uses a generic database-cylinder icon. A name with no free logo gets an initials badge. Draw at 22px inside the 24px logo slot. Reference: tech stack logos mockup (https://claude.ai/artifact/3kfcoECvyiYWhBYeyG15iW).
 - **Behavior:** loops on its own (accepted exception, like the cloud drift); pauses on hover.
 
@@ -145,7 +147,7 @@ Drew's work-section pattern, made ours with star markers: the section starts **c
   - Line 2: dates · location (Schibsted 14px, ~75% cream, tabular numerals, letter-spacing 0.02em). No mono font.
   - Right: the same 30px round "+" toggle as the header.
   - Marker: 12px sparkle centered on the rail, aligned with line 1.
-- **Details (when open):** 2–3 bullets, Schibsted ~15px, line-height 1.6, ~92% cream. Under the bullets, the role's tech tags in the same small pills as projects (decided 2026-10-16). No project link.
+- **Details (when open):** 2–3 bullets, Schibsted ~15px, line-height 1.6, ~92% cream, 8px between bullets (added 2026-10-19 so long bullets don't run together). Under the bullets, the role's tech tags in the same small pills as projects (decided 2026-10-16). No project link.
 - **Star states:** current role = full opacity + slow twinkle (opacity 1 ↔ 0.5, 2.4s ease-in-out, infinite; reuse the site's sparkle twinkle). Past roles = 55% opacity. Any open role = full opacity + soft glow (`drop-shadow(0 0 4px accent)`).
 - **Order:** newest first.
 

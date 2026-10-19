@@ -24,7 +24,7 @@ The main design doc: principles and current state, one line per decision. Full s
 - **Background:** open coast sunset, heavily blurred then pixelated into 4px squares on every screen, with film grain (only) that builds as the sky darkens. Phones get a recomposed tall coast (option C).
 - **Text:** warm cream with a soft plum shadow and a left-side vignette, widened ~25% site-wide (fades out ~72% across in the evening, ~88% in the day).
 - **Accent:** Starlight → Sun gold text as the sky darkens, with a Sun gold four-point sparkle and link underlines.
-- **Type:** Newsreader headings + Schibsted Grotesk body. Hero name stacked with italic surname, tight spacing.
+- **Type:** Newsreader headings + Schibsted Grotesk body; IBM Plex Mono in the tech stack pills only (decided 2026-10-19). Hero name stacked with italic surname, tight spacing.
 - **Motion:** slow cloud drift, stars twinkle in at dusk. Reduce Motion freezes grain, stars and clouds; scroll blending stays on.
 - **Hero:** one focal point, the name. Editorial left: small round portrait above the stacked name, hero line and "currently" line below, on the left vignette. Right side open to the sun. No medium or large images.
 - **Page layout:** every section's content sits in a centered 1000px column, left-aligned inside (like Drew's site); the nav stays at the screen edges. Narrower screens fall back to the side margin (decided 2026-10-19).

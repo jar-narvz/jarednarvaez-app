@@ -43,7 +43,7 @@ export default function Experience() {
   return (
     <section
       id="experience"
-      className="pl-(--content-l) pr-(--content-r) py-[clamp(72px,12vh,140px)] [text-shadow:var(--text-shadow)]"
+      className="pl-(--content-l) pr-(--content-r) py-(--collapsible-py) [text-shadow:var(--text-shadow)]"
     >
       <CollapsibleHeader
         label={label}
@@ -157,7 +157,7 @@ function RoleRow({
             open ? "translate-y-0 opacity-92" : "-translate-y-1 opacity-0"
           }`}
         >
-          <ul className="list-disc pl-4.5 text-[15px] leading-[1.6]">
+          <ul className="list-disc space-y-2 pl-4.5 text-[15px] leading-[1.6]">
             {role.bullets.map((bullet) => (
               <li key={bullet}>{bullet}</li>
             ))}
