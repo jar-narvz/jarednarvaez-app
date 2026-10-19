@@ -72,7 +72,7 @@ export default function Projects() {
       />
 
       <Collapse open={open} id={BODY_ID} durationMs={450}>
-        <div className="mt-4 max-w-160">
+        <div className="mt-4 max-w-(--block-w)">
           <ol>
             {projects.map((project, i) => (
               <ProjectRow

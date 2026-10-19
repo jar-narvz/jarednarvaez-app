@@ -99,6 +99,7 @@ Blend channel by channel (straight RGB) between neighboring keyframes. Golden ho
 
 - **Content column (decided 2026-10-19):** every section's content sits in a centered column, max 1000px wide, left-aligned inside (option B, like Drew's site). Built as `max(side margin, (page width − 1000px) / 2)` on each side, so below ~1100px wide it falls back to the side margin (up to 96px on desktop, 24px on phones).
 - **What "the 96px margin" means below:** on wide screens, the column's left and right edges. Tech stack rows run edge to edge of the column.
+- **Block widths (decided 2026-10-19):** dividers, section headers (with the "+"), the projects list and the experience timeline (80px narrower) fill the 1000px column, so their right edges line up with the tech stack rows. The intro quick-facts row is 640px (see intro layout), and reading text (hero line, intro paragraph, section lines) keeps its own widths. The hero block stays 640px.
 - **Nav** stays on the 96px screen margin, outside the column.
 - **Vignette** unchanged (still fades out ~72% across); text toward the column's right edge sits closer to the sun, so check golden hour when widening blocks.
 
@@ -114,7 +115,7 @@ Blend channel by channel (straight RGB) between neighboring keyframes. Golden ho
 ## Intro layout
 
 - **Placement:** left column at the 96px margin. Small "about" label with the sparkle (13px, accent color) → Newsreader lead (~32px, one phrase with the warm underline) → Schibsted paragraph (17px, line-height 1.65).
-- **Quick facts:** one row of four equal columns (~760px wide total, 20px gaps) under the paragraph. Each column: small label (13px, ~72% ink) over the value (15px), with a thin ink rule on top. Stays left of the sun.
+- **Quick facts:** one row of four equal columns (640px wide total, 20px gaps; was ~760px until 2026-10-19, now lines up with the paragraph above and stays further from the sun) under the paragraph. Each column: small label (13px, ~72% ink) over the value (15px), with a thin ink rule on top. Stays left of the sun.
 - **Vignette:** uses the site-wide widened vignette (evening: plum at 0.45 fading out ~72% across; day: cream at ~0.72 fading out ~88% across), which covers the row's right end.
 - **Mobile:** the row wraps to a 2×2 grid.
 

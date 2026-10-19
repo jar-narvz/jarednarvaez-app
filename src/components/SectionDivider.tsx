@@ -7,7 +7,7 @@
 export default function SectionDivider({ wide = false }: { wide?: boolean }) {
   return (
     <div aria-hidden="true" className="pl-(--content-l) pr-(--content-r)">
-      <div className={`h-px bg-ink/22 ${wide ? "" : "max-w-160"}`} />
+      <div className={`h-px bg-ink/22 ${wide ? "" : "max-w-(--block-w)"}`} />
     </div>
   );
 }

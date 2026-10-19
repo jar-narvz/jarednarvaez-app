@@ -18,7 +18,7 @@ export default function CollapsibleHeader({
   onToggle: () => void;
 }) {
   return (
-    <div className="flex max-w-160 items-end justify-between gap-4">
+    <div className="flex max-w-(--block-w) items-end justify-between gap-4">
       <div>
         <SectionLabel>{label}</SectionLabel>
         <SectionHeading>{heading}</SectionHeading>

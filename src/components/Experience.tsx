@@ -54,7 +54,7 @@ export default function Experience() {
       />
 
       <Collapse open={open} id={BODY_ID} durationMs={450}>
-        <div className="relative mt-5.5 max-w-140 pl-6">
+        <div className="relative mt-5.5 max-w-[calc(var(--block-w)-80px)] pl-6">
           {/* Timeline rail: runs star to star (22px in from each end, as in the mockup; chosen
               over the spec's 10px on 2026-10-16) and draws down over 700ms. */}
           <span

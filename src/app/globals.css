@@ -24,6 +24,12 @@
   --content-l: max(var(--margin), calc((100% - 1000px) / 2));
   --content-r: max(var(--margin), calc((100% - 1000px) / 2));
 
+  /* Width of the structural blocks inside the column: dividers, collapsible headers (where the
+     "+" sits), the projects list and the experience timeline (80px less). The full column
+     (option C, chosen by Jared in /lab, 2026-10-19; was 640px). The intro facts row and
+     reading text keep their own widths. */
+  --block-w: 1000px;
+
   /* Footer: one 20px line plus 28px below it and the phone's safe-area inset. Connect is one
      screen minus this, so the last screen at full night holds both (footer mockup, option A). */
   --footer-height: calc(48px + env(safe-area-inset-bottom, 0px));

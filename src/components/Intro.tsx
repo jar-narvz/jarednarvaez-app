@@ -21,7 +21,7 @@ export default function Intro() {
 
       <p className="mt-4.5 max-w-[62ch] text-[17px] leading-[1.65] text-ink/92">{intro.paragraph}</p>
 
-      <dl className="mt-9 grid max-w-190 grid-cols-2 gap-5 sm:grid-cols-4">
+      <dl className="mt-9 grid max-w-160 grid-cols-2 gap-5 sm:grid-cols-4">
         {intro.facts.map((fact) => (
           <div key={fact.label} className="border-t border-ink/40 pt-2.5">
             <dt className="text-[13px] text-ink/72">{fact.label}</dt>
