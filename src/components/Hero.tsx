@@ -28,7 +28,8 @@ export default function Hero() {
           <em className="block">{hero.surname}</em>
         </h1>
 
-        <p className="max-w-[46ch] text-[18px] text-ink/78">{hero.heroLine}</p>
+        {/* 20px, up from the 18px prototype value (chosen by Jared in /lab, 2026-10-19). */}
+        <p className="max-w-[46ch] text-[20px] text-ink/78">{hero.heroLine}</p>
 
         <p className="flex items-center gap-2 text-[14px] text-accent">
           <Sparkle twinkle />

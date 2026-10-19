@@ -3,7 +3,7 @@
 export const hero = {
   firstName: "Jared",
   surname: "Narvaez",
-  heroLine: "I build stuff.",
+  heroLine: "creating experiences, sharing memories",
   // Live widgets (now playing, location) come after launch and still need design.
   currently: "Interning at PhysaFlow, CS + DS @ Berkeley",
   // 1000×1000 square crop in public/.
