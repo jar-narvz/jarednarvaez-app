@@ -53,15 +53,14 @@ Right under the hero. Recruiters skim the four facts; everyone else reads the le
 
 ## Tech stack
 
-A heading and one line, then three rows of logo pills (languages, web & tools, ML & data) that loop across the screen. Claude Code adds the official logos, so just list exact names.
+A heading and one line, then two rows of logo pills (languages, frameworks & tools) that loop across the screen. Claude Code adds the official logos, so just list exact names.
 
 | Field | Where it shows | Guide | Your content |
 | --- | --- | --- | --- |
 | Heading | ~40px serif | 2–5 words | my stack |
 | Line | Under the heading | One sentence, up to ~100 characters | languages and frameworks i use to design and build frontend, backend, ml/ai and fullstack |
-| Languages | Row 1 pills | 6–10 names, comma-separated, most important first, e.g. Python, Java, TypeScript | Python, Java, Go, TypeScript, JavaScript, C, SQL, HTML/CSS, RISC-V Assembly |
-| Web & tools | Row 2 pills | 6–10 names, comma-separated, e.g. React, Next.js, Git, Figma | React, Next.js, Tailwind CSS, Node.js, Figma, Vercel, Git, GitHub, VS Code, IntelliJ, Unreal Engine 5, Wireshark |
-| ML & data | Row 3 pills | 6–10 names, comma-separated | PyTorch, scikit-learn, NumPy, Pandas, Matplotlib, Jupyter, Tableau, ArcGIS Pro |
+| Languages | Row 1 pills | 6–10 names, comma-separated, most important first, e.g. Python, Java, TypeScript | Python, Java, Go, TypeScript, C, C++, SQL, RISC-V Assembly |
+| Frameworks & tools | Row 2 pills | 6–10 names, comma-separated, web and ML together | React, Next.js, Node.js, Figma, PyTorch, scikit-learn, NumPy, Pandas |
 
 ## Experience
 

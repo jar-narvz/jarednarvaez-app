@@ -59,7 +59,7 @@ function PillList({ items, label, hidden }: { items: TechName[]; label?: string;
 }
 
 /** The logo in the text color, 22px inside a 24px slot; the name beside it does the talking, so
- *  the logo is decorative. Names without a free logo (Tableau) keep the initials badge. */
+ *  the logo is decorative. Names without a free logo would keep an initials badge. */
 function TechLogo({ name }: { name: TechName }) {
   const icon = techLogos[name];
 
