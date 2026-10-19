@@ -153,7 +153,7 @@ Drew's work-section pattern, made ours with star markers: the section starts **c
 
 ### Behavior
 
-- **Open section:** click the header "+".
+- **Open section:** click the header "+" or anywhere on the header row (added 2026-10-19, like the role rows).
 - **Close section:** click it again. This closes every open role too.
 - **Open a role:** click its "+" or anywhere on the row. Each role toggles independently; opening one never closes another.
 - **Text color:** all colors follow the sky. Accent comes from the accent variable (Starlight → Sun gold); stars use the accent fill.
@@ -257,7 +257,7 @@ A short, curated overview of the most important projects (2: Secure File Sharing
 
 ### Behavior
 
-- **Open section:** header "+". **Close section:** click again; this also closes every open project.
+- **Open section:** header "+" or anywhere on the header row (added 2026-10-19). **Close section:** click again; this also closes every open project.
 - **Open a project:** its "+" or anywhere on its row header. Projects toggle independently; several can be open.
 - **Links:** "view project →" → `/projects/[slug]`. "all projects →" → `/projects`. The nav's "projects" link scrolls to this section (open or not).
 

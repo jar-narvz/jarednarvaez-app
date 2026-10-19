@@ -14,7 +14,8 @@ export default function ToggleButton({
   controls: string;
   /** What it shows, completing "Show …" / "Hide …". */
   label: string;
-  /** Optional when a parent element handles the click (a role row toggles from anywhere on it). */
+  /** Optional when a parent element handles the click (role rows and section headers toggle from
+   *  anywhere on them). */
   onClick?: () => void;
 }) {
   return (
