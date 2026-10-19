@@ -33,7 +33,7 @@ The first screen, at golden hour: portrait, the stacked name, then these two lin
 
 | Field | Where it shows | Guide | Your content |
 | --- | --- | --- | --- |
-| Hero line | Under the name, 18px | One sentence that carries both the engineer and the person. Up to ~90 characters (wraps to 2 lines at ~46) | I build stuff. |
+| Hero line | Under the name, 20px | One sentence that carries both the engineer and the person. Up to ~90 characters (wraps to 2 lines at ~46) | creating experiences, sharing memories |
 | Currently line | Below the hero line, small, gold, with a twinkling sparkle | What Jared is up to right now, e.g. a role or what he's building. Up to ~50 characters. Live widgets (now playing, location) come after launch | Interning at PhysaFlow, CS + DS @ Berkeley |
 | Portrait alt text | Read aloud by screen readers | Describes the photo in a few words, e.g. "Jared smiling outdoors at sunset" | Jared Narvaez smiling outdoors in front of green leaves |
 

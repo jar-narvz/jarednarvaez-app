@@ -99,7 +99,7 @@ Blend channel by channel (straight RGB) between neighboring keyframes. Golden ho
 
 - **Placement:** editorial left, text block starts at the 96px left margin, vertically centered (slightly above middle). Sits on the left-side vignette. Right side left open to the sun and horizon.
 - **Order (top to bottom):** small round portrait (~84px, 2px cream border) → stacked name → hero line → "currently" line with sparkle.
-- **Supporting text (prototype values, tune later):** hero line Schibsted Grotesk 18px, cream at ~78%; "currently" line 14px in the accent color; nav top-right, 14px weight 500, cream at ~82%, no monogram.
+- **Supporting text (prototype values, tune later):** hero line Schibsted Grotesk 20px (was 18px; tuned 2026-10-19), cream at ~78%; "currently" line 14px in the accent color; nav top-right, 14px weight 500, cream at ~82%, no monogram.
 - **Nav:** about · experience · projects · résumé · contact, lowercase, 28px apart; sky controls (16px line icons) after a wider gap; right edge on the 96px margin, 40px from the top (24px side margin on phones); hides on scroll down, returns on scroll up (250ms slide); phone menu full screen, Newsreader 36px links over plum `#2A1630` at 60% with blur.
 - **Rule:** the name is the only focal point. Nothing in the hero should be bigger or brighter than it.
 - **Phone margin:** 24px side margin, a placeholder until the hero step.
