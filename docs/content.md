@@ -25,7 +25,7 @@ These feed the nav's résumé link and the connect section at the bottom of the 
 | LinkedIn | Connect | Full URL | https://www.linkedin.com/in/jaredrnarvaez/ |
 | GitHub | Connect | Full URL | https://github.com/jar-narvz |
 | Résumé | Nav + connect | A PDF file name (hosted on the site) or a full URL | Jared-Narvaez-Resume.pdf (in ~/website-content) |
-| Portrait photo | Hero, small circle above the name | File name. Square crop, face centered, at least 400×400 px, JPG or PNG | portrait.jpg (in ~/website-content), 1000×1000 square crop |
+| Portrait photo | Hero, small circle above the name | File name. Square crop, face centered, at least 400×400 px, JPG or PNG | public/portrait.jpg, 300×300 square crop (new sunset photo, 2026-10-19) |
 
 ## Hero
 
@@ -35,7 +35,7 @@ The first screen, at golden hour: portrait, the stacked name, then these two lin
 | --- | --- | --- | --- |
 | Hero line | Under the name, 20px | One sentence that carries both the engineer and the person. Up to ~90 characters (wraps to 2 lines at ~46) | creating experiences, sharing memories |
 | Currently line | Below the hero line, small, gold, with a twinkling sparkle | What Jared is up to right now, e.g. a role or what he's building. Up to ~50 characters. Live widgets (now playing, location) come after launch | Interning at PhysaFlow, CS + DS @ Berkeley |
-| Portrait alt text | Read aloud by screen readers | Describes the photo in a few words, e.g. "Jared smiling outdoors at sunset" | Jared Narvaez smiling outdoors in front of green leaves |
+| Portrait alt text | Read aloud by screen readers | Describes the photo in a few words, e.g. "Jared smiling outdoors at sunset" | Jared Narvaez smiling by the ocean at sunset |
 
 ## Intro (about)
 
