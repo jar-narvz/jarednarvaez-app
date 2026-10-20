@@ -45,7 +45,7 @@ The design docs are a snapshot exported from Jared's Notion "personal website pl
 - **Canvas 2D** for the sky, following the render pipeline in `docs/visual-system.md` (tiny canvas → smooth upscale for blur → grain → pixelated upscale). No WebGL or three.js unless Jared decides to switch after testing on a real phone.
 - **Motion** (formerly Framer Motion) for the scrapbook drag and small UI transitions; plain CSS animation for simple loops (tech-stack rows, sparkle twinkle)
 - **Content in the repo:** TypeScript data files for structured content (tech stack, experience, quick facts) and **MDX** for project detail pages. No CMS.
-- **Fonts:** Newsreader (headings) and Schibsted Grotesk (body), loaded with `next/font/google`
+- **Fonts:** Newsreader (headings), Schibsted Grotesk (body) and IBM Plex Mono (tech stack pills only, decided 2026-10-19), loaded with `next/font/google`
 - **No backend in the MVP.** Leave a star (a small store + `/api/stars`) and live widgets come after launch; don't add them, or any service account, until Jared reaches those steps.
 
 ## Architecture rules

@@ -26,7 +26,7 @@ export default function Connect() {
   return (
     <section
       id="contact"
-      className="flex min-h-[calc(100svh-var(--footer-height))] items-center px-(--margin) [text-shadow:var(--text-shadow)]"
+      className="flex min-h-[calc(100svh-var(--footer-height))] items-center pl-(--content-l) pr-(--content-r) [text-shadow:var(--text-shadow)]"
     >
       <div className="w-[min(320px,100%)]">
         <SectionLabel>{connect.label}</SectionLabel>

@@ -151,7 +151,7 @@ export default function BeyondCode() {
   return (
     <section
       id="beyond-code"
-      className="px-(--margin) py-[clamp(72px,12vh,140px)]"
+      className="pl-(--content-l) pr-(--content-r) py-[clamp(72px,12vh,140px)]"
     >
       {/* LAB: --bc-* variables let /lab tune height, width, print size and frame (2026-10-16).
           Defaults are the current values; bake the chosen ones in and remove the variables. */}

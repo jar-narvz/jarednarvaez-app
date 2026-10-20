@@ -10,7 +10,7 @@ import { hero } from "@/data/hero";
 // Layout values follow docs/reference/home-mockup.html.
 export default function Hero() {
   return (
-    <section className="flex min-h-svh items-center px-(--margin) pt-30 pb-20">
+    <section className="flex min-h-svh items-center pl-(--content-l) pr-(--content-r) pt-30 pb-20">
       {/* Nudged a little above center, as in the mockup. */}
       <div className="flex max-w-160 -translate-y-[4vh] flex-col gap-5.5 [text-shadow:var(--text-shadow)]">
         {/* 84px round portrait with a 2px cream border. First thing on screen, so it loads eagerly. */}
@@ -28,7 +28,8 @@ export default function Hero() {
           <em className="block">{hero.surname}</em>
         </h1>
 
-        <p className="max-w-[46ch] text-[18px] text-ink/78">{hero.heroLine}</p>
+        {/* 20px, up from the 18px prototype value (chosen by Jared in /lab, 2026-10-19). */}
+        <p className="max-w-[46ch] text-[20px] text-ink/78">{hero.heroLine}</p>
 
         <p className="flex items-center gap-2 text-[14px] text-accent">
           <Sparkle twinkle />

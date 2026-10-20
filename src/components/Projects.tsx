@@ -61,7 +61,7 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="px-(--margin) py-[clamp(72px,12vh,140px)] [text-shadow:var(--text-shadow)]"
+      className="pl-(--content-l) pr-(--content-r) py-(--collapsible-py) [text-shadow:var(--text-shadow)]"
     >
       <CollapsibleHeader
         label={projectsSection.label}
@@ -72,7 +72,7 @@ export default function Projects() {
       />
 
       <Collapse open={open} id={BODY_ID} durationMs={450}>
-        <div className="mt-4 max-w-160">
+        <div className="mt-4 max-w-(--block-w)">
           <ol>
             {projects.map((project, i) => (
               <ProjectRow

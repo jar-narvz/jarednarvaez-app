@@ -43,7 +43,7 @@ export default function Experience() {
   return (
     <section
       id="experience"
-      className="px-(--margin) py-[clamp(72px,12vh,140px)] [text-shadow:var(--text-shadow)]"
+      className="pl-(--content-l) pr-(--content-r) py-(--collapsible-py) [text-shadow:var(--text-shadow)]"
     >
       <CollapsibleHeader
         label={label}
@@ -54,7 +54,7 @@ export default function Experience() {
       />
 
       <Collapse open={open} id={BODY_ID} durationMs={450}>
-        <div className="relative mt-5.5 max-w-140 pl-6">
+        <div className="relative mt-5.5 max-w-[calc(var(--block-w)-80px)] pl-6">
           {/* Timeline rail: runs star to star (22px in from each end, as in the mockup; chosen
               over the spec's 10px on 2026-10-16) and draws down over 700ms. */}
           <span
@@ -157,7 +157,9 @@ function RoleRow({
             open ? "translate-y-0 opacity-92" : "-translate-y-1 opacity-0"
           }`}
         >
-          <ul className="list-disc pl-4.5 text-[15px] leading-[1.6]">
+          {/* Bullet text in the dates' grey: cream at 82% inside this 92% block ≈ the dates' 75%
+              (Jared, 2026-10-19). The dots keep the full ink color. */}
+          <ul className="list-disc space-y-2 pl-4.5 text-[15px] leading-[1.6] text-ink/82 marker:text-ink">
             {role.bullets.map((bullet) => (
               <li key={bullet}>{bullet}</li>
             ))}

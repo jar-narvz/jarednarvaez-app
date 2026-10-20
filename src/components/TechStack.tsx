@@ -16,7 +16,7 @@ export default function TechStack() {
   return (
     <section
       id="tech"
-      className="px-(--margin) py-[clamp(72px,12vh,140px)] [text-shadow:var(--text-shadow)]"
+      className="pl-(--content-l) pr-(--content-r) py-[clamp(72px,12vh,140px)] [text-shadow:var(--text-shadow)]"
     >
       <SectionLabel>{techStack.label}</SectionLabel>
       <SectionHeading>{techStack.heading}</SectionHeading>
@@ -44,11 +44,18 @@ export default function TechStack() {
 function PillList({ items, label, hidden }: { items: TechName[]; label?: string; hidden?: boolean }) {
   return (
     // role="list" keeps list semantics in Safari, which drops them when list-style is none.
-    <ul role="list" aria-label={label} aria-hidden={hidden || undefined} className="flex gap-3.5">
+    // Sizes are in em of --pill-size (at 14px: ~11px gaps, ~8px × 14px padding, ~19px logo slot),
+    // so one variable scales the whole pill.
+    <ul
+      role="list"
+      aria-label={label}
+      aria-hidden={hidden || undefined}
+      className="flex gap-[0.778em] font-(family-name:--pill-font) text-(length:--pill-size)"
+    >
       {items.map((item) => (
         <li
           key={item}
-          className="flex items-center gap-2.5 rounded-full border border-ink/38 bg-tint/34 px-4.5 py-2.5 text-[18px] font-medium whitespace-nowrap"
+          className="flex items-center gap-[0.556em] rounded-full border border-ink/38 bg-tint/34 px-[1em] py-[0.556em] font-medium whitespace-nowrap"
         >
           <TechLogo name={item} />
           {item}
@@ -58,16 +65,17 @@ function PillList({ items, label, hidden }: { items: TechName[]; label?: string;
   );
 }
 
-/** The logo in the text color, 22px inside a 24px slot; the name beside it does the talking, so
- *  the logo is decorative. Names without a free logo (Tableau) keep the initials badge. */
+/** The logo in the text color, 1.222em inside a 1.333em slot (~17px in ~19px at 14px); the name beside it does the talking, so
+ *  the logo is decorative. Names without a free logo would keep an initials badge. */
 function TechLogo({ name }: { name: TechName }) {
   const icon = techLogos[name];
 
   if (!icon) {
+    // Its own text is 11px (0.611em), so the 24px slot is 2.182 of its em.
     return (
       <span
         aria-hidden="true"
-        className="grid size-6 place-items-center rounded-md border border-ink/25 bg-ink/14 text-[11px] font-medium"
+        className="grid size-[2.182em] place-items-center rounded-md border border-ink/25 bg-ink/14 text-[0.611em] font-medium"
       >
         {name.replace(/[^A-Za-z]/g, "").slice(0, 2)}
       </span>
@@ -75,12 +83,12 @@ function TechLogo({ name }: { name: TechName }) {
   }
 
   return (
-    <span aria-hidden="true" className="grid size-6 place-items-center">
+    <span aria-hidden="true" className="grid size-[1.333em] place-items-center">
       <svg
         viewBox={icon.viewBox}
         fill="currentColor"
         fillRule={icon.evenOdd ? "evenodd" : undefined}
-        className="size-5.5"
+        className="size-[1.222em]"
       >
         {icon.paths.map((d) => (
           <path key={d} d={d} />

@@ -17,6 +17,29 @@
      docs/reference/home-mockup.html, chosen for step 7 on 2026-10-16). */
   --margin: clamp(24px, 6.7vw, 96px);
 
+  /* Left and right edges of the page content: a centered 1000px column, text left-aligned inside
+     (option B, chosen by Jared in /lab, 2026-10-19). On screens too narrow for side space, max()
+     falls back to the side margin. % (not vw) so the scrollbar doesn't push it off center.
+     The nav stays on --margin at the screen edges. */
+  --content-l: max(var(--margin), calc((100% - 1000px) / 2));
+  --content-r: max(var(--margin), calc((100% - 1000px) / 2));
+
+  /* Width of the structural blocks inside the column: dividers, collapsible headers (where the
+     "+" sits), the projects list and the experience timeline (80px less). The full column
+     (option C, chosen by Jared in /lab, 2026-10-19; was 640px). The intro facts row and
+     reading text keep their own widths. */
+  --block-w: 1000px;
+
+  /* Padding above and below the collapsible sections (experience, projects), which sit between
+     dividers: tight, so the closed sections read as a pair of rows (option C, chosen by Jared in
+     /lab, 2026-10-19; was the shared clamp(72px, 12vh, 140px)). */
+  --collapsible-py: 32px;
+
+  /* Tech stack pills: text size (padding, gaps and logo scale with it in em) and font. IBM Plex
+     Mono at 14px, chosen by Jared in /lab (2026-10-19; was Schibsted at 18px). */
+  --pill-size: 14px;
+  --pill-font: var(--font-plex-mono);
+
   /* Footer: one 20px line plus 28px below it and the phone's safe-area inset. Connect is one
      screen minus this, so the last screen at full night holds both (footer mockup, option A). */
   --footer-height: calc(48px + env(safe-area-inset-bottom, 0px));

@@ -25,7 +25,7 @@ These feed the nav's résumé link and the connect section at the bottom of the 
 | LinkedIn | Connect | Full URL | https://www.linkedin.com/in/jaredrnarvaez/ |
 | GitHub | Connect | Full URL | https://github.com/jar-narvz |
 | Résumé | Nav + connect | A PDF file name (hosted on the site) or a full URL | Jared-Narvaez-Resume.pdf (in ~/website-content) |
-| Portrait photo | Hero, small circle above the name | File name. Square crop, face centered, at least 400×400 px, JPG or PNG | portrait.jpg (in ~/website-content), 1000×1000 square crop |
+| Portrait photo | Hero, small circle above the name | File name. Square crop, face centered, at least 400×400 px, JPG or PNG | public/portrait.jpg, 300×300 square crop (new sunset photo, 2026-10-19) |
 
 ## Hero
 
@@ -33,9 +33,9 @@ The first screen, at golden hour: portrait, the stacked name, then these two lin
 
 | Field | Where it shows | Guide | Your content |
 | --- | --- | --- | --- |
-| Hero line | Under the name, 18px | One sentence that carries both the engineer and the person. Up to ~90 characters (wraps to 2 lines at ~46) | I build stuff. |
+| Hero line | Under the name, 20px | One sentence that carries both the engineer and the person. Up to ~90 characters (wraps to 2 lines at ~46) | creating experiences, sharing memories |
 | Currently line | Below the hero line, small, gold, with a twinkling sparkle | What Jared is up to right now, e.g. a role or what he's building. Up to ~50 characters. Live widgets (now playing, location) come after launch | Interning at PhysaFlow, CS + DS @ Berkeley |
-| Portrait alt text | Read aloud by screen readers | Describes the photo in a few words, e.g. "Jared smiling outdoors at sunset" | Jared Narvaez smiling outdoors in front of green leaves |
+| Portrait alt text | Read aloud by screen readers | Describes the photo in a few words, e.g. "Jared smiling outdoors at sunset" | Jared Narvaez smiling by the ocean at sunset |
 
 ## Intro (about)
 
@@ -53,15 +53,14 @@ Right under the hero. Recruiters skim the four facts; everyone else reads the le
 
 ## Tech stack
 
-A heading and one line, then three rows of logo pills (languages, web & tools, ML & data) that loop across the screen. Claude Code adds the official logos, so just list exact names.
+A heading and one line, then two rows of logo pills (languages, frameworks & tools) that loop across the screen. Claude Code adds the official logos, so just list exact names.
 
 | Field | Where it shows | Guide | Your content |
 | --- | --- | --- | --- |
 | Heading | ~40px serif | 2–5 words | my stack |
 | Line | Under the heading | One sentence, up to ~100 characters | languages and frameworks i use to design and build frontend, backend, ml/ai and fullstack |
-| Languages | Row 1 pills | 6–10 names, comma-separated, most important first, e.g. Python, Java, TypeScript | Python, Java, Go, TypeScript, JavaScript, C, SQL, HTML/CSS, RISC-V Assembly |
-| Web & tools | Row 2 pills | 6–10 names, comma-separated, e.g. React, Next.js, Git, Figma | React, Next.js, Tailwind CSS, Node.js, Figma, Vercel, Git, GitHub, VS Code, IntelliJ, Unreal Engine 5, Wireshark |
-| ML & data | Row 3 pills | 6–10 names, comma-separated | PyTorch, scikit-learn, NumPy, Pandas, Matplotlib, Jupyter, Tableau, ArcGIS Pro |
+| Languages | Row 1 pills | 6–10 names, comma-separated, most important first, e.g. Python, Java, TypeScript | Python, Java, Go, TypeScript, C, C++, SQL, RISC-V Assembly |
+| Frameworks & tools | Row 2 pills | 6–10 names, comma-separated, web and ML together | React, Next.js, Node.js, Figma, PyTorch, scikit-learn, NumPy, Pandas |
 
 ## Experience
 
