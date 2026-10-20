@@ -58,7 +58,7 @@ The design docs are a snapshot exported from Jared's Notion "personal website pl
 ## Git
 
 - Work on the `rebuild` branch. `main` holds the old site until launch (step 16), when Jared moves it to a `legacy` branch and merges `rebuild` into `main`.
-- **Jared commits, pushes, and does everything on GitHub himself.** Never run `git commit`, `push`, `pull`, `merge` or `rebase`. At the end of a step, give him the exact commands and a commit message (one commit per finished step), with the build-plan tick included in the same commit. Commits are authored by Jared; end the message with a `Co-Authored-By: Claude <noreply@anthropic.com>` line.
+- **Jared commits, pushes, and does everything on GitHub himself.** Never run `git commit`, `push`, `pull`, `merge` or `rebase`. At the end of a step, give him the exact commands and a commit message (one commit per finished step), with the build-plan tick included in the same commit. Commits are authored by Jared, with no `Co-Authored-By` line.
 - Stage with `git add -A -- . ':!.vscode'` (his editor settings stay out of the repo).
 - Never commit secrets. API keys go in `.env.local`, which stays git-ignored.
 
