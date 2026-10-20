@@ -31,7 +31,8 @@ export function withAlpha(hex: string, alpha: number) {
   return `rgba(${rgb(hex).join(",")},${alpha})`;
 }
 
-function mixKeyframes(a: SkyKeyframe, b: SkyKeyframe, u: number): SkyKeyframe {
+/** Mixes two keyframes field by field: u=0 is `a`, u=1 is `b`. */
+export function mixKeyframes(a: SkyKeyframe, b: SkyKeyframe, u: number): SkyKeyframe {
   const colors = <T extends string[]>(x: T, y: T) => x.map((c, i) => mixColor(c, y[i], u)) as T;
   return {
     sky: colors(a.sky, b.sky),

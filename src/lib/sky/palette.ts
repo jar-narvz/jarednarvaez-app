@@ -1,5 +1,6 @@
 // Sky keyframes, copied from the approved prototype (docs/reference/sky-prototype.html, `K`).
-// blend.ts mixes between them as the page scrolls: golden hour → dusk → night.
+// blend.ts mixes between them as the page scrolls: golden hour → dusk → night. The rest of the
+// day (midnight, dawn, sunrise, midday, afternoon) is at the bottom; hours.ts mixes all eight.
 
 type Five = [string, string, string, string, string];
 
@@ -67,6 +68,82 @@ export const night: SkyKeyframe = {
   near: "#08070F",
   reflection: 0,
   stars: 1,
+  ...EVENING_VIGNETTE,
+};
+
+// The rest of the 24-hour day (docs/visual-system.md → 24-hour sky → Keyframes). Sky and water
+// are exactly as specified. The spec gives less detail than the evening keyframes above, so:
+// - clouds: its one cloud color, used for all five clouds;
+// - near ridge: its headland color; far land: that headland mixed 45% toward the horizon color
+//   (the average of the evening keyframes). A placeholder until Jared picks by eye in /lab;
+// - sun color and reflection: the approved mockup's formulas at that hour. Below the horizon
+//   (midnight, dawn) the sun takes night's color and no reflection;
+// - sunY: the sun path at that hour (hours.ts recomputes the full arc; this is for reference);
+// - stars: the star rule at that hour (hours.ts recomputes it too);
+// - vignette: the evening plum for now. The day theme's cream haze comes with dayness (part 3).
+
+export const midnight: SkyKeyframe = {
+  sky: ["#07081A", "#0E1030", "#161840", "#22244C", "#2C2650"],
+  clouds: ["#1E1E40", "#1E1E40", "#1E1E40", "#1E1E40", "#1E1E40"],
+  sun: "#3A2C5E",
+  sunY: 330,
+  water: ["#16142E", "#0E0C22", "#08081A"],
+  land: "#171432",
+  near: "#06061A",
+  reflection: 0,
+  stars: 1,
+  ...EVENING_VIGNETTE,
+};
+
+export const dawn: SkyKeyframe = {
+  sky: ["#1C2550", "#3A4A7A", "#7A6A94", "#C08A9A", "#E8B0A0"],
+  clouds: ["#6A6088", "#6A6088", "#6A6088", "#6A6088", "#6A6088"],
+  sun: "#3A2C5E",
+  sunY: 330,
+  water: ["#4A4870", "#2C2E50", "#1A1C38"],
+  land: "#796066",
+  near: "#1E1E36",
+  reflection: 0,
+  stars: 1 - 0.5 / 1.4,
+  ...EVENING_VIGNETTE,
+};
+
+export const sunrise: SkyKeyframe = {
+  sky: ["#4A6A9E", "#8A9AC4", "#E8B4B0", "#FAD0A8", "#FFE6C0"],
+  clouds: ["#F4C8C0", "#F4C8C0", "#F4C8C0", "#F4C8C0", "#F4C8C0"],
+  sun: "#FFE0A8",
+  sunY: 304.5,
+  water: ["#C49AA8", "#7A7098", "#3E4470"],
+  land: "#938282",
+  near: "#3A3050",
+  reflection: 0.35,
+  stars: 0,
+  ...EVENING_VIGNETTE,
+};
+
+export const midday: SkyKeyframe = {
+  sky: ["#4F86C6", "#74A4D8", "#9CC2E6", "#C4DDF0", "#E2EEF6"],
+  clouds: ["#F6F4F0", "#F6F4F0", "#F6F4F0", "#F6F4F0", "#F6F4F0"],
+  sun: "#FFFBEE",
+  sunY: 187.4,
+  water: ["#6E9CC4", "#3F6E9C", "#2A4E78"],
+  land: "#8E9DAB",
+  near: "#4A5A6E",
+  reflection: 0.55,
+  stars: 0,
+  ...EVENING_VIGNETTE,
+};
+
+export const afternoon: SkyKeyframe = {
+  sky: ["#5A7FB8", "#86A2CC", "#B8C4D8", "#E6D8C4", "#F4E2C4"],
+  clouds: ["#F4E6D8", "#F4E6D8", "#F4E6D8", "#F4E6D8", "#F4E6D8"],
+  sun: "#FFFBEE",
+  sunY: 207.5,
+  water: ["#8AA0BC", "#566E92", "#344868"],
+  land: "#978B89",
+  near: "#4A4458",
+  reflection: 0.55,
+  stars: 0,
   ...EVENING_VIGNETTE,
 };
 
