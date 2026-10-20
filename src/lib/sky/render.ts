@@ -8,8 +8,7 @@
 // The prototype's low-res canvas was a fixed 170×95, shown 680px wide (4px squares). Here it's
 // sized from the screen instead (screen ÷ 4), so squares stay 4px on any screen size.
 
-import type { SkyKeyframe } from "./palette";
-import type { SkyScene } from "./scene";
+import type { DrawnSky, SkyScene } from "./scene";
 import { drawStars } from "./stars";
 
 /** Size of one visible sky pixel, in CSS pixels. */
@@ -47,7 +46,7 @@ export function renderSky(
   width: number,
   height: number,
   scene: SkyScene,
-  k: SkyKeyframe,
+  k: DrawnSky,
   time: number,
 ) {
   if (width <= 0 || height <= 0) return;

@@ -74,10 +74,11 @@ export const night: SkyKeyframe = {
 // The rest of the 24-hour day (docs/visual-system.md → 24-hour sky → Keyframes). Sky and water
 // are exactly as specified. The spec gives less detail than the evening keyframes above, so:
 // - clouds: its one cloud color, used for all five clouds;
-// - near ridge: its headland color; far land: that headland mixed 45% toward the horizon color
-//   (the average of the evening keyframes). A placeholder until Jared picks by eye in /lab;
-// - sun color and reflection: the approved mockup's formulas at that hour. Below the horizon
-//   (midnight, dawn) the sun takes night's color and no reflection;
+// - land: its one headland color on both the far headland and the near ridge, so the coast reads
+//   as one silhouette like the mockup (option C, Jared's pick in /lab/sky, 2026-10-20);
+// - sun color and reflection strength: the approved mockup's formulas at that hour (the
+//   reflection takes the sun's color, see scene.ts). Below the
+//   horizon (midnight, dawn) the sun takes night's color and no reflection;
 // - sunY: the sun path at that hour (hours.ts recomputes the full arc; this is for reference);
 // - stars: the star rule at that hour (hours.ts recomputes it too);
 // - vignette: the evening plum for now. The day theme's cream haze comes with dayness (part 3).
@@ -88,7 +89,7 @@ export const midnight: SkyKeyframe = {
   sun: "#3A2C5E",
   sunY: 330,
   water: ["#16142E", "#0E0C22", "#08081A"],
-  land: "#171432",
+  land: "#06061A",
   near: "#06061A",
   reflection: 0,
   stars: 1,
@@ -101,7 +102,7 @@ export const dawn: SkyKeyframe = {
   sun: "#3A2C5E",
   sunY: 330,
   water: ["#4A4870", "#2C2E50", "#1A1C38"],
-  land: "#796066",
+  land: "#1E1E36",
   near: "#1E1E36",
   reflection: 0,
   stars: 1 - 0.5 / 1.4,
@@ -114,7 +115,7 @@ export const sunrise: SkyKeyframe = {
   sun: "#FFE0A8",
   sunY: 304.5,
   water: ["#C49AA8", "#7A7098", "#3E4470"],
-  land: "#938282",
+  land: "#3A3050",
   near: "#3A3050",
   reflection: 0.35,
   stars: 0,
@@ -127,7 +128,7 @@ export const midday: SkyKeyframe = {
   sun: "#FFFBEE",
   sunY: 187.4,
   water: ["#6E9CC4", "#3F6E9C", "#2A4E78"],
-  land: "#8E9DAB",
+  land: "#4A5A6E",
   near: "#4A5A6E",
   reflection: 0.55,
   stars: 0,
@@ -140,7 +141,7 @@ export const afternoon: SkyKeyframe = {
   sun: "#FFFBEE",
   sunY: 207.5,
   water: ["#8AA0BC", "#566E92", "#344868"],
-  land: "#978B89",
+  land: "#4A4458",
   near: "#4A4458",
   reflection: 0.55,
   stars: 0,

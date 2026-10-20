@@ -29,7 +29,7 @@ export function wrapHour(hour: number) {
 
 // Hour → keyframe, in order around the clock. Midnight is at both ends so 21 → 24 blends night
 // into midnight.
-const KEYFRAMES: [number, SkyKeyframe][] = [
+const DAY_CYCLE: [number, SkyKeyframe][] = [
   [0, midnight],
   [5.3, dawn],
   [6.8, sunrise],
@@ -88,9 +88,9 @@ export type HourSky = SkyKeyframe & { sunX: number };
 export function keyframeAtHour(hour: number): HourSky {
   const h = wrapHour(hour);
   let i = 0;
-  while (KEYFRAMES[i + 1][0] <= h) i++;
-  const [startHour, a] = KEYFRAMES[i];
-  const [endHour, b] = KEYFRAMES[i + 1];
+  while (DAY_CYCLE[i + 1][0] <= h) i++;
+  const [startHour, a] = DAY_CYCLE[i];
+  const [endHour, b] = DAY_CYCLE[i + 1];
   const sun = sunAt(h);
   return {
     ...mixKeyframes(a, b, (h - startHour) / (endHour - startHour)),

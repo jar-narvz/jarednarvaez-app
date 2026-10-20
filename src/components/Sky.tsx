@@ -2,8 +2,10 @@
 
 import { useEffect, useRef } from "react";
 import { accentAt, grainAt, keyframeAt } from "@/lib/sky/blend";
+import { grainAtHour, keyframeAtHour } from "@/lib/sky/hours";
 import { renderSky } from "@/lib/sky/render";
-import { coastScene, tallCoastScene } from "@/lib/sky/scene";
+import { coastScene, tallCoastScene, type DrawnSky } from "@/lib/sky/scene";
+import { getFixedSky, onFixedSkyChange } from "@/lib/sky/skyHour";
 import { GRAIN_FRAME_MS, grainFrames } from "@/lib/sky/texture";
 
 /** How far down the page the visitor is: 0 at the top (golden hour), 1 at the bottom (night). */
@@ -12,8 +14,9 @@ function scrollProgress() {
   return max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
 }
 
-// The fixed background sky. It follows scroll progress from golden hour to night, writes the
-// live colors to CSS variables, and has moving film grain on top. Clouds drift and stars
+// The fixed background sky. It follows scroll progress from golden hour to night (or holds one
+// hour when skyHour.ts fixes it), writes the live colors to CSS variables, and has moving film
+// grain on top. Clouds drift and stars
 // twinkle on their own, so the sky repaints every frame (except under Reduce Motion).
 export default function Sky() {
   const frameRef = useRef<HTMLDivElement>(null);
@@ -29,20 +32,29 @@ export default function Sky() {
 
     // Seconds on the animation clock: moves the clouds and the twinkle. Frozen under Reduce Motion.
     let time = 0;
-    let lastProgress = -1;
+    let lastMoment = "";
 
-    // Sky at the current scroll position and time, plus the live CSS variables.
+    // Sky at the current scroll position (or fixed hour) and time, plus the live CSS variables.
     const paintSky = () => {
       const { clientWidth: w, clientHeight: h } = frame;
       if (!w || !h) return;
       const t = scrollProgress();
+      const fixed = getFixedSky();
+      let k: DrawnSky = keyframeAt(t);
+      let grainLevel = grainAt(t);
+      if (fixed) {
+        k = keyframeAtHour(fixed.hour);
+        grainLevel = grainAtHour(fixed.hour);
+      }
       // Portrait screens (phones) get the tall version of the coast.
-      renderSky(sky, w, h, w < h ? tallCoastScene : coastScene, keyframeAt(t), time);
-      // The variables only change with scroll, so skip rewriting them on still frames.
-      if (t !== lastProgress) {
-        lastProgress = t;
+      renderSky(sky, w, h, w < h ? tallCoastScene : coastScene, k, time);
+      // The variables only change with scroll or the hour, so skip rewriting them on still
+      // frames. The accent still follows the scroll; the day text theme comes in part 3.
+      const moment = `${t} ${fixed?.hour}`;
+      if (moment !== lastMoment) {
+        lastMoment = moment;
         root.setProperty("--accent", accentAt(t));
-        root.setProperty("--grain", String(grainAt(t)));
+        root.setProperty("--grain", String(grainLevel));
       }
     };
 
@@ -107,6 +119,7 @@ export default function Sky() {
     const pageObserver = new ResizeObserver(schedulePaint);
     pageObserver.observe(document.body);
     window.addEventListener("scroll", schedulePaint, { passive: true });
+    const stopFixedSky = onFixedSkyChange(schedulePaint);
     updateMotion();
     reducedMotion.addEventListener("change", updateMotion);
 
@@ -114,6 +127,7 @@ export default function Sky() {
       frameObserver.disconnect();
       pageObserver.disconnect();
       window.removeEventListener("scroll", schedulePaint);
+      stopFixedSky();
       cancelAnimationFrame(loop);
       cancelAnimationFrame(pending);
       reducedMotion.removeEventListener("change", updateMotion);
