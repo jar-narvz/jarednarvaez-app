@@ -163,7 +163,7 @@ function PhoneMenu({ reduceMotion, onPick }: { reduceMotion: boolean; onPick: ()
   return (
     <motion.div
       id="phone-menu"
-      className="fixed inset-0 z-10 bg-[#2A1630]/60 px-(--margin) pt-32 backdrop-blur-md md:hidden"
+      className="fixed inset-0 z-10 bg-tint/60 px-(--margin) pt-32 backdrop-blur-md md:hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: reduceMotion ? instant : { duration: MENU_OPEN_S, ease: "easeOut" } }}
       exit={{ opacity: 0, transition: reduceMotion ? instant : { duration: MENU_CLOSE_S, ease: "easeOut" } }}

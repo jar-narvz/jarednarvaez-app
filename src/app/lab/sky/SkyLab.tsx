@@ -68,6 +68,13 @@ export default function SkyLab() {
             {name}
           </button>
         ))}
+        <span className="ml-4 text-ink/70">switchover</span>
+        {[6.75, 17].map((h) => (
+          <button key={h} type="button" aria-pressed={hour === h} onClick={() => setHour(h)} className={pill(hour === h)}>
+            {clock(h)}
+          </button>
+        ))}
+
       </div>
     </div>
   );

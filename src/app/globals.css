@@ -6,8 +6,9 @@
   --starlight: #e3e8ff;
   --sun-gold: #ffd48a;
 
-  /* Live values. Golden hour for now; from step 4 the sky rewrites these
-     as you scroll. Components only use these names, never the palette. */
+  /* Live values: golden hour until the sky's first paint, then Sky.tsx rewrites them as you
+     scroll, and blends them toward the day theme at daytime hours (sky modes). Components only
+     use these names, never the palette. */
   --ink: var(--cream);
   --accent: var(--starlight);
   --underline: var(--sun-gold);
@@ -44,11 +45,11 @@
      screen minus this, so the last screen at full night holds both (footer mockup, option A). */
   --footer-height: calc(48px + env(safe-area-inset-bottom, 0px));
 
-  /* Soft plum shadow on all text over the sky (prototype value). */
+  /* Soft plum shadow on all text over the sky (prototype value); a cream glow by day. */
   --text-shadow: 0 0 18px rgba(42, 18, 40, 0.6);
 
-  /* Tinted fill behind pills (and later cells and the copy pill): dark plum, used at ~34%.
-     Fixed in scroll mode; sky modes will blend it toward cream for the day theme. */
+  /* Tinted fill behind pills, cells, the copy pill and the phone menu: dark plum, used at ~34%.
+     Fixed in scroll mode; blends toward cream for the day theme. */
   --tint: #2a1630;
 }
 

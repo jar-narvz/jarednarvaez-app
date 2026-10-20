@@ -2,13 +2,14 @@
 // Everything is in the prototype's 680×380 design space; render.ts scales it down.
 
 import { withAlpha } from "./blend";
-import type { SkyKeyframe } from "./palette";
+import { DAY_VIGNETTE, type SkyKeyframe } from "./palette";
 
 /**
- * What a scene draws: a keyframe, plus the sun's x, which the fixed-hour sky sets (hours.ts).
- * Without it, as in scroll mode, the sun stays at x=500.
+ * What a scene draws: a keyframe, plus two things only the fixed-hour sky sets: the sun's x
+ * (hours.ts) and dayness, 0–1, which fades the plum vignette into the day's cream one. Without
+ * them, as in scroll mode, the sun stays at x=500 and the vignette is plum.
  */
-export type DrawnSky = SkyKeyframe & { sunX?: number };
+export type DrawnSky = SkyKeyframe & { sunX?: number; day?: number };
 
 /** A scene the render pipeline can draw: its design-space size and how to paint it at `time` (seconds). */
 export type SkyScene = {
@@ -43,7 +44,26 @@ const CLOUDS: [number, number, number, number][] = [
 /** How far cloud `i` has drifted sideways at `time`: up to 14 units, one sway every ~42s (the prototype's). */
 const cloudDrift = (time: number, i: number) => Math.sin(time * 0.15 + i) * 14;
 
-/** Radial vignette fading out from (x, y). Its color, strength and reach come from the keyframe. */
+/** One radial vignette layer fading out from (x, y). */
+function vignetteLayer(
+  ctx: CanvasRenderingContext2D,
+  color: string,
+  strength: number,
+  reach: number,
+  x: number,
+  y: number,
+  radius: number,
+  width: number,
+  height: number,
+) {
+  const vignette = ctx.createRadialGradient(x, y, 0, x, y, radius * reach);
+  vignette.addColorStop(0, withAlpha(color, strength));
+  vignette.addColorStop(1, withAlpha(color, 0));
+  ctx.fillStyle = vignette;
+  ctx.fillRect(0, 0, width, height);
+}
+
+/** The vignette behind the text: the keyframe's plum one, fading into the day's cream haze by dayness. */
 function drawVignette(
   ctx: CanvasRenderingContext2D,
   k: DrawnSky,
@@ -53,11 +73,14 @@ function drawVignette(
   width: number,
   height: number,
 ) {
-  const vignette = ctx.createRadialGradient(x, y, 0, x, y, radius * k.vignetteReach);
-  vignette.addColorStop(0, withAlpha(k.vignette, k.vignetteStrength));
-  vignette.addColorStop(1, withAlpha(k.vignette, 0));
-  ctx.fillStyle = vignette;
-  ctx.fillRect(0, 0, width, height);
+  const day = k.day ?? 0;
+  if (day < 1) {
+    vignetteLayer(ctx, k.vignette, k.vignetteStrength * (1 - day), k.vignetteReach, x, y, radius, width, height);
+  }
+  if (day > 0) {
+    const { color, strength, reach } = DAY_VIGNETTE;
+    vignetteLayer(ctx, color, strength * day, reach, x, y, radius, width, height);
+  }
 }
 
 function drawCoast(ctx: CanvasRenderingContext2D, k: DrawnSky, time: number) {

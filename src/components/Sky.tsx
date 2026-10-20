@@ -2,10 +2,12 @@
 
 import { useEffect, useRef } from "react";
 import { accentAt, grainAt, keyframeAt } from "@/lib/sky/blend";
-import { grainAtHour, keyframeAtHour } from "@/lib/sky/hours";
+import { dayness, grainAtHour, keyframeAtHour } from "@/lib/sky/hours";
+import { SUN_GOLD } from "@/lib/sky/palette";
 import { renderSky } from "@/lib/sky/render";
 import { coastScene, tallCoastScene, type DrawnSky } from "@/lib/sky/scene";
 import { getFixedSky, onFixedSkyChange } from "@/lib/sky/skyHour";
+import { textDayness, themeAt } from "@/lib/sky/theme";
 import { GRAIN_FRAME_MS, grainFrames } from "@/lib/sky/texture";
 
 /** How far down the page the visitor is: 0 at the top (golden hour), 1 at the bottom (night). */
@@ -42,18 +44,28 @@ export default function Sky() {
       const fixed = getFixedSky();
       let k: DrawnSky = keyframeAt(t);
       let grainLevel = grainAt(t);
+      // Scroll mode never reaches daytime, so its dayness is 0 and its colors stay the evening's.
+      let day = 0;
+      let eveningAccent = accentAt(t);
       if (fixed) {
-        k = keyframeAtHour(fixed.hour);
+        day = dayness(fixed.hour);
+        k = { ...keyframeAtHour(fixed.hour), day };
         grainLevel = grainAtHour(fixed.hour);
+        eveningAccent = SUN_GOLD;
       }
       // Portrait screens (phones) get the tall version of the coast.
       renderSky(sky, w, h, w < h ? tallCoastScene : coastScene, k, time);
       // The variables only change with scroll or the hour, so skip rewriting them on still
-      // frames. The accent still follows the scroll; the day text theme comes in part 3.
+      // frames. Written in scroll mode too, so leaving a fixed hour puts the evening back.
       const moment = `${t} ${fixed?.hour}`;
       if (moment !== lastMoment) {
         lastMoment = moment;
-        root.setProperty("--accent", accentAt(t));
+        const theme = themeAt(textDayness(day), eveningAccent);
+        root.setProperty("--ink", theme.ink);
+        root.setProperty("--accent", theme.accent);
+        root.setProperty("--underline", theme.underline);
+        root.setProperty("--tint", theme.tint);
+        root.setProperty("--text-shadow", theme.textShadow);
         root.setProperty("--grain", String(grainLevel));
       }
     };

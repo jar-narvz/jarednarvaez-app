@@ -25,7 +25,7 @@ export type SkyKeyframe = {
   /** Vignette behind the text, painted into the sky so it's blurred and pixelated with it. */
   vignette: string;
   vignetteStrength: number;
-  /** Multiplier on the scene's base vignette radius. The day theme will use a wider reach. */
+  /** Multiplier on the scene's base vignette radius. The day vignette (DAY_VIGNETTE) reaches wider. */
   vignetteReach: number;
 };
 
@@ -151,3 +151,20 @@ export const afternoon: SkyKeyframe = {
 /** Accent text color at golden hour and at dark (docs/visual-system.md → Color). */
 export const STARLIGHT = "#E3E8FF";
 export const SUN_GOLD = "#FFD48A";
+
+// The day text theme (docs/visual-system.md → 24-hour sky → Day text theme and blending).
+// Everything blends from the evening value to these as dayness goes 0 → 1 (theme.ts).
+export const CREAM = "#FFF6EA";
+export const NAVY = "#1F1A3A";
+export const PLUM = "#4E3270";
+/** The evening's tinted fill behind pills and cells; blends to cream by day. */
+export const PLUM_TINT = "#2A1630";
+/** The evening's plum glow behind text (prototype value, rgba(42,18,40,0.6)). */
+export const PLUM_GLOW = "#2A1228";
+
+/**
+ * The cream "morning haze" vignette behind the text by day: 0.72, fading out by ~88% where the
+ * evening's plum one fades by ~72%, so its reach is 88/72 of the evening's. The scene fades
+ * between the two rather than mixing their colors (mixed, they'd turn grey-mauve halfway).
+ */
+export const DAY_VIGNETTE = { color: CREAM, strength: 0.72, reach: 88 / 72 };
