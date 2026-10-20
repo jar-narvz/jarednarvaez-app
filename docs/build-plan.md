@@ -7,7 +7,7 @@
 - **In progress:** none. Launched 2026-10-17 at jarednarvaez.vercel.app (old site on `legacy`); a custom domain can come later.
 - **Next:** after launch, sky modes 2 and 3 (Phase 4)
 - **Content:** all copy for step 14 is in `docs/content.md` (exported from Jared's Website content pass doc); files are in `~/website-content`.
-- **Notes:** Plan re-aimed at the MVP on 2026-10-16 (see `design.md` → Launch plan). Goal: launch as soon as possible.
+- **Notes:** Plan re-aimed at the MVP on 2026-10-16 (see `design.md` → Launch plan). Post-launch design fixes shipped 2026-10-19, outside the numbered steps: new hero line at 20px, centered 1000px content column, two-row tech stack in IBM Plex Mono pills, tighter experience/projects spacing, grey bullet text with gaps, clickable section headers, new sunset portrait. Each is in `decisions-log.md`.
 
 ## MVP (decided 2026-10-16)
 

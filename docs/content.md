@@ -1,4 +1,4 @@
-<!-- Exported from Jared's "Website content pass" doc on 2026-10-16. This file is the source of all site copy for build step 14. Files named here are in ~/website-content (portrait.jpg, Jared-Narvaez-Resume.pdf, secure-file-sharing.png, character-gpt.png): copy them into public/. Use the text exactly as written; keep a [placeholder] for any field still marked "?". -->
+<!-- Exported from Jared's "Website content pass" doc on 2026-10-16. This file is the source of all site copy for build step 14. Files named here are in ~/website-content (portrait.jpg, Jared-Narvaez-Resume.pdf, secure-file-sharing.png, character-gpt.png): copy them into public/. Since 2026-10-19 the portrait lives only in public/portrait.jpg (new 300×300 sunset photo). Use the text exactly as written; keep a [placeholder] for any field still marked "?". -->
 
 # Website content pass
 

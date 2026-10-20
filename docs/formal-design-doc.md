@@ -72,12 +72,12 @@ Why this cut: every piece is already fully specified and none needs a backend, s
 
 ### Phases
 
-| Phase | What | Status |
+| Phase | What | Status (2026-10-19) |
 |---|---|---|
 | 0. Setup | Fresh Next.js scaffold on `rebuild`, fonts, color variables | Done |
 | 1. Sky | Static golden hour, scroll blending, stars, cloud drift, grain | Done |
-| 2. Home page sections | Nav (done), hero, intro, tech stack, experience, projects, beyond code, connect contact block | In progress |
-| 3. Launch | Content pass, pre-launch checks, go live (old site to `legacy`, `rebuild` → `main`) | — |
-| 4. After launch | Sky modes 2 and 3 → leave a star → /projects, project detail and /scrapbook pages (design first) → live widgets → easter eggs | — |
+| 2. Home page sections | Nav, hero, intro, tech stack, experience, projects, connect contact block (beyond code moved after launch) | Done |
+| 3. Launch | Content pass, pre-launch checks, go live (old site to `legacy`, `rebuild` → `main`) | Done, launched 2026-10-17 |
+| 4. After launch | Sky modes 2 and 3 → leave a star → /projects, project detail and /scrapbook pages (design first) → live widgets → easter eggs | Next: sky modes 2 and 3 |
 
 Step-by-step tracking lives in `build-plan.md`.
