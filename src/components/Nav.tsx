@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "motion/react";
+import SkyControls, { shiftTransition } from "@/components/SkyControls";
 import { links } from "@/data/links";
 
 // The site nav: top-right, quiet (docs/visual-system.md → Hero layout: 14px, weight 500,
-// cream at ~82%, no monogram). Links in page order, lowercase. The sky controls are inert
-// placeholders, hidden for launch (step 15) until the sky modes are built after launch.
+// cream at ~82%, no monogram). Links in page order, lowercase, then the sky controls
+// (SkyControls: light/dark, mini dial, "sunset" pill), which stay visible on phones too.
 //
 // Chosen on /lab (step 6, 2026-10-11): it hides while you scroll down and comes back when you
 // scroll up, so the controls stay reachable without covering text; on phones the links open
@@ -34,10 +35,6 @@ const SCROLL_JITTER = 6;
 
 const SLIDE_S = 0.25;
 
-// Off for the MVP (docs/design.md: the nav shows no sky controls until sky modes 2 and 3).
-// Turn back on when the sky modes are built.
-const SHOW_SKY_CONTROLS = false;
-
 export default function Nav() {
   const reduceMotion = useReducedMotion();
   // Reduce Motion: everything appears and disappears instantly (decided 2026-10-11).
@@ -45,6 +42,7 @@ export default function Nav() {
 
   const [open, setOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const [dialOpen, setDialOpen] = useState(false);
 
   // Hide while scrolling down, come back on any scroll up.
   useEffect(() => {
@@ -78,7 +76,8 @@ export default function Nav() {
     };
   }, [open]);
 
-  const isHidden = hidden && !open;
+  // The nav stays put while the phone menu or the time dial is open.
+  const isHidden = hidden && !open && !dialOpen;
 
   return (
     <>
@@ -91,34 +90,45 @@ export default function Nav() {
         // see, so it comes back as soon as anything inside it gets focus (step 15).
         onFocus={() => setHidden(false)}
       >
-        <div className="flex items-center justify-end">
-          <nav aria-label="Main" className={`pointer-events-auto text-[14px] font-medium text-ink/82 ${SHADOW}`}>
-            {/* Desktop: the five links in a row. */}
-            <ul className="hidden items-center gap-7 md:flex">
-              {LINKS.map((link) => (
-                <li key={link.label}>
-                  <a href={link.href} {...newTab(link.href)} className="transition-colors hover:text-ink">
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <div className={`pointer-events-auto flex items-center gap-4 text-[14px] font-medium text-ink/82 md:ml-10 ${SHADOW}`}>
-            {SHOW_SKY_CONTROLS && <SkyControls />}
-            {/* Phones: the links live behind this button. */}
-            <button
-              type="button"
-              className="ml-2 md:hidden"
-              aria-expanded={open}
-              aria-controls="phone-menu"
-              onClick={() => setOpen((o) => !o)}
+        {/* One layout group, so the links re-measure and glide too when the sky controls change. */}
+        <LayoutGroup>
+          <div className="flex items-center justify-end">
+            <motion.nav
+              aria-label="Main"
+              // Glides with the sky controls when the "sunset" pill comes or goes.
+              layout="position"
+              transition={shiftTransition(!!reduceMotion)}
+              className={`pointer-events-auto text-[14px] font-medium text-ink/82 ${SHADOW}`}
             >
-              {open ? "close" : "menu"}
-            </button>
+              {/* Desktop: the five links in a row. */}
+              <ul className="hidden items-center gap-7 md:flex">
+                {LINKS.map((link) => (
+                  <li key={link.label}>
+                    <a href={link.href} {...newTab(link.href)} className="transition-colors hover:text-ink">
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </motion.nav>
+
+            <div className={`pointer-events-auto flex items-center gap-3 text-[14px] font-medium text-ink/82 md:ml-8 ${SHADOW}`}>
+              {/* Phones: the links live behind this button, before the sky controls. */}
+              <motion.button
+                type="button"
+                layout="position"
+                transition={shiftTransition(!!reduceMotion)}
+                className="mr-1 cursor-pointer md:hidden"
+                aria-expanded={open}
+                aria-controls="phone-menu"
+                onClick={() => setOpen((o) => !o)}
+              >
+                {open ? "close" : "menu"}
+              </motion.button>
+              <SkyControls dialOpen={dialOpen} onDialOpenChange={setDialOpen} />
+            </div>
           </div>
-        </div>
+        </LayoutGroup>
       </motion.header>
 
       {/* Outside the header on purpose: the header slides with a transform, and a fixed element
@@ -127,22 +137,6 @@ export default function Nav() {
       <AnimatePresence>
         {open && <PhoneMenu reduceMotion={!!reduceMotion} onPick={() => setOpen(false)} />}
       </AnimatePresence>
-    </>
-  );
-}
-
-// Light/dark (sun and moon swap on click) and local time. Placeholders until Phase 3: they
-// look real so Jared can judge the nav's width and balance, but they do nothing yet.
-function SkyControls() {
-  const placeholder = "[placeholder: sky modes come in Phase 3]";
-  return (
-    <>
-      <button type="button" aria-disabled="true" aria-label={`Light or dark sky ${placeholder}`} title={placeholder} className="cursor-default">
-        <SunIcon />
-      </button>
-      <button type="button" aria-disabled="true" aria-label={`Use my local time ${placeholder}`} title={placeholder} className="cursor-default">
-        <ClockIcon />
-      </button>
     </>
   );
 }
@@ -183,24 +177,5 @@ function PhoneMenu({ reduceMotion, onPick }: { reduceMotion: boolean; onPick: ()
         ))}
       </ul>
     </motion.div>
-  );
-}
-
-// 16px line icons in the nav's ink color. Placeholders until the icon set is decided.
-function SunIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" aria-hidden="true">
-      <circle cx="8" cy="8" r="3" />
-      <path d="M8 1.5v1.5M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1 1M11.6 11.6l1 1M3.4 12.6l1-1M11.6 4.4l1-1" />
-    </svg>
-  );
-}
-
-function ClockIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" aria-hidden="true">
-      <circle cx="8" cy="8" r="6.25" />
-      <path d="M8 4.5V8l2.25 1.5" />
-    </svg>
   );
 }

@@ -2,6 +2,9 @@ import { describe, expect, it } from "vitest";
 import { mixColor } from "./blend";
 import {
   dayness,
+  formatHour,
+  hourName,
+  isDarkHour,
   grainAtHour,
   hourAtScroll,
   keyframeAtHour,
@@ -113,5 +116,32 @@ describe("wrapHour", () => {
     expect(wrapHour(25)).toBe(1);
     expect(wrapHour(-1)).toBe(23);
     expect(wrapHour(24)).toBe(0);
+  });
+});
+
+describe("dial helpers", () => {
+  it("names each hour after the keyframe it's on or past", () => {
+    expect(hourName(4)).toBe("midnight");
+    expect(hourName(5.3)).toBe("dawn");
+    expect(hourName(7)).toBe("sunrise");
+    expect(hourName(13)).toBe("midday");
+    expect(hourName(18.5)).toBe("golden hour");
+    expect(hourName(20)).toBe("dusk");
+    expect(hourName(23)).toBe("night");
+  });
+
+  it("formats hours as clock times", () => {
+    expect(formatHour(19.5)).toBe("7:30 pm");
+    expect(formatHour(0)).toBe("12:00 am");
+    expect(formatHour(12)).toBe("12:00 pm");
+    expect(formatHour(6.75)).toBe("6:45 am");
+    expect(formatHour(23.999)).toBe("12:00 am");
+  });
+
+  it("calls the sky dark once more than half the stars are out", () => {
+    expect(isDarkHour(0)).toBe(true);
+    expect(isDarkHour(12)).toBe(false);
+    expect(isDarkHour(18.5)).toBe(false);
+    expect(isDarkHour(20.5)).toBe(true);
   });
 });

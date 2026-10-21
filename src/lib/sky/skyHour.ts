@@ -1,24 +1,59 @@
-// Which hour the sky is fixed at, or null for scroll mode (the default). Sky.tsx reads it on
-// every paint; whatever sets it calls setFixedSky, which tells Sky.tsx to repaint. Kept outside
-// React state so changing the hour doesn't re-render the page (CLAUDE.md → Architecture rules).
-// Only /lab/sky sets it for now; the nav's dial and "my time" will use it in sky modes part 4.
+// The sky mode (docs/visual-system.md → Sky timing and modes) and the hour the sky is showing.
+// Kept outside React state so the sky doesn't re-render the page (CLAUDE.md → Architecture rules):
+// - the mode changes only on a click, so the nav's controls subscribe to it and re-render then;
+// - the shown hour changes with every scroll frame, so the mini dial and the dial subscribe to it
+//   and update their own SVG directly, without React.
 
-export type FixedSky = { hour: number };
+export type SkyMode =
+  | { mode: "scroll" } // the default: golden hour → night as you scroll
+  | { mode: "hour"; hour: number } // pick the time: the dial or the light/dark button
+  | { mode: "local" }; // my time: the visitor's clock
 
-let fixed: FixedSky | null = null;
-const listeners = new Set<() => void>();
+const SCROLL: SkyMode = { mode: "scroll" };
 
-export const getFixedSky = () => fixed;
+let current: SkyMode = SCROLL;
+const modeListeners = new Set<() => void>();
 
-export function setFixedSky(next: FixedSky | null) {
-  fixed = next;
-  listeners.forEach((listener) => listener());
+export const getSkyMode = () => current;
+
+/** The mode the server renders with: always scroll, so the page hydrates the same. */
+export const getServerSkyMode = () => SCROLL;
+
+export function setSkyMode(next: SkyMode) {
+  current = next;
+  modeListeners.forEach((listener) => listener());
 }
 
-/** Calls `listener` whenever the fixed hour changes. Returns a function that stops it. */
-export function onFixedSkyChange(listener: () => void) {
-  listeners.add(listener);
+/** Calls `listener` whenever the mode changes. Returns a function that stops it. */
+export function onSkyModeChange(listener: () => void) {
+  modeListeners.add(listener);
   return () => {
-    listeners.delete(listener);
+    modeListeners.delete(listener);
   };
+}
+
+// The hour the sky is drawing, 0–24. Sky.tsx publishes it whenever it changes.
+let shownHour = 18.5;
+const hourListeners = new Set<(hour: number) => void>();
+
+export const getShownHour = () => shownHour;
+
+export function publishShownHour(hour: number) {
+  if (hour === shownHour) return;
+  shownHour = hour;
+  hourListeners.forEach((listener) => listener(hour));
+}
+
+/** Calls `listener` with the shown hour now and whenever it changes. Returns a function that stops it. */
+export function onShownHourChange(listener: (hour: number) => void) {
+  hourListeners.add(listener);
+  listener(shownHour);
+  return () => {
+    hourListeners.delete(listener);
+  };
+}
+
+/** The visitor's clock as an hour, e.g. 7:30 pm → 19.5. */
+export function localHour(now = new Date()) {
+  return now.getHours() + now.getMinutes() / 60;
 }

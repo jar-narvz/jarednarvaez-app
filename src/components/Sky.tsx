@@ -2,11 +2,11 @@
 
 import { useEffect, useRef } from "react";
 import { accentAt, grainAt, keyframeAt } from "@/lib/sky/blend";
-import { dayness, grainAtHour, keyframeAtHour } from "@/lib/sky/hours";
+import { dayness, grainAtHour, hourAtScroll, keyframeAtHour } from "@/lib/sky/hours";
 import { SUN_GOLD } from "@/lib/sky/palette";
 import { renderSky } from "@/lib/sky/render";
 import { coastScene, tallCoastScene, type DrawnSky } from "@/lib/sky/scene";
-import { getFixedSky, onFixedSkyChange } from "@/lib/sky/skyHour";
+import { getSkyMode, localHour, onSkyModeChange, publishShownHour } from "@/lib/sky/skyHour";
 import { textDayness, themeAt } from "@/lib/sky/theme";
 import { GRAIN_FRAME_MS, grainFrames } from "@/lib/sky/texture";
 
@@ -16,9 +16,10 @@ function scrollProgress() {
   return max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
 }
 
-// The fixed background sky. It follows scroll progress from golden hour to night (or holds one
-// hour when skyHour.ts fixes it), writes the live colors to CSS variables, and has moving film
-// grain on top. Clouds drift and stars
+// The fixed background sky. In scroll mode it follows scroll progress from golden hour to night;
+// in the other sky modes (skyHour.ts) it holds the picked hour or the visitor's clock. It writes
+// the live colors to CSS variables, publishes the hour it's showing for the nav's dials, and has
+// moving film grain on top. Clouds drift and stars
 // twinkle on their own, so the sky repaints every frame (except under Reduce Motion).
 export default function Sky() {
   const frameRef = useRef<HTMLDivElement>(null);
@@ -35,29 +36,44 @@ export default function Sky() {
     // Seconds on the animation clock: moves the clouds and the twinkle. Frozen under Reduce Motion.
     let time = 0;
     let lastMoment = "";
+    // "My time": the visitor's clock, refreshed every 30s (docs/visual-system.md → Mode behavior).
+    let clockHour = localHour();
+    const clock = window.setInterval(() => {
+      clockHour = localHour();
+      if (getSkyMode().mode === "local") schedulePaint();
+    }, 30_000);
+
+    /** The hour the sky holds in the fixed modes, or null in scroll mode. */
+    const fixedHour = () => {
+      const m = getSkyMode();
+      if (m.mode === "hour") return m.hour;
+      if (m.mode === "local") return clockHour;
+      return null;
+    };
 
     // Sky at the current scroll position (or fixed hour) and time, plus the live CSS variables.
     const paintSky = () => {
       const { clientWidth: w, clientHeight: h } = frame;
       if (!w || !h) return;
       const t = scrollProgress();
-      const fixed = getFixedSky();
+      const fixed = fixedHour();
       let k: DrawnSky = keyframeAt(t);
       let grainLevel = grainAt(t);
       // Scroll mode never reaches daytime, so its dayness is 0 and its colors stay the evening's.
       let day = 0;
       let eveningAccent = accentAt(t);
-      if (fixed) {
-        day = dayness(fixed.hour);
-        k = { ...keyframeAtHour(fixed.hour), day };
-        grainLevel = grainAtHour(fixed.hour);
+      if (fixed !== null) {
+        day = dayness(fixed);
+        k = { ...keyframeAtHour(fixed), day };
+        grainLevel = grainAtHour(fixed);
         eveningAccent = SUN_GOLD;
       }
+      publishShownHour(fixed ?? hourAtScroll(t));
       // Portrait screens (phones) get the tall version of the coast.
       renderSky(sky, w, h, w < h ? tallCoastScene : coastScene, k, time);
       // The variables only change with scroll or the hour, so skip rewriting them on still
       // frames. Written in scroll mode too, so leaving a fixed hour puts the evening back.
-      const moment = `${t} ${fixed?.hour}`;
+      const moment = `${t} ${fixed}`;
       if (moment !== lastMoment) {
         lastMoment = moment;
         const theme = themeAt(textDayness(day), eveningAccent);
@@ -131,7 +147,10 @@ export default function Sky() {
     const pageObserver = new ResizeObserver(schedulePaint);
     pageObserver.observe(document.body);
     window.addEventListener("scroll", schedulePaint, { passive: true });
-    const stopFixedSky = onFixedSkyChange(schedulePaint);
+    const stopSkyMode = onSkyModeChange(() => {
+      if (getSkyMode().mode === "local") clockHour = localHour();
+      schedulePaint();
+    });
     updateMotion();
     reducedMotion.addEventListener("change", updateMotion);
 
@@ -139,7 +158,8 @@ export default function Sky() {
       frameObserver.disconnect();
       pageObserver.disconnect();
       window.removeEventListener("scroll", schedulePaint);
-      stopFixedSky();
+      stopSkyMode();
+      window.clearInterval(clock);
       cancelAnimationFrame(loop);
       cancelAnimationFrame(pending);
       reducedMotion.removeEventListener("change", updateMotion);

@@ -99,3 +99,38 @@ export function keyframeAtHour(hour: number): HourSky {
     stars: starsAtHour(h),
   };
 }
+
+// Names for the dial's readout: the keyframe this hour is on or past (the mockup's `hourName`).
+const HOUR_NAMES: [number, string][] = [
+  [0, "midnight"],
+  [5.3, "dawn"],
+  [6.8, "sunrise"],
+  [12, "midday"],
+  [16, "afternoon"],
+  [18.5, "golden hour"],
+  [19.6, "dusk"],
+  [21, "night"],
+];
+
+/** The dial's name for an hour: 4:00 → "midnight", 7:00 → "sunrise", 19:00 → "golden hour". */
+export function hourName(hour: number) {
+  const h = wrapHour(hour);
+  let name = HOUR_NAMES[0][1];
+  for (const [start, n] of HOUR_NAMES) if (h >= start) name = n;
+  return name;
+}
+
+/** An hour as a clock time: 19.5 → "7:30 pm", 0 → "12:00 am". */
+export function formatHour(hour: number) {
+  const h = wrapHour(hour);
+  let hours = Math.floor(h);
+  let minutes = Math.round((h - hours) * 60);
+  if (minutes === 60) {
+    hours = (hours + 1) % 24;
+    minutes = 0;
+  }
+  return `${hours % 12 || 12}:${String(minutes).padStart(2, "0")} ${hours < 12 ? "am" : "pm"}`;
+}
+
+/** Whether the sky reads as night (more than half the stars out): the light/dark button then offers the day. */
+export const isDarkHour = (hour: number) => starsAtHour(hour) > 0.5;

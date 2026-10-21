@@ -4,8 +4,8 @@
 
 ## Now
 
-- **In progress:** sky modes, part 4 (nav controls): not started. Parts 1–3 done 2026-10-20; `/lab/sky` (dev only) holds the sky at any hour. Launched 2026-10-17 at jarednarvaez.vercel.app (old site on `legacy`); a custom domain can come later.
-- **Next:** sky modes, part 5 (mode transitions and checks)
+- **In progress:** sky modes, part 5 (mode transitions and checks): not started. Parts 1–4 done 2026-10-20. Launched 2026-10-17 at jarednarvaez.vercel.app (old site on `legacy`); a custom domain can come later.
+- **Next:** leave a star (Phase 4; pick the storage service with Jared first)
 - **Content:** all copy for step 14 is in `docs/content.md` (exported from Jared's Website content pass doc); files are in `~/website-content`.
 - **Notes:** Plan re-aimed at the MVP on 2026-10-16 (see `design.md` → Launch plan). Post-launch design fixes shipped 2026-10-19, outside the numbered steps: new hero line at 20px, centered 1000px content column, two-row tech stack in IBM Plex Mono pills, tighter experience/projects spacing, grey bullet text with gaps, clickable section headers, new sunset portrait. Each is in `decisions-log.md`.
 
@@ -49,7 +49,7 @@ Every section uses placeholder copy (`[like this]`) and its own data file, and s
   - [x] **1. 24-hour color math.** All 8 keyframes, sun path, stars by hour, grain and dayness as plain tested functions in `src/lib/sky/`. Nothing visible changes.
   - [x] **2. Sky renders any hour.** The canvas draws any hour; a temporary `/lab` slider scrubs through the day.
   - [x] **3. Day text theme.** CSS variables (ink, accent, underline, tints, shadow, vignette) blend with dayness; readable at every hour.
-  - [ ] **4. Nav controls.** Mini dial, full dial, light/dark button, "my time", "sunset" pill, with their Motion inventory animations.
+  - [x] **4. Nav controls.** Mini dial, full dial, light/dark button, "my time", "sunset" pill, with their Motion inventory animations.
   - [ ] **5. Mode transitions and checks.** Shorter-way-around transitions (~1.2s), fixed modes, Reduce Motion, connect in daytime, phone checks.
 - [ ] **Leave a star.** Storage, `/api/stars`, pixel-cross stars in the sky canvas, placing and hover in connect, privacy rules. Spec: `visual-system.md` → Connect. Pick the storage service with Jared first.
 - [ ] **/projects page + project detail pages (MDX).** Needs design first. Then turn on "view project →" and "all projects →".
