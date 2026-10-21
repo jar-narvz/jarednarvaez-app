@@ -4,12 +4,12 @@ import SectionLabel from "@/components/SectionLabel";
 import { techStack } from "@/data/techStack";
 import { techLogos, type TechName } from "@/icons/techLogos";
 
-// Copies of each list in its track: enough to fill the row edge to edge on screens up to
-// ~3,300px wide with the shortest row (ML and data).
+// Copies of each list in its track. One copy of the shortest row (languages) is ~900px at 14px,
+// so 4 copies (~3,600px) more than cover the 1000px content column while the track shifts by one copy.
 const COPIES = 4;
 
-// The tech stack (docs/visual-system.md → Tech stack section): header on the left, then three
-// logo pill rows looping in alternating directions at about 26, 23 and 25 px/s, edges fading over
+// The tech stack (docs/visual-system.md → Tech stack section): header on the left, then two
+// logo pill rows looping in alternating directions at about 26 and 23 px/s, edges fading over
 // the outer 7%; only the row under the pointer pauses (Jared, 2026-10-17); still under Reduce
 // Motion. Layout values follow docs/reference/home-mockup.html.
 export default function TechStack() {

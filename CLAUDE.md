@@ -29,6 +29,7 @@ The design docs are a snapshot exported from Jared's Notion "personal website pl
 
 - **One step at a time.** Do only the step Jared asked for (usually the next one in `docs/build-plan.md`), then stop and tell him what changed and how to see it (which URL, what to scroll to). Never build ahead into the next step.
 - **Build only what's designed.** If a step needs a section or detail that isn't designed yet (see "Not designed yet" in `docs/design.md`), stop and say so. Don't invent a layout to fill the gap; design happens with Jared first.
+- **Show it running before asking.** Before asking Jared to approve a step or giving him commit commands, make sure he can see the result himself: the dev server running and the exact URL (the page, or a `/lab` page) with what to look at. If a step has nothing visible (pure logic), show something he can run instead, like the tests by name.
 - **Plan before coding** anything bigger than a small fix: say which files you'll touch and what you'll add, and wait for a yes.
 - **Options, then react.** When a design question isn't answered by the docs, don't pick for him. Build 2–3 options he can see in the browser (for example on a temporary `/lab` page), give a short lean with reasons, and let him choose.
 - **Never write copy in Jared's voice.** Hero line, bios, captions, taglines, project descriptions: use obvious placeholders like `[hero line]` or `[about paragraph]`. Real copy now exists: for the content pass (build step 14) take it from `docs/content.md` exactly as written, and take files (portrait, résumé PDF, project images) from `~/website-content`, copying them into `public/`. Keep a placeholder for any field still marked `?` there.
@@ -58,7 +59,7 @@ The design docs are a snapshot exported from Jared's Notion "personal website pl
 ## Git
 
 - Work on the `rebuild` branch. `main` holds the old site until launch (step 16), when Jared moves it to a `legacy` branch and merges `rebuild` into `main`.
-- **Jared commits, pushes, and does everything on GitHub himself.** Never run `git commit`, `push`, `pull`, `merge` or `rebase`. At the end of a step, give him the exact commands and a commit message (one commit per finished step), with the build-plan tick included in the same commit. Commits are authored by Jared; end the message with a `Co-Authored-By: Claude <noreply@anthropic.com>` line.
+- **Jared commits, pushes, and does everything on GitHub himself.** Never run `git commit`, `push`, `pull`, `merge` or `rebase`. At the end of a step, give him the exact commands and a commit message (one commit per finished step), with the build-plan tick included in the same commit. Commits are authored by Jared, with no `Co-Authored-By` line.
 - Stage with `git add -A -- . ':!.vscode'` (his editor settings stay out of the repo).
 - Never commit secrets. API keys go in `.env.local`, which stays git-ignored.
 

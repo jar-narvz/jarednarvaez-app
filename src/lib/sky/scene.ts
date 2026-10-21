@@ -2,7 +2,14 @@
 // Everything is in the prototype's 680×380 design space; render.ts scales it down.
 
 import { withAlpha } from "./blend";
-import type { SkyKeyframe } from "./palette";
+import { DAY_VIGNETTE, type SkyKeyframe } from "./palette";
+
+/**
+ * What a scene draws: a keyframe, plus two things only the fixed-hour sky sets: the sun's x
+ * (hours.ts) and dayness, 0–1, which fades the plum vignette into the day's cream one. Without
+ * them, as in scroll mode, the sun stays at x=500 and the vignette is plum.
+ */
+export type DrawnSky = SkyKeyframe & { sunX?: number; day?: number };
 
 /** A scene the render pipeline can draw: its design-space size and how to paint it at `time` (seconds). */
 export type SkyScene = {
@@ -10,7 +17,7 @@ export type SkyScene = {
   height: number;
   /** Bottom of the star band, in design units. Stars fill the sky from the top down to here. */
   starBand: number;
-  draw: (ctx: CanvasRenderingContext2D, k: SkyKeyframe, time: number) => void;
+  draw: (ctx: CanvasRenderingContext2D, k: DrawnSky, time: number) => void;
 };
 
 const W = 680;
@@ -37,24 +44,47 @@ const CLOUDS: [number, number, number, number][] = [
 /** How far cloud `i` has drifted sideways at `time`: up to 14 units, one sway every ~42s (the prototype's). */
 const cloudDrift = (time: number, i: number) => Math.sin(time * 0.15 + i) * 14;
 
-/** Radial vignette fading out from (x, y). Its color, strength and reach come from the keyframe. */
-function drawVignette(
+/** One radial vignette layer fading out from (x, y). */
+function vignetteLayer(
   ctx: CanvasRenderingContext2D,
-  k: SkyKeyframe,
+  color: string,
+  strength: number,
+  reach: number,
   x: number,
   y: number,
   radius: number,
   width: number,
   height: number,
 ) {
-  const vignette = ctx.createRadialGradient(x, y, 0, x, y, radius * k.vignetteReach);
-  vignette.addColorStop(0, withAlpha(k.vignette, k.vignetteStrength));
-  vignette.addColorStop(1, withAlpha(k.vignette, 0));
+  const vignette = ctx.createRadialGradient(x, y, 0, x, y, radius * reach);
+  vignette.addColorStop(0, withAlpha(color, strength));
+  vignette.addColorStop(1, withAlpha(color, 0));
   ctx.fillStyle = vignette;
   ctx.fillRect(0, 0, width, height);
 }
 
-function drawCoast(ctx: CanvasRenderingContext2D, k: SkyKeyframe, time: number) {
+/** The vignette behind the text: the keyframe's plum one, fading into the day's cream haze by dayness. */
+function drawVignette(
+  ctx: CanvasRenderingContext2D,
+  k: DrawnSky,
+  x: number,
+  y: number,
+  radius: number,
+  width: number,
+  height: number,
+) {
+  const day = k.day ?? 0;
+  if (day < 1) {
+    vignetteLayer(ctx, k.vignette, k.vignetteStrength * (1 - day), k.vignetteReach, x, y, radius, width, height);
+  }
+  if (day > 0) {
+    const { color, strength, reach } = DAY_VIGNETTE;
+    vignetteLayer(ctx, color, strength * day, reach, x, y, radius, width, height);
+  }
+}
+
+function drawCoast(ctx: CanvasRenderingContext2D, k: DrawnSky, time: number) {
+  const sunX = k.sunX ?? SUN_X;
   const sky = ctx.createLinearGradient(0, 0, 0, HORIZON);
   SKY_STOPS.forEach((stop, i) => sky.addColorStop(stop, k.sky[i]));
   ctx.fillStyle = sky;
@@ -70,7 +100,7 @@ function drawCoast(ctx: CanvasRenderingContext2D, k: SkyKeyframe, time: number) 
   // A flat disc; the blur in the pipeline makes its glow.
   ctx.fillStyle = k.sun;
   ctx.beginPath();
-  ctx.arc(SUN_X, k.sunY, 56, 0, FULL_TURN);
+  ctx.arc(sunX, k.sunY, 56, 0, FULL_TURN);
   ctx.fill();
 
   // Far headland along the left, meeting the horizon at x=420.
@@ -91,10 +121,12 @@ function drawCoast(ctx: CanvasRenderingContext2D, k: SkyKeyframe, time: number) 
   ctx.fillStyle = k.water[2];
   ctx.fillRect(0, 345, W, 35);
 
+  // The sun's reflection, in the sun's own color (was the prototype's fixed gold #FFD9A0 until
+  // Jared compared them side by side, 2026-10-20).
   ctx.globalAlpha = k.reflection;
-  ctx.fillStyle = "#FFD9A0";
+  ctx.fillStyle = k.sun;
   ctx.beginPath();
-  ctx.ellipse(SUN_X, 320, 40, 60, 0, 0, FULL_TURN);
+  ctx.ellipse(sunX, 320, 40, 60, 0, 0, FULL_TURN);
   ctx.fill();
   ctx.globalAlpha = 1;
 
@@ -123,7 +155,8 @@ const T_HORIZON = 600;
 const NARROW = TW / W;
 const DROP = T_HORIZON - HORIZON;
 
-function drawTallCoast(ctx: CanvasRenderingContext2D, k: SkyKeyframe, time: number) {
+function drawTallCoast(ctx: CanvasRenderingContext2D, k: DrawnSky, time: number) {
+  const sunX = k.sunX ?? SUN_X;
   const sky = ctx.createLinearGradient(0, 0, 0, T_HORIZON);
   SKY_STOPS.forEach((stop, i) => sky.addColorStop(stop, k.sky[i]));
   ctx.fillStyle = sky;
@@ -141,7 +174,7 @@ function drawTallCoast(ctx: CanvasRenderingContext2D, k: SkyKeyframe, time: numb
   // Same height relative to the horizon as the landscape sun, so it sets the same way.
   ctx.fillStyle = k.sun;
   ctx.beginPath();
-  ctx.arc(SUN_X * NARROW, k.sunY + DROP, 44, 0, FULL_TURN);
+  ctx.arc(sunX * NARROW, k.sunY + DROP, 44, 0, FULL_TURN);
   ctx.fill();
 
   ctx.fillStyle = k.land;
@@ -161,9 +194,9 @@ function drawTallCoast(ctx: CanvasRenderingContext2D, k: SkyKeyframe, time: numb
   ctx.fillRect(0, T_HORIZON + 73, TW, TH - T_HORIZON - 73);
 
   ctx.globalAlpha = k.reflection;
-  ctx.fillStyle = "#FFD9A0";
+  ctx.fillStyle = k.sun;
   ctx.beginPath();
-  ctx.ellipse(SUN_X * NARROW, T_HORIZON + 48, 40 * NARROW, 60, 0, 0, FULL_TURN);
+  ctx.ellipse(sunX * NARROW, T_HORIZON + 48, 40 * NARROW, 60, 0, 0, FULL_TURN);
   ctx.fill();
   ctx.globalAlpha = 1;
 

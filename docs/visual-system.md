@@ -517,11 +517,11 @@ const starBrightness=t=>t<.35?0:t<.65?.3*(t-.35)/.3:.3+.7*(t-.65)/.35;
 | Nav *(after launch)* | Mini dial's gold dot travels around its ring to the current hour | Every frame | Follows the sky | Stays (it shows state) |
 | Nav *(after launch)* | Time dial grows down from the mini dial / shrinks back | Mini dial click / "close" / click outside | Open: scale 0 → 1 from top-right, 450ms `cubic-bezier(.3,1.3,.5,1)`. Close: scale → 0 + fade, 220ms ease-in | Instant |
 | Hero (and labels) | Sparkle twinkle | Always | Opacity 1 ↔ 0.5, 2.4s ease-in-out, infinite | Still |
-| Tech stack | Three pill rows loop, alternating directions; pause on hover | Always / hover | Linear, about 26, 23, 25 px/s (rows 1–3); loop time follows row length | Rows stay still |
+| Tech stack | Two pill rows loop, alternating directions; pause on hover | Always / hover | Linear, about 26 and 23 px/s (rows 1–2); loop time follows row length | Rows stay still |
 | Experience + projects | Round "+" toggles rotate 45° into "×", border turns accent | Click | 400ms `cubic-bezier(.3,1.4,.5,1)` | Instant |
-| Experience | Section opens: rail line draws down, stars pop in one by one, rows fade up; closes in reverse bottom-up | Header "+" | See Experience → Animation (line 700ms; star 500ms pop at 170 + 180·*i*; row 450ms at 250 + 180·*i*; close 60ms stagger) | Instant, all stars lit |
+| Experience | Section opens: rail line draws down, stars pop in one by one, rows fade up; closes in reverse bottom-up | Header row or "+" | See Experience → Animation (line 700ms; star 500ms pop at 170 + 180·*i*; row 450ms at 250 + 180·*i*; close 60ms stagger) | Instant, all stars lit |
 | Experience | Role opens: details slide open, bullets fade in, its star brightens with a glow; current role's star twinkles | Row "+" | Height 400ms; bullets 300ms after 100ms; twinkle 2.4s | Instant, no twinkle |
-| Projects | Section opens: rules draw left → right, rows fade up, closing rule then "all projects →" fade in | Header "+" | See Projects → Animation (rule 600ms; row 450ms at 150 + 160·*i*) | Instant |
+| Projects | Section opens: rules draw left → right, rows fade up, closing rule then "all projects →" fade in | Header row or "+" | See Projects → Animation (rule 600ms; row 450ms at 150 + 160·*i*) | Instant |
 | Projects | Project opens: cell slides open and fades in; image focus pull (blur → sharp); title turns accent | Row "+" | Height 450ms; cell 300ms after 120ms; image 800ms after 200ms | Instant, image sharp |
 | Beyond code | Prints drop into place one by one (also on "reset") | Section enters view (once) / reset | 300ms `cubic-bezier(.3,1.4,.5,1)`, delay 120 + 90·*i* ms | Appear in place |
 | Beyond code | Print hover lift, grab (scale 1.05 + deeper shadow), drop (settles to a new random tilt ±6°) | Hover / drag | Hover shadow 200ms; drop 300ms overshoot | Drag works, no scale/tilt animation |

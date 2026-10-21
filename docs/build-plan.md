@@ -4,10 +4,10 @@
 
 ## Now
 
-- **In progress:** none. Launched 2026-10-17 at jarednarvaez.vercel.app (old site on `legacy`); a custom domain can come later.
-- **Next:** after launch, sky modes 2 and 3 (Phase 4)
+- **In progress:** none. Sky modes 2 and 3 done 2026-10-20 (all five parts); going live with a `rebuild` → `main` pull request. Still to check on Jared's phone: Reduce Motion. Launched 2026-10-17 at jarednarvaez.vercel.app (old site on `legacy`); a custom domain can come later.
+- **Next:** leave a star (Phase 4; pick the storage service with Jared first)
 - **Content:** all copy for step 14 is in `docs/content.md` (exported from Jared's Website content pass doc); files are in `~/website-content`.
-- **Notes:** Plan re-aimed at the MVP on 2026-10-16 (see `design.md` → Launch plan). Goal: launch as soon as possible.
+- **Notes:** Plan re-aimed at the MVP on 2026-10-16 (see `design.md` → Launch plan). Post-launch design fixes shipped 2026-10-19, outside the numbered steps: new hero line at 20px, centered 1000px content column, two-row tech stack in IBM Plex Mono pills, tighter experience/projects spacing, grey bullet text with gaps, clickable section headers, new sunset portrait. Each is in `decisions-log.md`.
 
 ## MVP (decided 2026-10-16)
 
@@ -45,8 +45,13 @@ Every section uses placeholder copy (`[like this]`) and its own data file, and s
 
 ## Phase 4 — After launch (in this order)
 
-- [ ] **Sky modes 2 and 3.** Mini dial + full 24-hour dial, light/dark button, "my time", "sunset" pill, day text theme, transitions around the clock. Spec: `visual-system.md` → 24-hour sky.
-- [ ] **Leave a star.** Storage, `/api/stars`, pixel-cross stars in the sky canvas, placing and hover in connect, privacy rules. Spec: `visual-system.md` → Connect. Pick the storage service with Jared first.
+- [x] **Sky modes 2 and 3.** Mini dial + full 24-hour dial, light/dark button, "my time", "sunset" pill, day text theme, transitions around the clock. Spec: `visual-system.md` → 24-hour sky. Split into five parts, each reviewed on its own (Jared, 2026-10-19):
+  - [x] **1. 24-hour color math.** All 8 keyframes, sun path, stars by hour, grain and dayness as plain tested functions in `src/lib/sky/`. Nothing visible changes.
+  - [x] **2. Sky renders any hour.** The canvas draws any hour; a temporary `/lab` slider scrubs through the day.
+  - [x] **3. Day text theme.** CSS variables (ink, accent, underline, tints, shadow, vignette) blend with dayness; readable at every hour.
+  - [x] **4. Nav controls.** Mini dial, full dial, light/dark button, "my time", "sunset" pill, with their Motion inventory animations.
+  - [x] **5. Mode transitions and checks.** Shorter-way-around transitions (~1.2s), fixed modes, Reduce Motion, connect in daytime, phone checks.
+- [ ] **Leave a star.** Storage, `/api/stars`, pixel-cross stars in the sky canvas, placing and hover in connect, privacy rules. Spec: `visual-system.md` → Connect. Pick the storage service with Jared first. Includes the sky modes' "connect in daytime" rules (visitor stars hidden, "stars come out at night" hint, placing disabled), left out of sky modes part 5 since there are no visitor stars yet.
 - [ ] **/projects page + project detail pages (MDX).** Needs design first. Then turn on "view project →" and "all projects →".
 - [ ] **Beyond code (home scrapbook preview).** Needs design first. A working build is parked in the repo (`src/components/BeyondCode.tsx`, `src/data/scrapbook.ts`) with a dev-only tuning page at `/lab` (height, print size, frame width, frame). Re-add it to `src/app/page.tsx` after projects once designed.
 - [ ] **/scrapbook page.** Needs design first. Then turn on "open the scrapbook →".

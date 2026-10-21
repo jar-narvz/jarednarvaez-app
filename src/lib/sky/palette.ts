@@ -1,5 +1,6 @@
 // Sky keyframes, copied from the approved prototype (docs/reference/sky-prototype.html, `K`).
-// blend.ts mixes between them as the page scrolls: golden hour → dusk → night.
+// blend.ts mixes between them as the page scrolls: golden hour → dusk → night. The rest of the
+// day (midnight, dawn, sunrise, midday, afternoon) is at the bottom; hours.ts mixes all eight.
 
 type Five = [string, string, string, string, string];
 
@@ -24,7 +25,7 @@ export type SkyKeyframe = {
   /** Vignette behind the text, painted into the sky so it's blurred and pixelated with it. */
   vignette: string;
   vignetteStrength: number;
-  /** Multiplier on the scene's base vignette radius. The day theme will use a wider reach. */
+  /** Multiplier on the scene's base vignette radius. The day vignette (DAY_VIGNETTE) reaches wider. */
   vignetteReach: number;
 };
 
@@ -70,6 +71,100 @@ export const night: SkyKeyframe = {
   ...EVENING_VIGNETTE,
 };
 
+// The rest of the 24-hour day (docs/visual-system.md → 24-hour sky → Keyframes). Sky and water
+// are exactly as specified. The spec gives less detail than the evening keyframes above, so:
+// - clouds: its one cloud color, used for all five clouds;
+// - land: its one headland color on both the far headland and the near ridge, so the coast reads
+//   as one silhouette like the mockup (option C, Jared's pick in /lab/sky, 2026-10-20);
+// - sun color and reflection strength: the approved mockup's formulas at that hour (the
+//   reflection takes the sun's color, see scene.ts). Below the
+//   horizon (midnight, dawn) the sun takes night's color and no reflection;
+// - sunY: the sun path at that hour (hours.ts recomputes the full arc; this is for reference);
+// - stars: the star rule at that hour (hours.ts recomputes it too);
+// - vignette: the evening plum for now. The day theme's cream haze comes with dayness (part 3).
+
+export const midnight: SkyKeyframe = {
+  sky: ["#07081A", "#0E1030", "#161840", "#22244C", "#2C2650"],
+  clouds: ["#1E1E40", "#1E1E40", "#1E1E40", "#1E1E40", "#1E1E40"],
+  sun: "#3A2C5E",
+  sunY: 330,
+  water: ["#16142E", "#0E0C22", "#08081A"],
+  land: "#06061A",
+  near: "#06061A",
+  reflection: 0,
+  stars: 1,
+  ...EVENING_VIGNETTE,
+};
+
+export const dawn: SkyKeyframe = {
+  sky: ["#1C2550", "#3A4A7A", "#7A6A94", "#C08A9A", "#E8B0A0"],
+  clouds: ["#6A6088", "#6A6088", "#6A6088", "#6A6088", "#6A6088"],
+  sun: "#3A2C5E",
+  sunY: 330,
+  water: ["#4A4870", "#2C2E50", "#1A1C38"],
+  land: "#1E1E36",
+  near: "#1E1E36",
+  reflection: 0,
+  stars: 1 - 0.5 / 1.4,
+  ...EVENING_VIGNETTE,
+};
+
+export const sunrise: SkyKeyframe = {
+  sky: ["#4A6A9E", "#8A9AC4", "#E8B4B0", "#FAD0A8", "#FFE6C0"],
+  clouds: ["#F4C8C0", "#F4C8C0", "#F4C8C0", "#F4C8C0", "#F4C8C0"],
+  sun: "#FFE0A8",
+  sunY: 304.5,
+  water: ["#C49AA8", "#7A7098", "#3E4470"],
+  land: "#3A3050",
+  near: "#3A3050",
+  reflection: 0.35,
+  stars: 0,
+  ...EVENING_VIGNETTE,
+};
+
+export const midday: SkyKeyframe = {
+  sky: ["#4F86C6", "#74A4D8", "#9CC2E6", "#C4DDF0", "#E2EEF6"],
+  clouds: ["#F6F4F0", "#F6F4F0", "#F6F4F0", "#F6F4F0", "#F6F4F0"],
+  sun: "#FFFBEE",
+  sunY: 187.4,
+  water: ["#6E9CC4", "#3F6E9C", "#2A4E78"],
+  land: "#4A5A6E",
+  near: "#4A5A6E",
+  reflection: 0.55,
+  stars: 0,
+  ...EVENING_VIGNETTE,
+};
+
+export const afternoon: SkyKeyframe = {
+  sky: ["#5A7FB8", "#86A2CC", "#B8C4D8", "#E6D8C4", "#F4E2C4"],
+  clouds: ["#F4E6D8", "#F4E6D8", "#F4E6D8", "#F4E6D8", "#F4E6D8"],
+  sun: "#FFFBEE",
+  sunY: 207.5,
+  water: ["#8AA0BC", "#566E92", "#344868"],
+  land: "#4A4458",
+  near: "#4A4458",
+  reflection: 0.55,
+  stars: 0,
+  ...EVENING_VIGNETTE,
+};
+
 /** Accent text color at golden hour and at dark (docs/visual-system.md → Color). */
 export const STARLIGHT = "#E3E8FF";
 export const SUN_GOLD = "#FFD48A";
+
+// The day text theme (docs/visual-system.md → 24-hour sky → Day text theme and blending).
+// Everything blends from the evening value to these as dayness goes 0 → 1 (theme.ts).
+export const CREAM = "#FFF6EA";
+export const NAVY = "#1F1A3A";
+export const PLUM = "#4E3270";
+/** The evening's tinted fill behind pills and cells; blends to cream by day. */
+export const PLUM_TINT = "#2A1630";
+/** The evening's plum glow behind text (prototype value, rgba(42,18,40,0.6)). */
+export const PLUM_GLOW = "#2A1228";
+
+/**
+ * The cream "morning haze" vignette behind the text by day: 0.72, fading out by ~88% where the
+ * evening's plum one fades by ~72%, so its reach is 88/72 of the evening's. The scene fades
+ * between the two rather than mixing their colors (mixed, they'd turn grey-mauve halfway).
+ */
+export const DAY_VIGNETTE = { color: CREAM, strength: 0.72, reach: 88 / 72 };
