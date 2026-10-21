@@ -6,8 +6,8 @@ import TimeDial from "@/components/TimeDial";
 import { isDarkHour } from "@/lib/sky/hours";
 import {
   getServerSkyMode,
-  getShownHour,
   getSkyMode,
+  localHour,
   onShownHourChange,
   onSkyModeChange,
   setSkyMode,
@@ -88,7 +88,7 @@ function SunsetPill({ visible, reduceMotion }: { visible: boolean; reduceMotion:
       {visible && (
         <motion.button
           type="button"
-          onClick={() => setSkyMode({ mode: "scroll" })}
+          onClick={() => setSkyMode({ mode: "scroll" }, { glide: true })}
           initial={hidden}
           animate={{ opacity: 1, x: 0 }}
           exit={hidden}
@@ -113,14 +113,17 @@ function LightDarkButton({ reduceMotion }: { reduceMotion: boolean }) {
   const darkRef = useRef(false);
 
   useEffect(() => {
+    // Judged by where the sky is going, not where it is mid-glide, so the icon doesn't flip halfway.
     const update = () => {
-      const next = getSkyMode().mode !== "scroll" && isDarkHour(getShownHour());
+      const m = getSkyMode();
+      const next =
+        m.mode === "hour" ? isDarkHour(m.hour) : m.mode === "local" && isDarkHour(localHour());
       if (next === darkRef.current) return;
       darkRef.current = next;
       setDark(next);
       setSwapped(true);
     };
-    // The hour changes with the sky; the mode can change without it (back to scroll at night).
+    // The mode decides it; in "my time" the clock can also cross into night, so check as the sky moves.
     const stopHour = onShownHourChange(update);
     const stopMode = onSkyModeChange(update);
     return () => {
@@ -133,7 +136,7 @@ function LightDarkButton({ reduceMotion }: { reduceMotion: boolean }) {
     <button
       type="button"
       aria-label={dark ? "Switch to day sky" : "Switch to night sky"}
-      onClick={() => setSkyMode({ mode: "hour", hour: dark ? 12 : 0 })}
+      onClick={() => setSkyMode({ mode: "hour", hour: dark ? 12 : 0 }, { glide: true })}
       className={ICON_BUTTON}
     >
       <motion.span

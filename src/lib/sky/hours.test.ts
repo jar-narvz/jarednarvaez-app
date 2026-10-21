@@ -3,11 +3,13 @@ import { mixColor } from "./blend";
 import {
   dayness,
   formatHour,
+  glideHour,
   hourName,
   isDarkHour,
   grainAtHour,
   hourAtScroll,
   keyframeAtHour,
+  shorterWay,
   starsAtHour,
   sunAt,
   wrapHour,
@@ -143,5 +145,26 @@ describe("dial helpers", () => {
     expect(isDarkHour(12)).toBe(false);
     expect(isDarkHour(18.5)).toBe(false);
     expect(isDarkHour(20.5)).toBe(true);
+  });
+});
+
+describe("glides", () => {
+  it("go the shorter way around the clock", () => {
+    expect(shorterWay(23, 1)).toBe(2);
+    expect(shorterWay(1, 23)).toBe(-2);
+    expect(shorterWay(18.5, 0)).toBe(5.5);
+    expect(shorterWay(0, 18.5)).toBe(-5.5);
+  });
+
+  it("go forward on a 12-hour tie", () => {
+    expect(shorterWay(12, 0)).toBe(12);
+    expect(shorterWay(0, 12)).toBe(12);
+  });
+
+  it("ease from the start hour to the end, wrapping past midnight", () => {
+    expect(glideHour(23, 2, 0)).toBe(23);
+    expect(glideHour(23, 2, 0.5)).toBe(0);
+    expect(glideHour(23, 2, 1)).toBe(1);
+    expect(glideHour(12, -6, 1)).toBe(6);
   });
 });

@@ -3,7 +3,7 @@
 // (hours.test.ts). Ported from the approved mockup's `keyAt()`, `starA()` and `dayness()`.
 // Scroll mode keeps its own math in blend.ts; it's the 18.5 → 19.6 → 21 stretch of this clock.
 
-import { mixKeyframes } from "./blend";
+import { mixKeyframes, smoothstep } from "./blend";
 import {
   afternoon,
   dawn,
@@ -134,3 +134,19 @@ export function formatHour(hour: number) {
 
 /** Whether the sky reads as night (more than half the stars out): the light/dark button then offers the day. */
 export const isDarkHour = (hour: number) => starsAtHour(hour) > 0.5;
+
+/** How long a mode or hour change takes to glide around the clock (docs/visual-system.md → Mode behavior). */
+export const GLIDE_S = 1.2;
+
+/**
+ * The shorter way around the clock from one hour to another, in hours: 23 → 1 is +2, 1 → 23
+ * is −2. A 12-hour tie goes forward (midday → midnight sets through dusk).
+ */
+export function shorterWay(from: number, to: number) {
+  const ahead = wrapHour(to - from);
+  return ahead > 12 ? ahead - 24 : ahead;
+}
+
+/** The hour `progress` (0–1) of the way through a glide of `delta` hours from `from`, eased with smoothstep. */
+export const glideHour = (from: number, delta: number, progress: number) =>
+  wrapHour(from + delta * smoothstep(progress, 0, 1));

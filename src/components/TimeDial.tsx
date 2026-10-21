@@ -177,7 +177,7 @@ export default function TimeDial({
           type="button"
           aria-pressed={local}
           // "my time" sets the sky to the visitor's clock; clicking it again returns to scroll mode.
-          onClick={() => setSkyMode(local ? { mode: "scroll" } : { mode: "local" })}
+          onClick={() => setSkyMode(local ? { mode: "scroll" } : { mode: "local" }, { glide: true })}
           className={`${DIAL_BUTTON} bg-tint/35 ${local ? "border-underline text-accent" : "border-ink/40"}`}
         >
           my time

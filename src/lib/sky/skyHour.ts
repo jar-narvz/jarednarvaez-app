@@ -12,6 +12,7 @@ export type SkyMode =
 const SCROLL: SkyMode = { mode: "scroll" };
 
 let current: SkyMode = SCROLL;
+let glideNext = false;
 const modeListeners = new Set<() => void>();
 
 export const getSkyMode = () => current;
@@ -19,9 +20,22 @@ export const getSkyMode = () => current;
 /** The mode the server renders with: always scroll, so the page hydrates the same. */
 export const getServerSkyMode = () => SCROLL;
 
-export function setSkyMode(next: SkyMode) {
+/**
+ * Changes the mode. `glide` asks the sky to travel there around the clock (~1.2s) instead of
+ * jumping: the light/dark button, "my time" and the "sunset" pill glide; dragging the dial
+ * doesn't, so the sky follows the finger.
+ */
+export function setSkyMode(next: SkyMode, { glide = false } = {}) {
   current = next;
+  glideNext = glide;
   modeListeners.forEach((listener) => listener());
+}
+
+/** Whether the latest mode change asked to glide (Sky.tsx reads it once, then it resets). */
+export function takeGlide() {
+  const glide = glideNext;
+  glideNext = false;
+  return glide;
 }
 
 /** Calls `listener` whenever the mode changes. Returns a function that stops it. */
