@@ -4,7 +4,7 @@
 
 ## Now
 
-- **In progress:** none. Sky modes 2 and 3 done 2026-10-20 (all five parts); going live with a `rebuild` → `main` pull request. Still to check on Jared's phone: Reduce Motion. Launched 2026-10-17 at jarednarvaez.vercel.app (old site on `legacy`); a custom domain can come later.
+- **In progress:** none. Sky modes 2 and 3 done 2026-10-20 (all five parts); going live with a `rebuild` → `main` pull request. Still to check on Jared's phone: Reduce Motion. Launched 2026-10-17 at jarednarvaez.vercel.app (old site on `legacy`). Custom domain jarnarvz.com connected 2026-10-21 (Cloudflare DNS, DNS only → Vercel; www redirects to the root).
 - **Next:** leave a star (Phase 4; pick the storage service with Jared first)
 - **Content:** all copy for step 14 is in `docs/content.md` (exported from Jared's Website content pass doc); files are in `~/website-content`.
 - **Notes:** Plan re-aimed at the MVP on 2026-10-16 (see `design.md` → Launch plan). Post-launch design fixes shipped 2026-10-19, outside the numbered steps: new hero line at 20px, centered 1000px content column, two-row tech stack in IBM Plex Mono pills, tighter experience/projects spacing, grey bullet text with gaps, clickable section headers, new sunset portrait. Each is in `decisions-log.md`.
