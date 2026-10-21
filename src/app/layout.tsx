@@ -30,7 +30,7 @@ const plexMono = IBM_Plex_Mono({
 // The social preview image is src/app/opengraph-image.png, which Next.js picks up on its own.
 const TITLE = "jared narvaez";
 const DESCRIPTION =
-  "Jared Narvaez studies CS + Data Science at UC Berkeley and builds fullstack and AI/ML projects. Open to full-time roles in 2027.";
+  "Jared Narvaez studies CS + Data Science at UC Berkeley and builds fullstack and AI/ML projects. Open to 2027 full-time roles and Spring 2027 co-ops.";
 
 export const metadata: Metadata = {
   title: TITLE,

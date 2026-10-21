@@ -2,6 +2,19 @@
 
 Jared's personal portfolio site, being rebuilt from scratch. The design is decided in detail in `docs/`; your job is to build it faithfully, one small piece at a time, with Jared reviewing each step.
 
+## Context
+
+- Owner: Jared Narvaez, UC Berkeley CS + DS minor, graduating May 2027.
+- This repo is jarnarvz.com (Next.js + TypeScript, deployed on Vercel). Recruiters open it from my resume.
+- Source of truth for wording: my v2 resumes (Oct 21, 2026). The site can include more than the resumes, but must never contradict them or claim anything I can't defend in an interview.
+
+## Rules
+
+- Plan first; wait for my OK before editing files.
+- Change only what the task names. Keep the existing design, colors, and layout.
+- Never add a skill, tool, or claim I haven't confirmed I can defend in an interview.
+- Show me a diff summary and run the build (`npm run build`) before I deploy.
+
 ## Read first
 
 This file is the only steering doc for building; follow it over anything that conflicts.

@@ -4,5 +4,5 @@
 export const connect = {
   label: "connect",
   heading: "reach out!",
-  line: "I'd love to chat about anything! Looking for full-time work starting 2027.",
+  line: "I'd love to chat about anything! Looking for full-time roles starting 2027 and Spring 2027 co-ops.",
 };

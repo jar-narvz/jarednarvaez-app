@@ -25,9 +25,18 @@ export const experience = {
       location: "San Francisco Bay Area (remote)",
       current: true,
       bullets: [
-        "Ramping up on a startup's multi-agent product codebase, studying agent architecture, orchestration, and tool integration ahead of contributing to agentic product features.",
+        "Designed a multi-agent decision layer for data-center operations with three domain agents (facility power/cooling, compute/IT health, carbon) that can only propose changes or decline with a stated reason, never issue commands or write to systems.",
+        "Implemented the agent package in Python 3.11, with three agent modules, a shared response envelope, pytest fixtures, and an import-allowlist test that fails CI if an agent depends on anything beyond its validated input contract.",
+        "Wrote the design doc and delivery plan, raising 10 interface-contract questions that the tech lead resolved into 3 follow-up contract changes I own, delivered through branch-and-PR code review with green CI.",
       ],
-      tags: ["Multi-Agent Systems", "Python", "Systems Design", "Software Architecture"],
+      tags: [
+        "Multi-Agent Systems",
+        "Python",
+        "Systems Design",
+        "Software Architecture",
+        "pytest",
+        "CI",
+      ],
     },
     {
       title: "Data Assistant",
@@ -44,7 +53,7 @@ export const experience = {
     {
       title: "Vice President of External Relations",
       org: "PASAE",
-      start: "Apr 2025",
+      start: "May 2025",
       location: "Berkeley, CA",
       bullets: [
         "Led semester-long recruitment pipeline (tabling, info sessions, kickoffs) and co-organized UC Berkeley career fairs hosting 90+ employers and 2,000+ students; secured speakers and sponsors for flagship events.",
