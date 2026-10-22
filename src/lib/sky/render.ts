@@ -1,15 +1,18 @@
 // The render pipeline (docs/visual-system.md → Prototype reference):
 //   1. draw the scene on a tiny canvas (~48×27)
 //   2. enlarge ×2 with smoothing on, then to the low-res canvas with smoothing on (this is the blur)
-//   3. stars go straight onto the low-res canvas, unblurred, one pixel each (stars.ts)
+//   3. stars go straight onto the low-res canvas, unblurred, one pixel each (stars.ts), then the
+//      visitors' gold pixel crosses (visitorStars.ts)
 //   4. the browser enlarges the low-res canvas ×4 with smoothing off (`image-rendering: pixelated`
 //      on the canvas), which makes the ~4px squares.
 //
 // The prototype's low-res canvas was a fixed 170×95, shown 680px wide (4px squares). Here it's
 // sized from the screen instead (screen ÷ 4), so squares stay 4px on any screen size.
 
+import type { VisitorStar } from "@/lib/stars/types";
 import type { DrawnSky, SkyScene } from "./scene";
 import { drawStars } from "./stars";
+import { drawVisitorStars } from "./visitorStars";
 
 /** Size of one visible sky pixel, in CSS pixels. */
 const PIXEL = 4;
@@ -39,7 +42,7 @@ function view(scene: SkyScene, width: number, height: number) {
 
 /**
  * Draws keyframe `k` of `scene` onto `target`, sized to cover a width × height area (CSS pixels).
- * `time` (seconds) moves the clouds and the star twinkle.
+ * `time` (seconds) moves the clouds and the star twinkle. `visitors` are the left stars to draw.
  */
 export function renderSky(
   target: HTMLCanvasElement,
@@ -48,6 +51,7 @@ export function renderSky(
   scene: SkyScene,
   k: DrawnSky,
   time: number,
+  visitors: readonly VisitorStar[] = [],
 ) {
   if (width <= 0 || height <= 0) return;
   const v = view(scene, width, height);
@@ -76,6 +80,8 @@ export function renderSky(
   // 3. Stars, in the rows of the low-res canvas that show the scene's star band.
   const starRows = Math.round(((scene.starBand - v.y) / v.h) * target.height);
   drawStars(lc, target.width, Math.max(0, starRows), k.stars, time);
+  const horizonRow = ((scene.horizon - v.y) / v.h) * target.height;
+  drawVisitorStars(lc, visitors, { width: target.width, horizonRow }, k.stars, time);
 
   // 4. Pixelate: done by the browser via `image-rendering: pixelated` on the target canvas.
 }

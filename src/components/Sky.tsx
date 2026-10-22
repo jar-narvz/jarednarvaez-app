@@ -16,6 +16,8 @@ import {
 import { SUN_GOLD } from "@/lib/sky/palette";
 import { renderSky } from "@/lib/sky/render";
 import { coastScene, tallCoastScene, type DrawnSky } from "@/lib/sky/scene";
+import { drawableStars } from "@/lib/sky/visitorStars";
+import type { VisitorStar } from "@/lib/stars/types";
 import { getSkyMode, localHour, onSkyModeChange, publishShownHour, takeGlide } from "@/lib/sky/skyHour";
 import { textDayness, themeAt } from "@/lib/sky/theme";
 import { GRAIN_FRAME_MS, grainFrames } from "@/lib/sky/texture";
@@ -64,6 +66,19 @@ export default function Sky() {
       if (m.mode === "local") return clockHour;
       return null;
     };
+
+    // Visitor stars (leave a star), fetched once. A plain variable, not React state: the sky
+    // reads it every frame. If the API is down the list stays empty and the sky is unchanged.
+    let visitors: VisitorStar[] = [];
+    let cancelled = false;
+    fetch("/api/stars")
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data) => {
+        if (cancelled) return;
+        visitors = drawableStars(data);
+        schedulePaint();
+      })
+      .catch(() => {});
 
     // A glide in progress: where it started and when. Its end is wherever the mode now points,
     // read every frame (in scroll mode, the visitor may scroll during it).
@@ -126,7 +141,7 @@ export default function Sky() {
       painted = { hour, sunX: k.sunX ?? sunAt(18.5).x, stars: k.stars, grain: grainLevel, accent: eveningAccent };
       publishShownHour(hour);
       // Portrait screens (phones) get the tall version of the coast.
-      renderSky(sky, w, h, w < h ? tallCoastScene : coastScene, k, time);
+      renderSky(sky, w, h, w < h ? tallCoastScene : coastScene, k, time, visitors);
       // The variables only change with scroll or the hour, so skip rewriting them on still
       // frames. Written in scroll mode too, so leaving a fixed hour puts the evening back.
       const moment = `${t} ${fixed} ${glide ? hour : ""}`;
@@ -219,6 +234,7 @@ export default function Sky() {
     reducedMotion.addEventListener("change", updateMotion);
 
     return () => {
+      cancelled = true;
       frameObserver.disconnect();
       pageObserver.disconnect();
       window.removeEventListener("scroll", schedulePaint);
