@@ -79,8 +79,11 @@ export function drawableStars(data: unknown): VisitorStar[] {
   );
 }
 
-/** The visitor's own star and when it was placed (ms, the animation clock; -Infinity = no flare). */
-export type MyStar = { star: VisitorStar; placedAt: number };
+/**
+ * The visitor's own star and when it was placed (ms, the animation clock; -Infinity = no flare),
+ * and when it started fading out after a reset, if it has.
+ */
+export type MyStar = { star: VisitorStar; placedAt: number; fadingAt?: number };
 
 /** What the sky draws for leave a star: everyone's stars, and the visitor's own if they have one. */
 export type VisitorSky = { stars: readonly VisitorStar[]; mine: MyStar | null };
@@ -89,6 +92,8 @@ export const NO_VISITORS: VisitorSky = { stars: [], mine: null };
 
 /** The placing flare and ring (Motion inventory: 900ms). */
 export const FLARE_MS = 900;
+/** How long your star takes to fade out after a reset. */
+export const FADE_OUT_MS = 400;
 /** Your star's four extra pixels, two steps out, relative to the center. */
 const OUTER = 0.25;
 
@@ -144,7 +149,9 @@ export function drawVisitorStars(
   // an 8-pixel ring growing from 2 to 6 sky pixels and fading (from the mockup).
   const { x, y } = skyToPixel(mine.star, frame);
   const flare = flareProgress(mine.placedAt, time * 1000);
-  const a = myStarAlpha(level, time, flare);
+  // After a reset it fades out before it's gone.
+  const fading = mine.fadingAt === undefined ? 0 : (time * 1000 - mine.fadingAt) / FADE_OUT_MS;
+  const a = myStarAlpha(level, time, flare) * (1 - Math.min(1, Math.max(0, fading)));
   pixelCross(ctx, x, y, a);
   cross(ctx, x, y, a, 2, OUTER);
   if (flare < 1) {

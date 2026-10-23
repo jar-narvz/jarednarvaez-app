@@ -9,6 +9,8 @@ export const connect = {
   starHint: {
     dark: { action: "click the sky", rest: "to leave a star" },
     day: "stars come out at night",
+    // After placing: removes your star so you can place it again (Jared's word, 2026-10-23).
+    reset: "reset",
   },
   // Leave a star's privacy note, under the hint (docs/visual-system.md → Connect → Privacy; wording
   // chosen by Jared 2026-10-23). Keep it true to what /api/stars stores.

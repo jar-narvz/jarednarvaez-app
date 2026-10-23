@@ -8,7 +8,7 @@
 // - whether the stars API is up changes at most once (it went down).
 
 // Relative, not "@/": Vitest has no path alias, and live.test.ts loads this file.
-import { drawableStars, type MyStar, type SkyFrame, type VisitorSky } from "../sky/visitorStars";
+import { drawableStars, FADE_OUT_MS, type MyStar, type SkyFrame, type VisitorSky } from "../sky/visitorStars";
 import { localTimeNow } from "./format";
 import type { VisitorStar } from "./types";
 
@@ -98,11 +98,14 @@ export function onDarkChange(listener: () => void) {
 }
 
 // The visitor's own star (one per visitor). The whole star is kept in localStorage, not just its
-// id: the GET list is cached for 60s and capped at 500, so it may not include it.
+// id: the GET list is cached for 60s and capped at 500, so it may not include it. Its secret
+// owner token (owner.ts) is kept with it, so "reset" can prove it's theirs.
 const STORAGE_KEY = "leave-a-star";
 // undefined until first read (localStorage only exists in the browser).
 let mine: MyStar | null | undefined;
+let myToken: string | null = null;
 let justNow = false;
+let resetting = false;
 const mineListeners = new Set<() => void>();
 const mineChanged = () => mineListeners.forEach((listener) => listener());
 
@@ -110,8 +113,11 @@ const mineChanged = () => mineListeners.forEach((listener) => listener());
 function readSaved(): MyStar | null {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    const star = raw ? drawableStars([JSON.parse(raw)])[0] : undefined;
-    return star ? { star, placedAt: -Infinity } : null;
+    const { token, ...saved } = raw ? JSON.parse(raw) : {};
+    const star = drawableStars([saved])[0];
+    if (!star) return null;
+    myToken = typeof token === "string" ? token : null;
+    return { star, placedAt: -Infinity };
   } catch {
     return null;
   }
@@ -126,6 +132,9 @@ export const hasMyStar = () => getMyStar() !== null;
 
 /** No star during server rendering, so the page hydrates the same. */
 export const getServerHasMyStar = () => false;
+
+/** Whether the visitor can reset their star: they have one, with its owner token (newer stars). */
+export const canResetMyStar = () => getMyStar() !== null && myToken !== null && !resetting;
 
 /** Whether the visitor placed their star during this visit (its label then says "just now"). */
 export const isMyStarJustNow = () => justNow;
@@ -170,11 +179,13 @@ export function placeMyStar(x: number, y: number, animate: boolean) {
   })
     .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
     .then((data) => {
-      const saved = drawableStars([data])[0];
+      const { token, ...rest } = data ?? {};
+      const saved = drawableStars([rest])[0];
       if (!saved) throw new Error("bad star");
       mine = { ...placing, star: saved };
+      myToken = typeof token === "string" ? token : null;
       try {
-        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...saved, token: myToken }));
       } catch {
         // Storage blocked: the star stays for this visit only.
       }
@@ -185,5 +196,57 @@ export function placeMyStar(x: number, y: number, animate: boolean) {
       justNow = false;
       mineChanged();
       if (reason !== 429) markUnavailable();
+    });
+}
+
+/** Forgets the visitor's star here: the sky, the list and localStorage. */
+function forgetMyStar(id: string) {
+  stars = stars.filter((s) => s.id !== id);
+  mine = null;
+  myToken = null;
+  justNow = false;
+  resetting = false;
+  try {
+    window.localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // Storage blocked: nothing was saved.
+  }
+  mineChanged();
+}
+
+/**
+ * Reset: removes the visitor's star from the sky (DELETE with its owner token) so they can place
+ * it again. It fades out over FADE_OUT_MS (instant when `animate` is false, for Reduce Motion).
+ * If the server says it isn't theirs, reset stops being offered; if the API is down, nothing
+ * changes except that the stars are marked unavailable.
+ */
+export function resetMyStar(animate: boolean) {
+  const current = getMyStar();
+  if (!current || !myToken || resetting) return;
+  resetting = true;
+  mineChanged();
+
+  fetch("/api/stars", {
+    method: "DELETE",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ id: current.star.id, token: myToken }),
+  })
+    .then((r) => {
+      if (r.ok) {
+        if (!animate) return forgetMyStar(current.star.id);
+        mine = { ...current, fadingAt: performance.now() };
+        mineChanged();
+        window.setTimeout(() => forgetMyStar(current.star.id), FADE_OUT_MS);
+        return;
+      }
+      resetting = false;
+      if (r.status === 403) myToken = null;
+      else if (r.status >= 500) markUnavailable();
+      mineChanged();
+    })
+    .catch(() => {
+      resetting = false;
+      markUnavailable();
+      mineChanged();
     });
 }
