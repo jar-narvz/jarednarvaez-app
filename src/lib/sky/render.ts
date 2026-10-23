@@ -12,10 +12,10 @@
 import type { VisitorStar } from "@/lib/stars/types";
 import type { DrawnSky, SkyScene } from "./scene";
 import { drawStars } from "./stars";
-import { drawVisitorStars } from "./visitorStars";
+import { drawVisitorStars, type SkyFrame } from "./visitorStars";
 
 /** Size of one visible sky pixel, in CSS pixels. */
-const PIXEL = 4;
+export const PIXEL = 4;
 /** Tiny-canvas pixels per design unit: the prototype draws 680 units into 48 pixels. */
 const TINY_PER_UNIT = 48 / 680;
 
@@ -43,6 +43,7 @@ function view(scene: SkyScene, width: number, height: number) {
 /**
  * Draws keyframe `k` of `scene` onto `target`, sized to cover a width × height area (CSS pixels).
  * `time` (seconds) moves the clouds and the star twinkle. `visitors` are the left stars to draw.
+ * Returns the low-res frame it drew, so connect can find the visitor stars on screen.
  */
 export function renderSky(
   target: HTMLCanvasElement,
@@ -52,8 +53,8 @@ export function renderSky(
   k: DrawnSky,
   time: number,
   visitors: readonly VisitorStar[] = [],
-) {
-  if (width <= 0 || height <= 0) return;
+): SkyFrame | null {
+  if (width <= 0 || height <= 0) return null;
   const v = view(scene, width, height);
 
   // 1. Tiny canvas: the visible part of the scene at ~48×27.
@@ -80,8 +81,9 @@ export function renderSky(
   // 3. Stars, in the rows of the low-res canvas that show the scene's star band.
   const starRows = Math.round(((scene.starBand - v.y) / v.h) * target.height);
   drawStars(lc, target.width, Math.max(0, starRows), k.stars, time);
-  const horizonRow = ((scene.horizon - v.y) / v.h) * target.height;
-  drawVisitorStars(lc, visitors, { width: target.width, horizonRow }, k.stars, time);
+  const frame = { width: target.width, horizonRow: ((scene.horizon - v.y) / v.h) * target.height };
+  drawVisitorStars(lc, visitors, frame, k.stars, time);
 
   // 4. Pixelate: done by the browser via `image-rendering: pixelated` on the target canvas.
+  return frame;
 }
