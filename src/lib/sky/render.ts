@@ -9,11 +9,10 @@
 // The prototype's low-res canvas was a fixed 170×95, shown 680px wide (4px squares). Here it's
 // sized from the screen instead (screen ÷ 4), so squares stay 4px on any screen size.
 
-import type { VisitorStar } from "@/lib/stars/types";
 import type { DrawnSky, SkyScene } from "./scene";
 import type { PixelBox } from "./starless";
 import { drawStars } from "./stars";
-import { drawVisitorStars, type SkyFrame } from "./visitorStars";
+import { drawVisitorStars, NO_VISITORS, type SkyFrame, type VisitorSky } from "./visitorStars";
 
 /** Size of one visible sky pixel, in CSS pixels. */
 export const PIXEL = 4;
@@ -43,9 +42,9 @@ function view(scene: SkyScene, width: number, height: number) {
 
 /**
  * Draws keyframe `k` of `scene` onto `target`, sized to cover a width × height area (CSS pixels).
- * `time` (seconds) moves the clouds and the star twinkle. `visitors` are the left stars to draw.
- * No white stars are drawn inside `textBoxes` (starless.ts). Returns the low-res frame it drew,
- * so connect can find the visitor stars on screen.
+ * `time` (seconds) moves the clouds and the star twinkle. `visitors` are the left stars (and your
+ * own) to draw. No white stars are drawn inside `textBoxes` (starless.ts). Returns the low-res
+ * frame it drew, so connect can find the visitor stars on screen.
  */
 export function renderSky(
   target: HTMLCanvasElement,
@@ -54,7 +53,7 @@ export function renderSky(
   scene: SkyScene,
   k: DrawnSky,
   time: number,
-  visitors: readonly VisitorStar[] = [],
+  visitors: VisitorSky = NO_VISITORS,
   textBoxes: readonly PixelBox[] = [],
 ): SkyFrame | null {
   if (width <= 0 || height <= 0) return null;

@@ -23,6 +23,14 @@ export function skyToPixel(star: Pick<VisitorStar, "x" | "y">, frame: SkyFrame) 
   };
 }
 
+/**
+ * The sky position of a pointer at `point` (low-res sky pixels, e.g. clientX / 4): the inverse of
+ * skyToPixel, so a star placed there is drawn in the pixel that was clicked.
+ */
+export function pixelToSky(point: { x: number; y: number }, frame: SkyFrame) {
+  return { x: Math.floor(point.x) / frame.width, y: Math.floor(point.y) / frame.horizonRow };
+}
+
 /** One visitor star's opacity: the sky's star level × a gentle twinkle between 0.6 and 1.0. */
 export function visitorStarAlpha(level: number, phase: number, time: number) {
   return level * (0.8 + 0.2 * Math.sin(time * 1.8 + phase));
@@ -61,7 +69,7 @@ export function nearestStar<S extends Pick<VisitorStar, "x" | "y">>(
   return best;
 }
 
-const inUnit =(n: unknown) => typeof n === "number" && Number.isFinite(n) && n >= 0 && n <= 1;
+const inUnit = (n: unknown) => typeof n === "number" && Number.isFinite(n) && n >= 0 && n <= 1;
 
 /** The stars in an `/api/stars` response that can be drawn. Anything malformed is skipped. */
 export function drawableStars(data: unknown): VisitorStar[] {
@@ -71,29 +79,80 @@ export function drawableStars(data: unknown): VisitorStar[] {
   );
 }
 
+/** The visitor's own star and when it was placed (ms, the animation clock; -Infinity = no flare). */
+export type MyStar = { star: VisitorStar; placedAt: number };
+
+/** What the sky draws for leave a star: everyone's stars, and the visitor's own if they have one. */
+export type VisitorSky = { stars: readonly VisitorStar[]; mine: MyStar | null };
+
+export const NO_VISITORS: VisitorSky = { stars: [], mine: null };
+
+/** The placing flare and ring (Motion inventory: 900ms). */
+export const FLARE_MS = 900;
+/** Your star's four extra pixels, two steps out, relative to the center. */
+const OUTER = 0.25;
+
+/** Your star's opacity: a slight pulse (0.76–1.0), brightened up to ~1.9× while it flares in. */
+export function myStarAlpha(level: number, time: number, flare: number) {
+  const boost = 1 + 0.9 * (1 - flare) * (flare < 0.15 ? flare / 0.15 : 1);
+  return level * (0.88 + 0.12 * Math.sin(time * 2)) * boost;
+}
+
+/** How far the placing flare is, 0 → 1 over FLARE_MS. */
+export const flareProgress = (placedAt: number, now: number) => Math.min(1, Math.max(0, (now - placedAt) / FLARE_MS));
+
+function cross(ctx: CanvasRenderingContext2D, x: number, y: number, a: number, step: number, strength: number) {
+  ctx.fillStyle = `rgba(${GOLD},${a * strength})`;
+  ctx.fillRect(x + step, y, 1, 1);
+  ctx.fillRect(x - step, y, 1, 1);
+  ctx.fillRect(x, y + step, 1, 1);
+  ctx.fillRect(x, y - step, 1, 1);
+}
+
+/** One pixel cross: the center at `a`, its four neighbors at ARM. Each fill mixes gold into the sky pixel. */
+function pixelCross(ctx: CanvasRenderingContext2D, x: number, y: number, a: number) {
+  ctx.fillStyle = `rgba(${GOLD},${a})`;
+  ctx.fillRect(x, y, 1, 1);
+  cross(ctx, x, y, a, 1, ARM);
+}
+
 const phases = new Map<string, number>();
 
-/** Paints the visitor stars onto the low-res sky canvas. `level` is the keyframe's star value. */
+/**
+ * Paints the visitor stars onto the low-res sky canvas. `level` is the keyframe's star value;
+ * `time` (seconds, the animation clock) drives the twinkle, your star's pulse and its flare.
+ */
 export function drawVisitorStars(
   ctx: CanvasRenderingContext2D,
-  stars: readonly VisitorStar[],
+  { stars, mine }: VisitorSky,
   frame: SkyFrame,
   level: number,
   time: number,
 ) {
   if (level <= 0) return;
   for (const star of stars) {
+    // Your own star is drawn below, with its own look.
+    if (star.id === mine?.star.id) continue;
     let phase = phases.get(star.id);
     if (phase === undefined) phases.set(star.id, (phase = phaseOf(star.id)));
-    const a = visitorStarAlpha(level, phase, time);
     const { x, y } = skyToPixel(star, frame);
-    // Same 1×1 fills as the white stars: each mixes gold into the sky pixel under it.
-    ctx.fillStyle = `rgba(${GOLD},${a})`;
-    ctx.fillRect(x, y, 1, 1);
-    ctx.fillStyle = `rgba(${GOLD},${a * ARM})`;
-    ctx.fillRect(x + 1, y, 1, 1);
-    ctx.fillRect(x - 1, y, 1, 1);
-    ctx.fillRect(x, y + 1, 1, 1);
-    ctx.fillRect(x, y - 1, 1, 1);
+    pixelCross(ctx, x, y, visitorStarAlpha(level, phase, time));
+  }
+  if (!mine) return;
+
+  // Your star: four more faint pixels two steps out, a slight pulse, and the placing flare with
+  // an 8-pixel ring growing from 2 to 6 sky pixels and fading (from the mockup).
+  const { x, y } = skyToPixel(mine.star, frame);
+  const flare = flareProgress(mine.placedAt, time * 1000);
+  const a = myStarAlpha(level, time, flare);
+  pixelCross(ctx, x, y, a);
+  cross(ctx, x, y, a, 2, OUTER);
+  if (flare < 1) {
+    const r = 2 + 4 * flare;
+    ctx.fillStyle = `rgba(${GOLD},${level * 0.7 * (1 - flare)})`;
+    for (let i = 0; i < 8; i++) {
+      const angle = (i * Math.PI) / 4;
+      ctx.fillRect(x + Math.round(Math.cos(angle) * r), y + Math.round(Math.sin(angle) * r), 1, 1);
+    }
   }
 }

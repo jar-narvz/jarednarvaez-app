@@ -16,7 +16,7 @@ import {
 import { SUN_GOLD } from "@/lib/sky/palette";
 import { PIXEL, renderSky } from "@/lib/sky/render";
 import { coastScene, tallCoastScene, type DrawnSky } from "@/lib/sky/scene";
-import { getVisitorStars, loadVisitorStars, publishSkyFrame } from "@/lib/stars/live";
+import { getVisitorSky, loadVisitorStars, onMyStarChange, publishSkyFrame } from "@/lib/stars/live";
 import { getSkyMode, localHour, onSkyModeChange, publishShownHour, takeGlide } from "@/lib/sky/skyHour";
 import { onStarlessChange, textBoxes } from "@/lib/sky/starless";
 import { textDayness, themeAt } from "@/lib/sky/theme";
@@ -136,7 +136,7 @@ export default function Sky() {
       publishShownHour(hour);
       // Portrait screens (phones) get the tall version of the coast.
       const scene = w < h ? tallCoastScene : coastScene;
-      const drawn = renderSky(sky, w, h, scene, k, time, getVisitorStars(), textBoxes(PIXEL));
+      const drawn = renderSky(sky, w, h, scene, k, time, getVisitorSky(), textBoxes(PIXEL));
       if (drawn) publishSkyFrame(drawn, k.stars);
       // The variables only change with scroll or the hour, so skip rewriting them on still
       // frames. Written in scroll mode too, so leaving a fixed hour puts the evening back.
@@ -228,6 +228,8 @@ export default function Sky() {
     });
     // Text starting or stopping to keep stars out (the hover label) repaints a still sky too.
     const stopStarless = onStarlessChange(schedulePaint);
+    // Placing your star (or losing it if saving fails) repaints a still sky too.
+    const stopMyStar = onMyStarChange(schedulePaint);
     updateMotion();
     reducedMotion.addEventListener("change", updateMotion);
 
@@ -238,6 +240,7 @@ export default function Sky() {
       window.removeEventListener("scroll", schedulePaint);
       stopSkyMode();
       stopStarless();
+      stopMyStar();
       window.clearInterval(clock);
       cancelAnimationFrame(loop);
       cancelAnimationFrame(pending);

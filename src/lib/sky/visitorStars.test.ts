@@ -1,5 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { drawableStars, nearestStar, phaseOf, skyToPixel, visitorStarAlpha } from "./visitorStars";
+import {
+  drawableStars,
+  FLARE_MS,
+  flareProgress,
+  myStarAlpha,
+  nearestStar,
+  phaseOf,
+  pixelToSky,
+  skyToPixel,
+  visitorStarAlpha,
+} from "./visitorStars";
 
 describe("skyToPixel", () => {
   it("maps x across the visible sky and y down to the horizon (desktop)", () => {
@@ -76,5 +86,40 @@ describe("nearestStar", () => {
 
   it("finds nothing with no stars", () => {
     expect(nearestStar([], { x: 0, y: 0 }, frame)).toBeNull();
+  });
+});
+
+describe("pixelToSky", () => {
+  it("lands a placed star in the pixel that was clicked", () => {
+    for (const frame of [{ width: 360, horizonRow: 161.3 }, { width: 94, horizonRow: 160 }]) {
+      for (const point of [{ x: 0.2, y: 0.9 }, { x: 57.6, y: 33.1 }, { x: frame.width - 0.5, y: 120.9 }]) {
+        expect(skyToPixel(pixelToSky(point, frame), frame)).toEqual({ x: Math.floor(point.x), y: Math.floor(point.y) });
+      }
+    }
+  });
+});
+
+describe("myStarAlpha", () => {
+  it("pulses slightly once placed (0.76–1.0 of the star level)", () => {
+    for (let t = 0; t < 10; t += 0.07) {
+      const a = myStarAlpha(1, t, 1);
+      expect(a).toBeGreaterThanOrEqual(0.76 - 1e-9);
+      expect(a).toBeLessThanOrEqual(1 + 1e-9);
+    }
+  });
+
+  it("flares up to ~1.9× early in placing, then settles", () => {
+    expect(myStarAlpha(1, 0, 0.15)).toBeCloseTo(0.88 * (1 + 0.9 * 0.85));
+    expect(myStarAlpha(1, 0, 0)).toBeCloseTo(0.88);
+    expect(myStarAlpha(1, 0, 1)).toBeCloseTo(0.88);
+  });
+});
+
+describe("flareProgress", () => {
+  it("runs 0 → 1 over 900ms, and is already done for a star placed under Reduce Motion", () => {
+    expect(flareProgress(1000, 1000)).toBe(0);
+    expect(flareProgress(1000, 1000 + FLARE_MS / 2)).toBeCloseTo(0.5);
+    expect(flareProgress(1000, 5000)).toBe(1);
+    expect(flareProgress(-Infinity, 0)).toBe(1);
   });
 });
