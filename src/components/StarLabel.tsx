@@ -25,8 +25,8 @@ import { MAX_Y } from "@/lib/stars/validate";
 //   just above it (your own: "you · City · just now", or its month on later visits) and the
 //   cursor is a pointer. The label fades in over 200ms (instant under Reduce Motion).
 // - Click or tap open sky to place your one star, when the sky is dark enough, above the ~90%
-//   line (not on the water) and the stars API is up; the cursor is a crosshair wherever that's
-//   possible.
+//   line (not on the water) and the stars API is up. The cursor stays the normal arrow there
+//   (Jared, 2026-10-23, in place of the spec's crosshair).
 // The label is moved by writing its style, not React state, like the sky.
 
 /** How long a tapped star's label stays up on phones. */
@@ -104,7 +104,7 @@ export default function StarLabel({ sectionRef, blockRef }: Props) {
       const star = starAt(e);
       if (star) show(star);
       else hide();
-      section.style.cursor = star ? "pointer" : placeAt(e) ? "crosshair" : "";
+      section.style.cursor = star ? "pointer" : "";
     };
 
     const onLeave = (e: PointerEvent) => {
