@@ -5,6 +5,7 @@ import SectionHeading from "@/components/SectionHeading";
 import SectionLabel from "@/components/SectionLabel";
 import StarHint from "@/components/StarHint";
 import StarLabel from "@/components/StarLabel";
+import YouLabel from "@/components/YouLabel";
 import { connect } from "@/data/connect";
 import { links } from "@/data/links";
 import { keepStarsOut } from "@/lib/sky/starless";
@@ -12,10 +13,11 @@ import { keepStarsOut } from "@/lib/sky/starless";
 // Connect (docs/visual-system.md → Connect): the contact block plus leave a star. The last
 // section: at least one screen tall, so the bottom of the scroll, which is full night, lands on
 // it. The block sits left on the vignette: label → heading → line → email with a "copy" pill →
-// LinkedIn · GitHub · Résumé. The open sky around it shows visitor stars' labels on hover
-// (StarLabel; never over the block), with the hint bottom right (StarHint). Placing a star comes
-// with leave a star part 4. Layout values follow docs/reference/home-mockup.html. The footer line
-// sits under it, so its height comes off the screen here and the two share the last screen.
+// LinkedIn · GitHub · Résumé. On the open sky around it visitors hover stars for their labels and
+// click to leave their own (StarLabel; never over the block), which gets a "you" label (YouLabel),
+// with the hint bottom right (StarHint). Layout values follow docs/reference/home-mockup.html. The
+// footer line sits under it, so its height comes off the screen here and the two share the last
+// screen.
 
 /** How long the pill says "copied" (Motion inventory: instant swap, 1.4s). */
 const COPIED_MS = 1400;
@@ -67,6 +69,7 @@ export default function Connect() {
         </ul>
       </div>
       <StarLabel sectionRef={sectionRef} blockRef={blockRef} />
+      <YouLabel sectionRef={sectionRef} />
       <StarHint />
     </section>
   );
