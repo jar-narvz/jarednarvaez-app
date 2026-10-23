@@ -5,4 +5,9 @@ export const connect = {
   label: "connect",
   heading: "reach out!",
   line: "I'd love to chat about anything! Looking for full-time roles starting 2027 and Spring 2027 co-ops.",
+  // Leave a star's hint (wording from docs/visual-system.md → Connect, confirmed by Jared 2026-10-22).
+  starHint: {
+    dark: { action: "click the sky", rest: "to leave a star" },
+    day: "stars come out at night",
+  },
 };

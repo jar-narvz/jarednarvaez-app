@@ -3,15 +3,18 @@
 import { useEffect, useRef, useState } from "react";
 import SectionHeading from "@/components/SectionHeading";
 import SectionLabel from "@/components/SectionLabel";
+import StarHint from "@/components/StarHint";
+import StarLabel from "@/components/StarLabel";
 import { connect } from "@/data/connect";
 import { links } from "@/data/links";
 
-// Connect, contact block only (docs/visual-system.md → Connect; leave a star comes after launch,
-// so the sky here isn't clickable and there's no star hint). The last section: at least one
-// screen tall, so the bottom of the scroll, which is full night, lands on it. The block sits
-// left on the vignette: label → heading → line → email with a "copy" pill → LinkedIn · GitHub ·
-// Résumé. Layout values follow docs/reference/home-mockup.html. The footer line sits under it,
-// so its height comes off the screen here and the two share the last screen.
+// Connect (docs/visual-system.md → Connect): the contact block plus leave a star. The last
+// section: at least one screen tall, so the bottom of the scroll, which is full night, lands on
+// it. The block sits left on the vignette: label → heading → line → email with a "copy" pill →
+// LinkedIn · GitHub · Résumé. The open sky around it shows visitor stars' labels on hover
+// (StarLabel; never over the block), with the hint bottom right (StarHint). Placing a star comes
+// with leave a star part 4. Layout values follow docs/reference/home-mockup.html. The footer line
+// sits under it, so its height comes off the screen here and the two share the last screen.
 
 /** How long the pill says "copied" (Motion inventory: instant swap, 1.4s). */
 const COPIED_MS = 1400;
@@ -23,12 +26,16 @@ const CONTACT_LINKS = [
 ];
 
 export default function Connect() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const blockRef = useRef<HTMLDivElement>(null);
+
   return (
     <section
+      ref={sectionRef}
       id="contact"
-      className="flex min-h-[calc(100svh-var(--footer-height))] items-center pl-(--content-l) pr-(--content-r) [text-shadow:var(--text-shadow)]"
+      className="relative flex min-h-[calc(100svh-var(--footer-height))] items-center pl-(--content-l) pr-(--content-r) [text-shadow:var(--text-shadow)]"
     >
-      <div className="w-[min(320px,100%)]">
+      <div ref={blockRef} className="w-[min(320px,100%)]">
         <SectionLabel>{connect.label}</SectionLabel>
         <SectionHeading>{connect.heading}</SectionHeading>
         <p className="mt-2.5 text-[17px] text-ink/88">{connect.line}</p>
@@ -53,6 +60,8 @@ export default function Connect() {
           ))}
         </ul>
       </div>
+      <StarLabel sectionRef={sectionRef} blockRef={blockRef} />
+      <StarHint />
     </section>
   );
 }
