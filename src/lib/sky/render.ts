@@ -11,6 +11,7 @@
 
 import type { VisitorStar } from "@/lib/stars/types";
 import type { DrawnSky, SkyScene } from "./scene";
+import type { PixelBox } from "./starless";
 import { drawStars } from "./stars";
 import { drawVisitorStars, type SkyFrame } from "./visitorStars";
 
@@ -43,7 +44,8 @@ function view(scene: SkyScene, width: number, height: number) {
 /**
  * Draws keyframe `k` of `scene` onto `target`, sized to cover a width × height area (CSS pixels).
  * `time` (seconds) moves the clouds and the star twinkle. `visitors` are the left stars to draw.
- * Returns the low-res frame it drew, so connect can find the visitor stars on screen.
+ * No white stars are drawn inside `textBoxes` (starless.ts). Returns the low-res frame it drew,
+ * so connect can find the visitor stars on screen.
  */
 export function renderSky(
   target: HTMLCanvasElement,
@@ -53,6 +55,7 @@ export function renderSky(
   k: DrawnSky,
   time: number,
   visitors: readonly VisitorStar[] = [],
+  textBoxes: readonly PixelBox[] = [],
 ): SkyFrame | null {
   if (width <= 0 || height <= 0) return null;
   const v = view(scene, width, height);
@@ -80,7 +83,7 @@ export function renderSky(
 
   // 3. Stars, in the rows of the low-res canvas that show the scene's star band.
   const starRows = Math.round(((scene.starBand - v.y) / v.h) * target.height);
-  drawStars(lc, target.width, Math.max(0, starRows), k.stars, time);
+  drawStars(lc, target.width, Math.max(0, starRows), k.stars, time, textBoxes);
   const frame = { width: target.width, horizonRow: ((scene.horizon - v.y) / v.h) * target.height };
   drawVisitorStars(lc, visitors, frame, k.stars, time);
 

@@ -14,10 +14,11 @@ import {
   sunAt,
 } from "@/lib/sky/hours";
 import { SUN_GOLD } from "@/lib/sky/palette";
-import { renderSky } from "@/lib/sky/render";
+import { PIXEL, renderSky } from "@/lib/sky/render";
 import { coastScene, tallCoastScene, type DrawnSky } from "@/lib/sky/scene";
 import { getVisitorStars, loadVisitorStars, publishSkyFrame } from "@/lib/stars/live";
 import { getSkyMode, localHour, onSkyModeChange, publishShownHour, takeGlide } from "@/lib/sky/skyHour";
+import { onStarlessChange, textBoxes } from "@/lib/sky/starless";
 import { textDayness, themeAt } from "@/lib/sky/theme";
 import { GRAIN_FRAME_MS, grainFrames } from "@/lib/sky/texture";
 
@@ -134,7 +135,8 @@ export default function Sky() {
       painted = { hour, sunX: k.sunX ?? sunAt(18.5).x, stars: k.stars, grain: grainLevel, accent: eveningAccent };
       publishShownHour(hour);
       // Portrait screens (phones) get the tall version of the coast.
-      const drawn = renderSky(sky, w, h, w < h ? tallCoastScene : coastScene, k, time, getVisitorStars());
+      const scene = w < h ? tallCoastScene : coastScene;
+      const drawn = renderSky(sky, w, h, scene, k, time, getVisitorStars(), textBoxes(PIXEL));
       if (drawn) publishSkyFrame(drawn, k.stars);
       // The variables only change with scroll or the hour, so skip rewriting them on still
       // frames. Written in scroll mode too, so leaving a fixed hour puts the evening back.
@@ -224,6 +226,8 @@ export default function Sky() {
       }
       schedulePaint();
     });
+    // Text starting or stopping to keep stars out (the hover label) repaints a still sky too.
+    const stopStarless = onStarlessChange(schedulePaint);
     updateMotion();
     reducedMotion.addEventListener("change", updateMotion);
 
@@ -233,6 +237,7 @@ export default function Sky() {
       pageObserver.disconnect();
       window.removeEventListener("scroll", schedulePaint);
       stopSkyMode();
+      stopStarless();
       window.clearInterval(clock);
       cancelAnimationFrame(loop);
       cancelAnimationFrame(pending);
