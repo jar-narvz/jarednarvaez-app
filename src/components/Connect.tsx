@@ -7,6 +7,7 @@ import StarHint from "@/components/StarHint";
 import StarLabel from "@/components/StarLabel";
 import { connect } from "@/data/connect";
 import { links } from "@/data/links";
+import { keepStarsOut } from "@/lib/sky/starless";
 
 // Connect (docs/visual-system.md → Connect): the contact block plus leave a star. The last
 // section: at least one screen tall, so the bottom of the scroll, which is full night, lands on
@@ -28,6 +29,11 @@ const CONTACT_LINKS = [
 export default function Connect() {
   const sectionRef = useRef<HTMLElement>(null);
   const blockRef = useRef<HTMLDivElement>(null);
+
+  // No white stars behind the contact block, where they'd read as bits of letters.
+  useEffect(() => {
+    if (blockRef.current) return keepStarsOut(blockRef.current);
+  }, []);
 
   return (
     <section

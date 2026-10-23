@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, type RefObject } from "react";
 import { PIXEL } from "@/lib/sky/render";
+import { keepStarsOut } from "@/lib/sky/starless";
 import { nearestStar, skyToPixel } from "@/lib/sky/visitorStars";
 import { starLabel } from "@/lib/stars/format";
 import { getSkyFrame, getStarLevel, getVisitorStars } from "@/lib/stars/live";
@@ -36,6 +37,8 @@ export default function StarLabel({ sectionRef, blockRef }: Props) {
 
     let shown: VisitorStar | null = null;
     let tapTimer: number | undefined;
+    // While the label shows, no white stars behind it (starless.ts).
+    let releaseStars: (() => void) | null = null;
 
     const starAt = (e: PointerEvent) => {
       if (block.contains(e.target as Node) || getStarLevel() <= MIN_LEVEL) return null;
@@ -54,9 +57,12 @@ export default function StarLabel({ sectionRef, blockRef }: Props) {
         label.style.top = `${p.y * PIXEL - EDGE}px`;
       }
       label.dataset.on = "true";
+      releaseStars ??= keepStarsOut(label);
     };
 
     const hide = () => {
+      releaseStars?.();
+      releaseStars = null;
       shown = null;
       label.dataset.on = "false";
       section.style.cursor = "";
@@ -102,6 +108,7 @@ export default function StarLabel({ sectionRef, blockRef }: Props) {
       section.removeEventListener("pointerup", onTap);
       window.removeEventListener("scroll", onScroll);
       window.clearTimeout(tapTimer);
+      releaseStars?.();
     };
   }, [sectionRef, blockRef]);
 

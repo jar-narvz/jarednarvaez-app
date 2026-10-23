@@ -1,7 +1,8 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 import { connect } from "@/data/connect";
+import { keepStarsOut } from "@/lib/sky/starless";
 import { getServerSkyDark, isSkyDark, onDarkChange } from "@/lib/stars/live";
 
 // Leave a star's hint, bottom-right of connect (docs/visual-system.md → Connect → Hint): 13px at
@@ -12,11 +13,17 @@ import { getServerSkyDark, isSkyDark, onDarkChange } from "@/lib/stars/live";
 export default function StarHint() {
   const dark = useSyncExternalStore(onDarkChange, isSkyDark, getServerSkyDark);
   const { starHint } = connect;
+  const ref = useRef<HTMLParagraphElement>(null);
+
+  // No white stars behind the hint's small text.
+  useEffect(() => {
+    if (ref.current) return keepStarsOut(ref.current);
+  }, []);
   const fade = "col-start-1 row-start-1 transition-opacity duration-400 motion-reduce:transition-none";
 
   // Both lines share one grid cell, so they fade over each other in place.
   return (
-    <p className="pointer-events-none absolute right-(--content-r) bottom-12 grid justify-items-end text-right text-[13px] text-ink/85 [text-shadow:var(--text-shadow)]">
+    <p ref={ref} className="pointer-events-none absolute right-(--content-r) bottom-12 grid justify-items-end text-right text-[13px] text-ink/85 [text-shadow:var(--text-shadow)]">
       <span aria-hidden={!dark} className={`${fade} ${dark ? "opacity-100" : "opacity-0"}`}>
         <b className="font-medium text-accent">{starHint.dark.action}</b> {starHint.dark.rest}
       </span>
