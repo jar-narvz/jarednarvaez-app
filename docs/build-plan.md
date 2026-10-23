@@ -4,8 +4,8 @@
 
 ## Now
 
-- **In progress:** none. Leave a star parts 1 (storage and API) and 2 (visitor stars in the sky) done 2026-10-22; part 3 (hover labels and the hint) done 2026-10-23, with white stars kept out from behind connect's text and the hover label (Jared chose clearing over dimming, 2026-10-23). Don't merge `rebuild` into `main` until part 4, since the hint invites clicks. Storage decided 2026-10-22: Upstash Redis through the Vercel Marketplace, connected to the project for all environments. Sky modes 2 and 3 done 2026-10-20 and merged into `main` (PR #5). Still to check on Jared's phone: Reduce Motion. Launched 2026-10-17 (old site on `legacy`). Custom domain jarnarvz.com connected 2026-10-21 (Cloudflare DNS, DNS only → Vercel; www redirects to the root).
-- **Next:** leave a star, part 4 (placing your star)
+- **In progress:** none. Leave a star parts 1 (storage and API) and 2 (visitor stars in the sky) done 2026-10-22; part 3 (hover labels and the hint) done 2026-10-23, with white stars kept out from behind connect's text and the hover label (Jared chose clearing over dimming, 2026-10-23); part 4 (placing your star) done 2026-10-23. Still to check on Jared's phone: placing a star, and Reduce Motion for it. Don't merge `rebuild` into `main` until part 5 is done. Storage decided 2026-10-22: Upstash Redis through the Vercel Marketplace, connected to the project for all environments. Sky modes 2 and 3 done 2026-10-20 and merged into `main` (PR #5). Still to check on Jared's phone: Reduce Motion. Launched 2026-10-17 (old site on `legacy`). Custom domain jarnarvz.com connected 2026-10-21 (Cloudflare DNS, DNS only → Vercel; www redirects to the root).
+- **Next:** leave a star, part 5 (daytime rules, failure and checks)
 - **Content:** all copy for step 14 is in `docs/content.md` (exported from Jared's Website content pass doc); files are in `~/website-content`.
 - **Notes:** Plan re-aimed at the MVP on 2026-10-16 (see `design.md` → Launch plan). Post-launch design fixes shipped 2026-10-19, outside the numbered steps: new hero line at 20px, centered 1000px content column, two-row tech stack in IBM Plex Mono pills, tighter experience/projects spacing, grey bullet text with gaps, clickable section headers, new sunset portrait. Each is in `decisions-log.md`.
 
@@ -55,7 +55,7 @@ Every section uses placeholder copy (`[like this]`) and its own data file, and s
   - [x] **1. Storage and API.** `VisitorStar` type, request validation, Upstash store (capped list, per-IP rate limit, key prefix per environment) with an in-memory dev store when the keys aren't set, `/api/stars` GET and POST. Nothing visible changes.
   - [x] **2. Visitor stars in the sky.** Pixel-cross stars drawn after the blur, mapped onto the desktop and phone coasts, same brightness as the white stars, twinkle, Reduce Motion.
   - [x] **3. Hover labels and the hint.** Hover (and phone tap) labels inside connect only, the bottom-right hint and its fades.
-  - [ ] **4. Placing your star.** Click or tap open sky, one star per visitor, "you" star and label, the placing flare.
+  - [x] **4. Placing your star.** Click or tap open sky, one star per visitor, "you" star and label, the placing flare.
   - [ ] **5. Daytime rules, failure and checks.** Connect in daytime, API-down fallback, privacy note, preview deploy with real cities, phone checks.
 - [ ] **/projects page + project detail pages (MDX).** Needs design first. Then turn on "view project →" and "all projects →".
 - [ ] **Beyond code (home scrapbook preview).** Needs design first. A working build is parked in the repo (`src/components/BeyondCode.tsx`, `src/data/scrapbook.ts`) with a dev-only tuning page at `/lab` (height, print size, frame width, frame). Re-add it to `src/app/page.tsx` after projects once designed.
