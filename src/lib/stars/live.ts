@@ -4,9 +4,11 @@
 // - the star list loads once;
 // - the sky frame and star level change every frame, so they're plain values read on demand;
 // - "dark enough to place" only flips now and then, so the hint subscribes to that;
-// - the visitor's own star changes once (placed, or rolled back if saving fails).
+// - the visitor's own star changes once (placed, or rolled back if saving fails);
+// - whether the stars API is up changes at most once (it went down).
 
-import { drawableStars, type MyStar, type SkyFrame, type VisitorSky } from "@/lib/sky/visitorStars";
+// Relative, not "@/": Vitest has no path alias, and live.test.ts loads this file.
+import { drawableStars, type MyStar, type SkyFrame, type VisitorSky } from "../sky/visitorStars";
 import { localTimeNow } from "./format";
 import type { VisitorStar } from "./types";
 
@@ -16,12 +18,37 @@ export const DARK_LEVEL = 0.95;
 let stars: VisitorStar[] = [];
 let loading: Promise<VisitorStar[]> | null = null;
 
+// Whether the stars API is working. Assumed up until a request fails, so the hint doesn't flicker
+// on load. When it's down (spec → Failure) the sky still draws its white stars, the hint hides
+// and placing quietly does nothing.
+let available = true;
+const availableListeners = new Set<() => void>();
+
+export const areStarsAvailable = () => available;
+
+function markUnavailable() {
+  if (!available) return;
+  available = false;
+  availableListeners.forEach((listener) => listener());
+}
+
+/** Calls `listener` when the stars API turns out to be down. Returns a function that stops it. */
+export function onAvailableChange(listener: () => void) {
+  availableListeners.add(listener);
+  return () => {
+    availableListeners.delete(listener);
+  };
+}
+
 /** Fetches `/api/stars` once for the whole page. If the API is down the list stays empty. */
 export function loadVisitorStars() {
   loading ??= fetch("/api/stars")
-    .then((r) => (r.ok ? r.json() : []))
+    .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
     .then((data) => (stars = drawableStars(data)))
-    .catch(() => stars);
+    .catch(() => {
+      markUnavailable();
+      return stars;
+    });
   return loading;
 }
 
@@ -122,8 +149,8 @@ export function getHoverableStars() {
 
 /**
  * Places the visitor's star at sky position (x, y). It shows (and flares, unless `animate` is
- * false for Reduce Motion) right away while the POST runs; if saving fails (API down, or the
- * rate limit) it quietly disappears again.
+ * false for Reduce Motion) right away while the POST runs; if saving fails it quietly disappears
+ * again. "Too soon" (the rate limit) only rolls it back; anything else also marks the API down.
  */
 export function placeMyStar(x: number, y: number, animate: boolean) {
   if (getMyStar()) return;
@@ -153,9 +180,10 @@ export function placeMyStar(x: number, y: number, animate: boolean) {
       }
       mineChanged();
     })
-    .catch(() => {
+    .catch((reason) => {
       mine = null;
       justNow = false;
       mineChanged();
+      if (reason !== 429) markUnavailable();
     });
 }

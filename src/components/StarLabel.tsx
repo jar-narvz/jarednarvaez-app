@@ -6,6 +6,7 @@ import { keepStarsOut } from "@/lib/sky/starless";
 import { nearestStar, pixelToSky, skyToPixel } from "@/lib/sky/visitorStars";
 import { myStarLabel, starLabel } from "@/lib/stars/format";
 import {
+  areStarsAvailable,
   getHoverableStars,
   getMyStar,
   getSkyFrame,
@@ -23,8 +24,9 @@ import { MAX_Y } from "@/lib/stars/validate";
 // - Hover (mouse) or tap (touch, shown ~2s) a star: `City, Region · Mon YYYY · h:mm am/pm` shows
 //   just above it (your own: "you · City · just now", or its month on later visits) and the
 //   cursor is a pointer. The label fades in over 200ms (instant under Reduce Motion).
-// - Click or tap open sky to place your one star, when the sky is dark enough and above the
-//   ~90% line (not on the water); the cursor is a crosshair wherever that's possible.
+// - Click or tap open sky to place your one star, when the sky is dark enough, above the ~90%
+//   line (not on the water) and the stars API is up; the cursor is a crosshair wherever that's
+//   possible.
 // The label is moved by writing its style, not React state, like the sky.
 
 /** How long a tapped star's label stays up on phones. */
@@ -69,7 +71,7 @@ export default function StarLabel({ sectionRef, blockRef }: Props) {
     /** Where a star would go if placed here, or null if it can't be placed here. */
     const placeAt = (e: PointerEvent) => {
       const frame = getSkyFrame();
-      if (overBlock(e) || !isSkyDark() || hasMyStar() || !frame.width) return null;
+      if (overBlock(e) || !isSkyDark() || hasMyStar() || !areStarsAvailable() || !frame.width) return null;
       const p = pixelToSky(skyPoint(e), frame);
       return p.x >= 0 && p.x <= 1 && p.y >= 0 && p.y <= MAX_Y ? p : null;
     };
