@@ -25,9 +25,9 @@ export const experience = {
       location: "San Francisco Bay Area (remote)",
       current: true,
       bullets: [
-        "Designed a multi-agent decision layer for data-center operations with three domain agents (facility power/cooling, compute/IT health, carbon) that can only propose changes or decline with a stated reason, never issue commands or write to systems.",
-        "Implemented the agent package in Python 3.11, with three agent modules, a shared response envelope, pytest fixtures, and an import-allowlist test that fails CI if an agent depends on anything beyond its validated input contract.",
-        "Wrote the design doc and delivery plan, raising 10 interface-contract questions that the tech lead resolved into 3 follow-up contract changes I own, delivered through branch-and-PR code review with green CI.",
+        "Designed a multi-agent decision layer for data-center operations with three deterministic domain agents (facility power/cooling, compute/IT health, carbon) that can only propose changes or decline with a stated reason, never issue commands or write to systems.",
+        "Implemented the agent package in Python 3.11 with typed proposal/no-op contracts, a shared response envelope, pytest fixtures, and an import-allowlist test that fails CI if an agent depends on anything beyond its validated input contract.",
+        "Validate each agent end to end against a coordinator and an independent safety supervisor across 4 scenarios: nominal, conflict, missing data, and source failure.",
       ],
       tags: [
         "Multi-Agent Systems",
@@ -44,11 +44,11 @@ export const experience = {
       start: "Jun 2026",
       location: "Berkeley, CA",
       bullets: [
-        "Maintain and audit 2,000+ scholar and postdoc records across internal databases, validating incoming submissions for accuracy and completeness to keep institutional records audit-ready for quarterly compliance reviews.",
-        "Built automated reporting and validation workflows, replacing manual data handling with reusable spreadsheet logic and integrity checks.",
+        "Debugged and wrote Python scripts for data validation and cleaning, standardizing 3,000+ monthly entries from departments and funding agencies.",
+        "Produce monthly appointment and reappointment summaries from the validated data, giving the Vice Chancellor's office audit-ready statistics across 90+ departments and 3 scholar types each quarter.",
         "Maintain the department's public-facing website, transforming institutional data for 3 scholar populations into demographic, diversity, and career-outcome visualizations and dashboards on a biannual refresh cycle.",
       ],
-      tags: ["Data Validation", "Google Sheets", "Tableau"],
+      tags: ["Python", "Data Validation", "Tableau"],
     },
     {
       title: "Vice President of External Relations",

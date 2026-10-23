@@ -4,8 +4,8 @@
 
 ## Now
 
-- **In progress:** none. Sky modes 2 and 3 done 2026-10-20 (all five parts); going live with a `rebuild` → `main` pull request. Still to check on Jared's phone: Reduce Motion. Launched 2026-10-17 at jarednarvaez.vercel.app (old site on `legacy`). Custom domain jarnarvz.com connected 2026-10-21 (Cloudflare DNS, DNS only → Vercel; www redirects to the root).
-- **Next:** leave a star (Phase 4; pick the storage service with Jared first)
+- **In progress:** none. Leave a star done 2026-10-23 (all five parts, plus Jared's reset-button and normal-cursor follow-up), checked on the `rebuild` preview deploy (real city from Vercel's geo headers, stars in the `stars:preview` list) and on Jared's phone; not yet merged into `main`. Merge Vercel's Next.js CVE fix PR first: every build warns that `next@16.4.0` has a known vulnerability. Decisions along the way: white stars kept out from behind connect's text and the hover label (clearing chosen over dimming); privacy note under the hint, "your star keeps only your city and the time" (chosen over the footer). Storage: Upstash Redis through the Vercel Marketplace, connected for all environments. Sky modes 2 and 3 done 2026-10-20 and merged into `main` (PR #5). Launched 2026-10-17 (old site on `legacy`). Custom domain jarnarvz.com connected 2026-10-21 (Cloudflare DNS, DNS only → Vercel; www redirects to the root).
+- **Next:** /projects page + project detail pages (needs design first)
 - **Content:** all copy for step 14 is in `docs/content.md` (exported from Jared's Website content pass doc); files are in `~/website-content`.
 - **Notes:** Plan re-aimed at the MVP on 2026-10-16 (see `design.md` → Launch plan). Post-launch design fixes shipped 2026-10-19, outside the numbered steps: new hero line at 20px, centered 1000px content column, two-row tech stack in IBM Plex Mono pills, tighter experience/projects spacing, grey bullet text with gaps, clickable section headers, new sunset portrait. Each is in `decisions-log.md`.
 
@@ -51,7 +51,13 @@ Every section uses placeholder copy (`[like this]`) and its own data file, and s
   - [x] **3. Day text theme.** CSS variables (ink, accent, underline, tints, shadow, vignette) blend with dayness; readable at every hour.
   - [x] **4. Nav controls.** Mini dial, full dial, light/dark button, "my time", "sunset" pill, with their Motion inventory animations.
   - [x] **5. Mode transitions and checks.** Shorter-way-around transitions (~1.2s), fixed modes, Reduce Motion, connect in daytime, phone checks.
-- [ ] **Leave a star.** Storage, `/api/stars`, pixel-cross stars in the sky canvas, placing and hover in connect, privacy rules. Spec: `visual-system.md` → Connect. Pick the storage service with Jared first. Includes the sky modes' "connect in daytime" rules (visitor stars hidden, "stars come out at night" hint, placing disabled), left out of sky modes part 5 since there are no visitor stars yet.
+- [x] **Leave a star.** Storage, `/api/stars`, pixel-cross stars in the sky canvas, placing and hover in connect, privacy rules. Spec: `visual-system.md` → Connect. Includes the sky modes' "connect in daytime" rules (visitor stars hidden, "stars come out at night" hint, placing disabled), left out of sky modes part 5 since there are no visitor stars yet. Storage: Upstash Redis via the Vercel Marketplace (decided 2026-10-22). Hint wording from the spec confirmed; add the one-line privacy note. Split into five parts, each reviewed on its own (Jared, 2026-10-22):
+  - [x] **1. Storage and API.** `VisitorStar` type, request validation, Upstash store (capped list, per-IP rate limit, key prefix per environment) with an in-memory dev store when the keys aren't set, `/api/stars` GET and POST. Nothing visible changes.
+  - [x] **2. Visitor stars in the sky.** Pixel-cross stars drawn after the blur, mapped onto the desktop and phone coasts, same brightness as the white stars, twinkle, Reduce Motion.
+  - [x] **3. Hover labels and the hint.** Hover (and phone tap) labels inside connect only, the bottom-right hint and its fades.
+  - [x] **4. Placing your star.** Click or tap open sky, one star per visitor, "you" star and label, the placing flare.
+  - [x] **5. Daytime rules, failure and checks.** Connect in daytime, API-down fallback, privacy note, preview deploy with real cities, phone checks.
+  - [x] **Follow-up (Jared, 2026-10-23): reset and cursor.** A "reset" button where the hint was removes your star so you can place it again (secret owner token, stored hashed; `DELETE /api/stars`; frees your 10-minute wait). The cursor stays the normal arrow over open sky instead of the spec's crosshair.
 - [ ] **/projects page + project detail pages (MDX).** Needs design first. Then turn on "view project →" and "all projects →".
 - [ ] **Beyond code (home scrapbook preview).** Needs design first. A working build is parked in the repo (`src/components/BeyondCode.tsx`, `src/data/scrapbook.ts`) with a dev-only tuning page at `/lab` (height, print size, frame width, frame). Re-add it to `src/app/page.tsx` after projects once designed.
 - [ ] **/scrapbook page.** Needs design first. Then turn on "open the scrapbook →".

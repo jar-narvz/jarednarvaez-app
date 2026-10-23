@@ -1,7 +1,8 @@
 // The render pipeline (docs/visual-system.md → Prototype reference):
 //   1. draw the scene on a tiny canvas (~48×27)
 //   2. enlarge ×2 with smoothing on, then to the low-res canvas with smoothing on (this is the blur)
-//   3. stars go straight onto the low-res canvas, unblurred, one pixel each (stars.ts)
+//   3. stars go straight onto the low-res canvas, unblurred, one pixel each (stars.ts), then the
+//      visitors' gold pixel crosses (visitorStars.ts)
 //   4. the browser enlarges the low-res canvas ×4 with smoothing off (`image-rendering: pixelated`
 //      on the canvas), which makes the ~4px squares.
 //
@@ -9,10 +10,12 @@
 // sized from the screen instead (screen ÷ 4), so squares stay 4px on any screen size.
 
 import type { DrawnSky, SkyScene } from "./scene";
+import type { PixelBox } from "./starless";
 import { drawStars } from "./stars";
+import { drawVisitorStars, NO_VISITORS, type SkyFrame, type VisitorSky } from "./visitorStars";
 
 /** Size of one visible sky pixel, in CSS pixels. */
-const PIXEL = 4;
+export const PIXEL = 4;
 /** Tiny-canvas pixels per design unit: the prototype draws 680 units into 48 pixels. */
 const TINY_PER_UNIT = 48 / 680;
 
@@ -39,7 +42,9 @@ function view(scene: SkyScene, width: number, height: number) {
 
 /**
  * Draws keyframe `k` of `scene` onto `target`, sized to cover a width × height area (CSS pixels).
- * `time` (seconds) moves the clouds and the star twinkle.
+ * `time` (seconds) moves the clouds and the star twinkle. `visitors` are the left stars (and your
+ * own) to draw. No white stars are drawn inside `textBoxes` (starless.ts). Returns the low-res
+ * frame it drew, so connect can find the visitor stars on screen.
  */
 export function renderSky(
   target: HTMLCanvasElement,
@@ -48,8 +53,10 @@ export function renderSky(
   scene: SkyScene,
   k: DrawnSky,
   time: number,
-) {
-  if (width <= 0 || height <= 0) return;
+  visitors: VisitorSky = NO_VISITORS,
+  textBoxes: readonly PixelBox[] = [],
+): SkyFrame | null {
+  if (width <= 0 || height <= 0) return null;
   const v = view(scene, width, height);
 
   // 1. Tiny canvas: the visible part of the scene at ~48×27.
@@ -75,7 +82,10 @@ export function renderSky(
 
   // 3. Stars, in the rows of the low-res canvas that show the scene's star band.
   const starRows = Math.round(((scene.starBand - v.y) / v.h) * target.height);
-  drawStars(lc, target.width, Math.max(0, starRows), k.stars, time);
+  drawStars(lc, target.width, Math.max(0, starRows), k.stars, time, textBoxes);
+  const frame = { width: target.width, horizonRow: ((scene.horizon - v.y) / v.h) * target.height };
+  drawVisitorStars(lc, visitors, frame, k.stars, time);
 
   // 4. Pixelate: done by the browser via `image-rendering: pixelated` on the target canvas.
+  return frame;
 }

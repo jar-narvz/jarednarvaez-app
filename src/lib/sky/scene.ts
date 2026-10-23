@@ -17,6 +17,8 @@ export type SkyScene = {
   height: number;
   /** Bottom of the star band, in design units. Stars fill the sky from the top down to here. */
   starBand: number;
+  /** Where the sea meets the sky, in design units. Visitor star heights are a share of this. */
+  horizon: number;
   draw: (ctx: CanvasRenderingContext2D, k: DrawnSky, time: number) => void;
 };
 
@@ -144,7 +146,7 @@ function drawCoast(ctx: CanvasRenderingContext2D, k: DrawnSky, time: number) {
   drawVignette(ctx, k, 100, 150, 380, W, H);
 }
 
-export const coastScene: SkyScene = { width: W, height: H, starBand: STAR_BAND, draw: drawCoast };
+export const coastScene: SkyScene = { width: W, height: H, starBand: STAR_BAND, horizon: HORIZON, draw: drawCoast };
 
 // Portrait version for phones (option C, chosen 2026-10-11). The same coast re-laid in a tall
 // 380×760 space: x narrowed (×380/680), the sky stretched (horizon at 600 instead of 272),
@@ -217,5 +219,6 @@ export const tallCoastScene: SkyScene = {
   width: TW,
   height: TH,
   starBand: STAR_BAND * (T_HORIZON / HORIZON),
+  horizon: T_HORIZON,
   draw: drawTallCoast,
 };

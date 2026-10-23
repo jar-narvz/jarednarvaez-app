@@ -5,6 +5,8 @@
 // pixels. Here every low-res pixel in the band gets a repeatable "dice roll" instead, so the
 // density is the same on any screen size and the stars stay in the same place across reloads.
 
+import { isBehindText, type PixelBox } from "./starless";
+
 /**
  * Chance that a low-res pixel in the star band holds a star. 1 in 240: about 30% sparser than
  * the prototype's 1 in 170, which read as too many on the full-size sky (Jared, 2026-10-11).
@@ -43,13 +45,17 @@ export function starsIn(width: number, rows: number): Star[] {
 // The star list only changes when the band's size does, so keep the last one.
 let cached = { width: -1, rows: -1, stars: [] as Star[] };
 
-/** Paints the stars onto the low-res sky canvas. `level` is the keyframe's star value. */
+/**
+ * Paints the stars onto the low-res sky canvas. `level` is the keyframe's star value; stars
+ * inside `textBoxes` are left out, so none sit behind text (starless.ts).
+ */
 export function drawStars(
   ctx: CanvasRenderingContext2D,
   width: number,
   rows: number,
   level: number,
   time: number,
+  textBoxes: readonly PixelBox[] = [],
 ) {
   if (level <= 0) return;
   if (cached.width !== width || cached.rows !== rows) {
@@ -57,6 +63,7 @@ export function drawStars(
   }
   // A 1×1 fill at this opacity mixes the star color into the sky pixel, like the prototype.
   for (const s of cached.stars) {
+    if (isBehindText(s.x, s.y, textBoxes)) continue;
     ctx.fillStyle = `rgba(${STAR_COLOR},${starAlpha(level, s.brightness, s.phase, time)})`;
     ctx.fillRect(s.x, s.y, 1, 1);
   }

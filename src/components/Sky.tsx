@@ -14,9 +14,11 @@ import {
   sunAt,
 } from "@/lib/sky/hours";
 import { SUN_GOLD } from "@/lib/sky/palette";
-import { renderSky } from "@/lib/sky/render";
+import { PIXEL, renderSky } from "@/lib/sky/render";
 import { coastScene, tallCoastScene, type DrawnSky } from "@/lib/sky/scene";
+import { getVisitorSky, loadVisitorStars, onMyStarChange, publishSkyFrame } from "@/lib/stars/live";
 import { getSkyMode, localHour, onSkyModeChange, publishShownHour, takeGlide } from "@/lib/sky/skyHour";
+import { onStarlessChange, textBoxes } from "@/lib/sky/starless";
 import { textDayness, themeAt } from "@/lib/sky/theme";
 import { GRAIN_FRAME_MS, grainFrames } from "@/lib/sky/texture";
 
@@ -64,6 +66,13 @@ export default function Sky() {
       if (m.mode === "local") return clockHour;
       return null;
     };
+
+    // Visitor stars (leave a star), fetched once for the page (live.ts) and read every frame. If
+    // the API is down the list stays empty and the sky is unchanged.
+    let cancelled = false;
+    loadVisitorStars().then(() => {
+      if (!cancelled) schedulePaint();
+    });
 
     // A glide in progress: where it started and when. Its end is wherever the mode now points,
     // read every frame (in scroll mode, the visitor may scroll during it).
@@ -126,7 +135,9 @@ export default function Sky() {
       painted = { hour, sunX: k.sunX ?? sunAt(18.5).x, stars: k.stars, grain: grainLevel, accent: eveningAccent };
       publishShownHour(hour);
       // Portrait screens (phones) get the tall version of the coast.
-      renderSky(sky, w, h, w < h ? tallCoastScene : coastScene, k, time);
+      const scene = w < h ? tallCoastScene : coastScene;
+      const drawn = renderSky(sky, w, h, scene, k, time, getVisitorSky(), textBoxes(PIXEL));
+      if (drawn) publishSkyFrame(drawn, k.stars);
       // The variables only change with scroll or the hour, so skip rewriting them on still
       // frames. Written in scroll mode too, so leaving a fixed hour puts the evening back.
       const moment = `${t} ${fixed} ${glide ? hour : ""}`;
@@ -215,14 +226,21 @@ export default function Sky() {
       }
       schedulePaint();
     });
+    // Text starting or stopping to keep stars out (the hover label) repaints a still sky too.
+    const stopStarless = onStarlessChange(schedulePaint);
+    // Placing your star (or losing it if saving fails) repaints a still sky too.
+    const stopMyStar = onMyStarChange(schedulePaint);
     updateMotion();
     reducedMotion.addEventListener("change", updateMotion);
 
     return () => {
+      cancelled = true;
       frameObserver.disconnect();
       pageObserver.disconnect();
       window.removeEventListener("scroll", schedulePaint);
       stopSkyMode();
+      stopStarless();
+      stopMyStar();
       window.clearInterval(clock);
       cancelAnimationFrame(loop);
       cancelAnimationFrame(pending);
