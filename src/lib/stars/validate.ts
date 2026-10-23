@@ -9,6 +9,15 @@ const LOCAL_TIME = /^(1[0-2]|[1-9]):[0-5]\d (am|pm)$/;
 const inRange = (n: unknown, min: number, max: number): n is number =>
   typeof n === "number" && Number.isFinite(n) && n >= min && n <= max;
 
+/** The star id and owner token a `DELETE` body carries (reset), or null if either is off. */
+export function parseOwnerRequest(body: unknown): { id: string; token: string } | null {
+  if (typeof body !== "object" || body === null) return null;
+  const { id, token } = body as Record<string, unknown>;
+  if (typeof id !== "string" || !/^[\w-]{1,64}$/.test(id)) return null;
+  if (typeof token !== "string" || !/^[0-9a-f]{64}$/.test(token)) return null;
+  return { id, token };
+}
+
 /** The star a `POST` body describes, or null if anything is off. Extra fields are dropped. */
 export function parseNewStar(body: unknown): NewStar | null {
   if (typeof body !== "object" || body === null) return null;
