@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { drawableStars, phaseOf, skyToPixel, visitorStarAlpha } from "./visitorStars";
+import { drawableStars, nearestStar, phaseOf, skyToPixel, visitorStarAlpha } from "./visitorStars";
 
 describe("skyToPixel", () => {
   it("maps x across the visible sky and y down to the horizon (desktop)", () => {
@@ -52,5 +52,29 @@ describe("drawableStars", () => {
   it("returns nothing for a response that isn't a list (API down or an error body)", () => {
     expect(drawableStars({ error: "stars unavailable" })).toEqual([]);
     expect(drawableStars(null)).toEqual([]);
+  });
+});
+
+describe("nearestStar", () => {
+  const frame = { width: 360, horizonRow: 160 };
+  // Pixels (180, 80) and (190, 80).
+  const a = { id: "a", x: 0.5, y: 0.5 };
+  const b = { id: "b", x: 190 / 360, y: 0.5 };
+
+  it("finds the star under the pointer", () => {
+    expect(nearestStar([a, b], { x: 180.5, y: 80.5 }, frame)).toBe(a);
+  });
+
+  it("reaches about 3 sky pixels, and no further", () => {
+    expect(nearestStar([a], { x: 183.4, y: 80.5 }, frame)).toBe(a);
+    expect(nearestStar([a], { x: 184, y: 80.5 }, frame)).toBeNull();
+  });
+
+  it("picks the closer of two nearby stars", () => {
+    expect(nearestStar([a, b], { x: 188, y: 80.5 }, frame)).toBe(b);
+  });
+
+  it("finds nothing with no stars", () => {
+    expect(nearestStar([], { x: 0, y: 0 }, frame)).toBeNull();
   });
 });

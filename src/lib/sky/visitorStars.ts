@@ -35,7 +35,33 @@ export function phaseOf(id: string) {
   return ((h >>> 0) / 4294967296) * Math.PI * 2;
 }
 
-const inUnit = (n: unknown) => typeof n === "number" && Number.isFinite(n) && n >= 0 && n <= 1;
+/** How close (in sky pixels) the pointer must be to a star to hover it (spec: ~3). */
+export const HOVER_REACH = 3;
+
+/**
+ * The star nearest to `point` (low-res sky pixels, e.g. clientX / 4) within HOVER_REACH, or null.
+ * Uses the same mapping as the drawing, so hover lines up with what's on screen.
+ */
+export function nearestStar<S extends Pick<VisitorStar, "x" | "y">>(
+  stars: readonly S[],
+  point: { x: number; y: number },
+  frame: SkyFrame,
+): S | null {
+  let best: S | null = null;
+  let bestDistance = HOVER_REACH;
+  for (const star of stars) {
+    const p = skyToPixel(star, frame);
+    // Measured from the middle of the star's pixel.
+    const d = Math.hypot(p.x + 0.5 - point.x, p.y + 0.5 - point.y);
+    if (d <= bestDistance) {
+      best = star;
+      bestDistance = d;
+    }
+  }
+  return best;
+}
+
+const inUnit =(n: unknown) => typeof n === "number" && Number.isFinite(n) && n >= 0 && n <= 1;
 
 /** The stars in an `/api/stars` response that can be drawn. Anything malformed is skipped. */
 export function drawableStars(data: unknown): VisitorStar[] {
