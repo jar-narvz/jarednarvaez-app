@@ -10,7 +10,7 @@ export const connect = {
     dark: { action: "click the sky", rest: "to leave a star" },
     day: "stars come out at night",
   },
-  // PLACEHOLDER: Jared writes this line before merging into main. It must say a star keeps only a
-  // city, region, time and position, never the IP (docs/visual-system.md → Connect → Privacy).
-  privacyNote: "[privacy note]",
+  // Leave a star's privacy note, under the hint (docs/visual-system.md → Connect → Privacy; wording
+  // chosen by Jared 2026-10-23). Keep it true to what /api/stars stores.
+  privacyNote: "your star keeps only your city and the time",
 };
