@@ -4,9 +4,9 @@ Jared's personal portfolio site, being rebuilt from scratch. The design is decid
 
 ## Context
 
-- Owner: Jared Narvaez, UC Berkeley CS + DS minor, graduating May 2027.
+- Owner: Jared Narvaez, UC Berkeley CS + DS minor, graduating December 2027.
 - This repo is jarnarvz.com (Next.js + TypeScript, deployed on Vercel). Recruiters open it from my resume.
-- Source of truth for wording: my v2 resumes (Oct 21, 2026). The site can include more than the resumes, but must never contradict them or claim anything I can't defend in an interview.
+- Source of truth for wording: my v3.2 resumes (Oct 26, 2026). The site can include more than the resumes, but must never contradict them or claim anything I can't defend in an interview.
 
 ## Rules
 
