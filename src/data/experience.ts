@@ -78,7 +78,7 @@ export const experience = {
       title: "Computer Science Major, Data Science Minor",
       org: "University of California, Berkeley",
       start: "Aug 2023",
-      end: "May 2027",
+      end: "Dec 2027",
       location: "Berkeley, CA",
       // Relevant coursework from Jared's résumé, one course per bullet.
       bullets: [
