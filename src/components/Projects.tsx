@@ -14,6 +14,7 @@ import {
   showProjectPages,
   type Project,
 } from "@/data/projects";
+import { GithubIcon } from "@/icons/lineIcons";
 import { staggerDelay } from "@/lib/stagger";
 
 // Projects (docs/visual-system.md → Projects): an editorial numbered index, collapsed by default
@@ -182,6 +183,18 @@ function ProjectRow({
             <div className="min-w-0">
               <p className="text-[15px] leading-[1.55]">{project.summary}</p>
               <TagList tags={project.tags} className="mt-2.5" />
+              {project.github && (
+                // The hero link buttons' material, scaled down to sit under the tags.
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${project.title} on GitHub`}
+                  className="mt-3 flex size-8 items-center justify-center rounded-full border border-ink/38 bg-tint/34 text-ink/82 transition-colors duration-200 ease-out hover:border-accent/60 hover:text-accent motion-reduce:transition-none"
+                >
+                  <GithubIcon size={15} />
+                </a>
+              )}
               {showProjectPages && (
                 <p className="mt-3">
                   <UnderlineLink href={`/projects/${project.slug}`}>view project →</UnderlineLink>
