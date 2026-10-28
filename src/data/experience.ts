@@ -25,9 +25,10 @@ export const experience = {
       location: "San Francisco Bay Area (remote)",
       current: true,
       bullets: [
-        "Designed a multi-agent decision layer for data-center operations with three deterministic domain agents (facility power/cooling, compute/IT health, carbon) that can only propose changes or decline with a stated reason, never issue commands or write to systems.",
-        "Implemented the agent package in Python 3.11 with typed proposal/no-op contracts, a shared response envelope, pytest fixtures, and an import-allowlist test that fails CI if an agent depends on anything beyond its validated input contract.",
-        "Validate each agent end to end against a coordinator and an independent safety supervisor across 4 scenarios: nominal, conflict, missing data, and source failure.",
+        "Designed and built the base structure for three domain agents (facility, compute/IT, sustainability) in a Python 3.11 FastAPI service, shipped as my first PR and reviewed by the tech lead and an independent reviewer; agents only propose actions or decline with a reason code, and never write.",
+        "Found a safety gap while testing: a snapshot with no observations could get approved on a separate decision path; wrote a test that proved it, reported it to the tech lead, and reverted that part, pinning the refusal with a test.",
+        "Changed the agent-input builder so a missing, stale, or invalid input reaches the agent as an explicit labeled state instead of a hard failure, keeping the v1 contract unchanged; approved by the tech lead.",
+        "Checked that the tests really catch failures by breaking code on purpose (three deliberate breaks made exactly the six predicted tests fail), and ran the full test suite in Docker as review evidence when CI was down.",
       ],
       tags: [
         "Multi-Agent Systems",
