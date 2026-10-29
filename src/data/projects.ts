@@ -39,6 +39,23 @@ export const projects: Project[] = [
     order: 1,
   },
   {
+    // Summary from the route-impact README's one-liner; tags from the v3.5 résumé.
+    slug: "route-impact",
+    title: "OpenStreetMap Route-Impact Pipeline",
+    type: "Personal project",
+    year: "2026",
+    summary: "Measures how a day of OpenStreetMap edits changes navigation in Northern California.",
+    tags: ["Python", "DuckDB", "SQL"],
+    image: {
+      // [screenshot] placeholder: no image yet, so the card shows a gradient.
+      src: "",
+      alt: "[route-impact screenshot]",
+    },
+    github: "https://github.com/jar-narvz/route-impact",
+    featured: true,
+    order: 2,
+  },
+  {
     slug: "secure-file-sharing",
     title: "Secure File Sharing System",
     type: "Class project",
@@ -51,7 +68,7 @@ export const projects: Project[] = [
       alt: "Flowchart of the secure file sharing system: user authentication, encrypted file storage as chunks, and sharing and revocation",
     },
     featured: true,
-    order: 2,
+    order: 3,
   },
   {
     slug: "character-gpt",
@@ -66,7 +83,7 @@ export const projects: Project[] = [
       alt: "Flowchart of the character-level GPT: training data, transformer model and sampling, with generated text at iteration 0 and 9,900",
     },
     featured: true,
-    order: 3,
+    order: 4,
   },
 ];
 
