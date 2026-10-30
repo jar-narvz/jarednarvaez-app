@@ -1,12 +1,15 @@
 // Projects content (docs/visual-system.md → Projects → Data shape). One list feeds both the home
-// page (featured only, by `order`) and, after launch, /projects (all). Copy from docs/content.md →
-// Projects; the rest of the list ("More projects") joins when /projects is built.
+// page (featured only, by `order`) and /projects (all, in list order: strongest first within each
+// group, decided 2026-10-30). Copy from docs/content.md → Projects and More projects.
 
 export type Project = {
   slug: string; // detail page: /projects/[slug] (MDX)
   title: string;
-  type: string; // "Class project", "Game dev", "Web" ...
-  year: string;
+  type?: string; // home page row: "Class project", "Personal project" ... (featured projects)
+  year?: string; // home page row
+  group: ProjectGroup; // /projects group
+  classLabel?: string; // /projects card: the class or club, e.g. "CS 161" (else `type`)
+  term?: string; // /projects card: e.g. "Spring 2026" (else `year`)
   summary: string; // 1–2 lines
   tags: string[]; // tech used
   image: { src: string; alt: string }; // 16:10 screenshot; src is a path under /public
@@ -16,9 +19,15 @@ export type Project = {
   order?: number; // home page order
 };
 
-// MVP: /projects and the detail pages aren't designed yet, so "view project →" and
-// "all projects →" stay hidden. Flip this once those pages exist.
-export const showProjectPages = false;
+export type ProjectGroup = "personal" | "coursework & clubs";
+
+/** /projects groups, in page order. */
+export const PROJECT_GROUPS: ProjectGroup[] = ["personal", "coursework & clubs"];
+
+// "all projects →" on the home page stays hidden until /projects is live; "view project →" stays
+// hidden until a write-up exists (Secure File Sharing and Character-Level GPT, later).
+export const showAllProjectsLink = false;
+export const showWriteUps = false;
 
 // Screenshots are 16:10 PNGs (1600×1000) in public/.
 export const projects: Project[] = [
@@ -29,6 +38,7 @@ export const projects: Project[] = [
     title: "Posting Triage",
     type: "Personal project",
     year: "2026",
+    group: "personal",
     summary:
       "Reads a job posting and answers APPLY, FLAG, SKIP, or DEAD, with the line from the posting that decided it.",
     tags: ["FastAPI", "Docker", "AWS", "Claude API"],
@@ -47,6 +57,7 @@ export const projects: Project[] = [
     title: "OpenStreetMap Route-Impact Pipeline",
     type: "Personal project",
     year: "2026",
+    group: "personal",
     summary: "Measures how a day of OpenStreetMap edits changes navigation in Northern California.",
     tags: ["Python", "DuckDB", "SQL"],
     image: {
@@ -63,6 +74,8 @@ export const projects: Project[] = [
     title: "Secure File Sharing System",
     type: "Class project",
     year: "2025",
+    group: "coursework & clubs",
+    classLabel: "CS 161", // term still open (docs/design.md → still open), so the card shows the year
     summary:
       "An encrypted file store in Go that stays safe on an untrusted server, with sharing, revocation and fast appends",
     tags: ["Go", "AES-CTR", "HMAC", "RSA"],
@@ -78,6 +91,8 @@ export const projects: Project[] = [
     title: "Character-Level GPT",
     type: "Class project",
     year: "2026",
+    group: "coursework & clubs",
+    classLabel: "CS 188", // term still open, as above
     summary:
       "Neural nets in PyTorch, from 97%+ MNIST to an RNN language ID and a transformer that writes Shakespeare",
     tags: ["Python", "PyTorch", "Transformers"],
@@ -88,12 +103,90 @@ export const projects: Project[] = [
     featured: true,
     order: 4,
   },
+  // The rest of /projects, word for word from docs/content.md → More projects. No screenshots yet
+  // (docs/design.md → still open), so their cards show the [screenshot] placeholder.
+  {
+    slug: "reliable-transport",
+    title: "Reliable Transport (TCP)",
+    group: "coursework & clubs",
+    classLabel: "CS 168",
+    term: "Spring 2026",
+    summary:
+      "A subset of TCP: handshake, sliding window, out-of-order reassembly, teardown and RFC 6298 retransmission timers",
+    tags: ["Python", "TCP"],
+    image: { src: "", alt: "[Reliable Transport (TCP) screenshot]" },
+  },
+  {
+    slug: "rl-agents",
+    title: "Reinforcement Learning Agents",
+    group: "coursework & clubs",
+    classLabel: "CS 188",
+    term: "Spring 2026",
+    summary:
+      "Value iteration and Q-learning agents that learn Gridworld, a crawler robot and Pacman, which wins after 50 episodes",
+    tags: ["Python", "Q-learning", "MDPs"],
+    image: { src: "", alt: "[Reinforcement Learning Agents screenshot]" },
+  },
+  {
+    slug: "risc-v-cpu",
+    title: "RISC-V CPU",
+    group: "coursework & clubs",
+    classLabel: "CS 61C",
+    term: "Spring 2025",
+    summary:
+      "A CPU that runs real RISC-V instructions, built in Logisim from the ALU, register file, immediate generator and control logic",
+    tags: ["Logisim", "RISC-V"],
+    image: { src: "", alt: "[RISC-V CPU screenshot]" },
+  },
+  {
+    slug: "build-your-own-world",
+    title: "Build Your Own World",
+    group: "coursework & clubs",
+    classLabel: "CS 61B",
+    term: "Spring 2024",
+    summary:
+      "A tile-based exploration game in Java: seeded rooms and hallways, a playable avatar, save/load and custom tile art",
+    tags: ["Java", "Procedural generation"],
+    image: { src: "", alt: "[Build Your Own World screenshot]" },
+  },
+  {
+    slug: "nn-classifier-assembly",
+    title: "Neural Net Classifier in Assembly",
+    group: "coursework & clubs",
+    classLabel: "CS 61C",
+    term: "Spring 2025",
+    summary:
+      "A neural-net classifier in RISC-V assembly: matrix multiply, ReLU, argmax and matrix file I/O written by hand",
+    tags: ["RISC-V Assembly"],
+    image: { src: "", alt: "[Neural Net Classifier in Assembly screenshot]" },
+  },
+  {
+    slug: "pasae-website",
+    title: "PASAE Website",
+    group: "coursework & clubs",
+    classLabel: "PASAE (Webmaster)",
+    term: "2024–2025",
+    summary:
+      "Updated the homepage, events, core team and archive pages of PASAE's public site, pasae.berkeley.edu",
+    tags: ["HTML", "SCSS", "JavaScript", "PHP"],
+    image: { src: "", alt: "[PASAE Website screenshot]" },
+  },
 ];
 
 export const projectsSection = {
   label: "projects",
   heading: "what i've made",
 };
+
+/** /projects: every project in its group, in list order. */
+export function projectsByGroup() {
+  return PROJECT_GROUPS.map((name) => ({ name, projects: projects.filter((p) => p.group === name) }));
+}
+
+/** A /projects card's meta line: class · term, falling back to type · year. */
+export function cardMeta(p: Project) {
+  return `${p.classLabel ?? p.type} · ${p.term ?? p.year}`;
+}
 
 /** The home page's projects: featured only, in `order`. */
 export function featuredProjects() {

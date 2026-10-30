@@ -11,7 +11,8 @@ import UnderlineLink from "@/components/UnderlineLink";
 import {
   featuredProjects,
   projectsSection,
-  showProjectPages,
+  showAllProjectsLink,
+  showWriteUps,
   type Project,
 } from "@/data/projects";
 import { GithubIcon } from "@/icons/lineIcons";
@@ -89,7 +90,7 @@ export default function Projects() {
           </ol>
           <Rule drawn={open} delayMs={open ? afterLastMs - RULE_LEAD_MS : 0} />
 
-          {showProjectPages && (
+          {showAllProjectsLink && (
             <p
               style={{ transitionDelay: `${open ? afterLastMs + ALL_LINK_LAG_MS : 0}ms` }}
               className={`mt-4.5 transition-opacity duration-400 ease-[ease] motion-reduce:transition-none ${
@@ -209,7 +210,7 @@ function ProjectRow({
                   )}
                 </div>
               )}
-              {showProjectPages && (
+              {showWriteUps && (
                 <p className="mt-3">
                   <UnderlineLink href={`/projects/${project.slug}`}>view project →</UnderlineLink>
                 </p>
