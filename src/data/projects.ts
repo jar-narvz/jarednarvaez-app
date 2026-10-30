@@ -24,9 +24,10 @@ export type ProjectGroup = "personal" | "coursework & clubs";
 /** /projects groups, in page order. */
 export const PROJECT_GROUPS: ProjectGroup[] = ["personal", "coursework & clubs"];
 
-// "all projects →" on the home page stays hidden until /projects is live; "view project →" stays
-// hidden until a write-up exists (Secure File Sharing and Character-Level GPT, later).
-export const showAllProjectsLink = false;
+// "all projects →" under the home projects list links to /projects (on since 2026-10-30, when
+// /projects was built); "view project →" stays hidden until a write-up exists (Secure File
+// Sharing and Character-Level GPT, later).
+export const showAllProjectsLink = true;
 export const showWriteUps = false;
 
 // Screenshots are 16:10 PNGs (1600×1000) in public/.
