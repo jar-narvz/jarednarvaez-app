@@ -514,6 +514,14 @@ const starBrightness=t=>t<.35?0:t<.65?.3*(t-.35)/.3:.3+.7*(t-.65)/.35;
 
 The sun glow's y is in the coast's 680×380 space (horizon 272); the abstract scene places it at y/272 × 80% of its height.
 
+### /projects cards (decided 2026-10-30)
+
+- **Layout:** each group (h2: group name + count, a 1px rule at 22% ink under it) holds a grid of cards with 16px gaps: 3 columns on desktop (`lg`), 2 on tablets (`sm`), 1 on phones. Both groups keep 3 columns, so "personal" leaves its third slot empty.
+- **Card:** the home projects cell's material (tint at 34%, 1px border at 30% ink, 14px radius, 14px padding), a column with 12px gaps: screenshot (full card width, 16:10, 8px radius) → title (Newsreader 20px, line-height 1.2) with class · term under it (13px, 70% ink) → summary (Schibsted 15px, line-height 1.55) → tags (the site's small pills) → links (the 32px GitHub circle, then "project page →" / write-up link as underline links). No whole-card link, since a card can have several links.
+- **Placeholders:** projects without an image show the home page's `[screenshot]` gradients, cycling through the three.
+- **Motion:** see the motion inventory. Each card fades up once as it scrolls into view (opacity 0 → 1, translateY 8px → 0, 450ms ease), delayed 150 + 160·*c* ms where *c* is its column among the columns showing (so on phones every card waits 150ms); 200ms after its card starts, the screenshot comes into focus (`blur(5px) brightness(1.15)` → none, 800ms ease). Reduce Motion: cards and screenshots show at once, sharp.
+- **Lab:** `/lab/projects` (dev only) has the comparison; its stagger uses a fixed 3 columns, so build the real page with the columns actually showing.
+
 ## Motion
 
 ### Motion inventory (every animation on the site)
@@ -533,6 +541,7 @@ The sun glow's y is in the coast's 680×380 space (horizon 272); the abstract sc
 | Nav (phones) | Full-screen menu opens: backdrop fades in, links rise 10px and fade in one by one; closes with a fade | "menu" / "close" / link tap | Open 250ms fade; links 350ms ease, delay 60 + 40·*i* ms; close 200ms fade | Instant |
 | Nav *(after launch)* | "sunset" pill slides in / out | Leaving / returning to scroll mode | translateX 8px → 0 + fade, 300ms | Instant |
 | Nav *(after launch)* | Light/dark icon swap: the new icon (sun or moon) spins in | Sky turns dark / light | rotate −90° → 0, scale 0.6 → 1, fade; 350ms `cubic-bezier(.3,1.4,.5,1)` | Instant |
+| /projects *(after launch)* | Cards fade up as they scroll into view; each screenshot comes into focus | Card enters the viewport (once) | Card 450ms ease, opacity 0 → 1 + translateY 8px → 0, delay 150 + 160·*column* ms; screenshot `blur(5px) brightness(1.15)` → none, 800ms ease, 200ms after its card | Shown at once, sharp |
 | Subpages *(after launch)* | Light/dark toggle icon swap: the new icon (sun or moon) spins in; the background and text switch palette version | Toggle click | rotate −90° → 0, scale 0.6 → 1, fade; 350ms `cubic-bezier(.3,1.4,.5,1)` | Instant |
 | Nav *(after launch)* | Mini dial's gold dot travels around its ring to the current hour | Every frame | Follows the sky | Stays (it shows state) |
 | Nav *(after launch)* | Time dial grows down from the mini dial / shrinks back | Mini dial click / "close" / click outside | Open: scale 0 → 1 from top-right, 450ms `cubic-bezier(.3,1.3,.5,1)`. Close: scale → 0 + fade, 220ms ease-in | Instant |
