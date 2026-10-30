@@ -4,6 +4,7 @@
 // uses new hues on purpose, to show how far a palette can drift from golden hour.
 
 import { dusk, type SkyKeyframe } from "@/lib/sky/palette";
+import { TEAL_SEA } from "@/lib/sky/subpagePalettes";
 
 export type LabPalette = {
   id: string;
@@ -61,31 +62,16 @@ export const PALETTES: LabPalette[] = [
     },
   },
   {
+    // The approved palette, from src/lib/sky/subpagePalettes.ts.
     id: "teal-sea",
     name: "teal sea",
     note: "new hues: deep teal into a golden-hour band at the bottom",
     newHexes: ["#0E1E2A", "#123A44", "#1E5A5E", "#3E8A7E", "#E8B48A", "#163640", "#1E4C52", "#2A6A68", "#4E9A88", "#C49A7A", "#0A1A22"],
-    sky: base({
-      sky: ["#0E1E2A", "#123A44", "#1E5A5E", "#3E8A7E", "#E8B48A"],
-      clouds: ["#163640", "#1E4C52", "#2A6A68", "#4E9A88", "#C49A7A"],
-      sun: "#F7C27E",
-      sunY: 300,
-      stars: 0.2,
-      vignette: "#0A1A22",
-      vignetteStrength: 0.5,
-    }),
-    grain: 0.12,
+    ...TEAL_SEA.dark,
     light: {
       note: "pale seafoam into a warm sand band (afternoon's)",
       newHexes: ["#9CCBC4", "#B8DCD6", "#CFE6E2", "#E8F2EE"],
-      sky: base({
-        sky: ["#9CCBC4", "#B8DCD6", "#CFE6E2", "#E8F2EE", "#F4E2C4"],
-        clouds: ["#F6F4F0", "#F6F4F0", "#F6F4F0", "#F6F4F0", "#F4E6D8"],
-        sun: "#FFFBEE",
-        sunY: 300,
-        stars: 0,
-      }),
-      grain: 0.07,
+      ...TEAL_SEA.light,
     },
   },
 ];

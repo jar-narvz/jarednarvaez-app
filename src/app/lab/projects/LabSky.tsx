@@ -5,11 +5,11 @@ import { dayness, grainAtHour, keyframeAtHour } from "@/lib/sky/hours";
 import { renderSky } from "@/lib/sky/render";
 import { coastScene, tallCoastScene, type DrawnSky, type SkyScene } from "@/lib/sky/scene";
 import { GRAIN_FRAME_MS, grainFrames } from "@/lib/sky/texture";
-import { abstractScene, tallAbstractScene } from "./abstractScene";
+import { abstractScene, tallAbstractScene } from "@/lib/sky/abstractScene";
 import { PLAIN } from "./palettes";
 
-// Lab-only (2026-10-30): a fixed subpage background drawn over the site's sky (which keeps
-// running underneath at z -10). Same pipeline as Sky.tsx: renderSky, then moving grain on top.
+// Lab-only (2026-10-30): a fixed subpage background, compared across options. The site's sky
+// steps aside on this page (isSubpage), so this draws the coast and abstract skies itself. Same pipeline as Sky.tsx: renderSky, then moving grain on top.
 // No visitor stars and no scroll: a subpage holds one look. Text colors are set by the lab page.
 
 export type LabBackground =

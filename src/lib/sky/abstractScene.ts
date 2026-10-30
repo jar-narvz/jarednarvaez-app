@@ -1,11 +1,11 @@
-// Lab-only (2026-10-30): the "abstract" subpage background. The coast's look without the coast:
-// a sky gradient top to bottom, the same drifting clouds, a soft sun glow low on the right, and
-// the plum (or day cream) vignette on the left, all through the same blur → pixel → grain
-// pipeline (render.ts). No horizon, sea or land. Moves into src/lib/sky/ only if Jared picks it.
+// The subpages' abstract scene (docs/visual-system.md → Subpages, decided 2026-10-30): the coast's
+// look without the coast. A sky gradient top to bottom, the same drifting clouds, a soft sun glow
+// low on the right, and the plum (or day cream) vignette on the left, all through the same blur →
+// pixel → grain pipeline (render.ts). No horizon, sea or land.
 
-import { withAlpha } from "@/lib/sky/blend";
-import { DAY_VIGNETTE } from "@/lib/sky/palette";
-import type { DrawnSky, SkyScene } from "@/lib/sky/scene";
+import { withAlpha } from "./blend";
+import { DAY_VIGNETTE } from "./palette";
+import type { DrawnSky, SkyScene } from "./scene";
 
 const FULL_TURN = Math.PI * 2;
 const SKY_STOPS = [0, 0.35, 0.55, 0.85, 1];
