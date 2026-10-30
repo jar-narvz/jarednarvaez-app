@@ -16,7 +16,7 @@ The main design doc: principles and current state, one line per decision. Full s
 
 ## Decided
 
-- **Structure:** hybrid — home page hub + detail pages per project.
+- **Structure:** hybrid — home page hub + a /projects index of every project; written write-ups only for a few class projects (decided 2026-10-30).
 - **Home order:** hero → intro (about me) → tech stack → experience (PhysaFlow, VSPA, PASAE, KOSMOS) → projects → beyond code (scrapbook preview) → connect. No GitHub activity section. No fun / experimental section (cut 2026-10-12; playful ideas become easter eggs after launch).
 - **Signature ideas:** draggable photo scrapbook (beyond code), leave a star (connect: visitors add a gold pixel star to the night sky), live widgets like now playing and location (hero "currently" line).
 - **Sky:** fixed background shifting golden hour → sunset → dusk → night with stars as you scroll.
@@ -32,7 +32,8 @@ The main design doc: principles and current state, one line per decision. Full s
 - **Intro:** lead + paragraph on the left, quick facts (studying, leading, currently @, based in) as a row of four short columns underneath, left of the sun.
 - **Tech stack:** label + heading + one line on the left; two looping rows (languages; frameworks & tools; three rows from 2026-10-16 to 2026-10-19) of logo + name pills, running edge to edge of the content column, edges fading out. Pause on hover.
 - **Experience:** collapsed by default; "+" opens a vertical timeline with four-point star markers (current role twinkles), animated as the line draws down and stars pop in one by one. Each role opens with its own "+", several at once. An open role shows its bullets plus tech tags (decided 2026-10-16).
-- **Projects (home):** 2 featured projects (Secure File Sharing System, Character-Level GPT; decided 2026-10-16) as an editorial numbered index, collapsible like experience; each expands into a soft cell with a screenshot, summary, tags and "view project →" (detail page). "all projects →" leads to a separate /projects page.
+- **Projects (home):** 4 featured projects (Posting Triage, OpenStreetMap Route-Impact Pipeline, Secure File Sharing System, Character-Level GPT; updated 2026-10-29) as an editorial numbered index, collapsible like experience; each expands into a soft cell with a screenshot, summary, tags, a GitHub icon when the repo is public, "project page →" when the project has its own external page, and "view project →" only where a write-up exists. "all projects →" leads to /projects.
+- **Projects page (/projects):** every project as a small screenshot card in plain groups (no ranking tiers), with a total count; each card links to its proof (GitHub, project page, write-up). Layout not designed yet (decided 2026-10-30).
 - **Beyond code (home):** a small scrapbook preview: left text block with one intro line and "open the scrapbook →"; 6 draggable prints clustered around it (larger on the right) inside a framed area with crop marks, plus a drag hint and reset. Not collapsible.
 - **Footer:** one plain, quiet line, "designed and built by Jared Narvaez", left-aligned on the margin under connect (decided 2026-10-16).
 - **Connect:** contact block on the left (email with copy, LinkedIn · GitHub · Résumé) + leave a star: click open night sky to leave one gold "pixel cross" star; hover shows city + time; yours says "you". Needs a small database + one API route; stores city only, never IP.
@@ -48,7 +49,8 @@ The main design doc: principles and current state, one line per decision. Full s
 
 ## Not designed yet
 
-- /projects page (all projects) and the project detail page (MDX).
+- /projects layout. Open: which sky it shows (follow the visitor's sky mode, a fixed time, or its own short golden hour → night scroll); where PASAE Website goes (its own group or under personal); order inside a group (newest first?); images for the 13 projects without one (diagrams or screenshots of the running program, no solution code).
+- Write-up page for Secure File Sharing System and Character-Level GPT (~300 words each, Jared writes them).
 - /scrapbook page (full scrapbook + interests in depth).
 - Live widgets in the hero "currently" line (now playing, location): which services, how they fetch.
 
@@ -62,6 +64,7 @@ If a step needs one of these, stop and say it needs design.
 - Body text sizes and spacing (tune once real content exists).
 - One-sentence purpose of the site.
 - "Load into focus" idea: page opens at max blur and settles. Don't build it unless decided.
+- Link labels: a card with both "project page →" and "view project →" reads as two links to the same thing; settle the wording with the /projects design.
 
 ## Copy
 
