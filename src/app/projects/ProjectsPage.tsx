@@ -42,8 +42,13 @@ export default function ProjectsPage() {
           </section>
         ))}
 
-        {/* The home page's contact block, at normal section spacing (no leave a star). */}
-        <section id="contact" className="py-[clamp(72px,12vh,140px)]">
+        {/* The home page's contact block, at normal section spacing (no leave a star), under a
+            full-width rule like the group headings' (decided 2026-10-30), with the section gap on
+            both sides of the rule. */}
+        <section
+          id="contact"
+          className="mt-[clamp(72px,12vh,140px)] border-t border-ink/22 py-[clamp(72px,12vh,140px)]"
+        >
           <ContactBlock />
         </section>
       </main>
