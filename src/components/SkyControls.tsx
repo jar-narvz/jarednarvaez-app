@@ -196,7 +196,7 @@ function MiniDial({
 }
 
 // 16px line icons, from the approved mockup.
-function MoonIcon() {
+export function MoonIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true">
       <path d="M13.5 9.8A5.8 5.8 0 0 1 6.2 2.5a5.8 5.8 0 1 0 7.3 7.3Z" />
@@ -204,7 +204,7 @@ function MoonIcon() {
   );
 }
 
-function SunIcon() {
+export function SunIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true">
       <circle cx="8" cy="8" r="3" />
