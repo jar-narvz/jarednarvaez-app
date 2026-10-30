@@ -109,7 +109,7 @@ Blend channel by channel (straight RGB) between neighboring keyframes. Golden ho
 
 - **Placement:** editorial left, text block starts at the 96px left margin, vertically centered (slightly above middle). Sits on the left-side vignette. Right side left open to the sun and horizon.
 - **Order (top to bottom):** small round portrait (~84px, 2px cream border) → stacked name → hero line → "currently" line with sparkle.
-- **Supporting text (prototype values, tune later):** hero line Schibsted Grotesk 20px (was 18px; tuned 2026-10-19), cream at ~78%; "currently" line 14px in the accent color; nav top-right, 14px weight 500, cream at ~82%, no monogram.
+- **Supporting text (prototype values, tune later):** hero line Schibsted Grotesk 20px (was 18px; tuned 2026-10-19), cream at ~78%; "currently" line 14px in the accent color; nav top-right, 14px weight 500, cream at ~82%; the "jn" mark at top left (decided 2026-10-30, see Subpages → Mark).
 - **Nav:** about · experience · projects · résumé · contact, lowercase, 28px apart; sky controls (16px line icons) after a wider gap; right edge on the 96px margin, 40px from the top (24px side margin on phones); hides on scroll down, returns on scroll up (250ms slide); phone menu full screen, Newsreader 36px links over plum `#2A1630` at 60% with blur.
 - **Rule:** the name is the only focal point. Nothing in the hero should be bigger or brighter than it.
 - **Phone margin:** 24px side margin, a placeholder until the hero step.
@@ -514,10 +514,17 @@ const starBrightness=t=>t<.35?0:t<.65?.3*(t-.35)/.3:.3+.7*(t-.65)/.35;
 
 The sun glow's y is in the coast's 680×380 space (horizon 272); the abstract scene places it at y/272 × 80% of its height.
 
+### Mark (decided 2026-10-30)
+
+- **Look:** "jn" in Newsreader 400, lowercase, the n in italic (like the hero surname), 20px, letter-spacing -0.03em, line-height 1, ink at 82% (the nav links' strength; full ink on hover), plum text shadow.
+- **Where:** top left on every page (home and subpages), on the nav's screen margin (96px, 24px on phones) and 40px from the top, in the same row as the nav, aligned on its text baseline. It hides on scroll down and returns on scroll up with the nav.
+- **Link:** on the home page it scrolls back to the top; on subpages it goes to the home page. Accessible name "jared narvaez, home".
+- **Favicon:** still open (whether the mark, drawn from the letter outlines, replaces the placeholder sparkle).
+
 ### Subpage header and contact block (decided 2026-10-30)
 
-- **Header:** the home nav's type and placement: Schibsted lowercase links, 40px from the top, on the 96px screen margin (24px on phones), plum text shadow. Left: a back link to the home page (label still open: "← jared narvaez" or "← home"). Right: résumé · contact, 28px apart, then the light/dark toggle after the wider gap the home nav uses before its sky controls. Hides on scroll down and returns on scroll up like the home nav. On phones everything fits in one row, so there is no menu button.
-- **Links:** résumé opens the PDF like the home nav's; contact scrolls to the contact block on the same page.
+- **Header:** the home nav's type and placement: Schibsted lowercase links, 40px from the top, on the 96px screen margin (24px on phones), plum text shadow. Left: the mark. Right: home · résumé · contact, 28px apart, then the light/dark toggle after the wider gap the home nav uses before its sky controls. Hides on scroll down and returns on scroll up like the home nav. On phones everything fits in one row, so there is no menu button.
+- **Links:** home goes to the home page; résumé opens the PDF like the home nav's; contact scrolls to the contact block on the same page.
 - **Contact block:** the home page's contact block (Connect → Contact block) unchanged: label with sparkle, "reach out!", the line, email with the copy pill, LinkedIn · GitHub · Résumé. No leave a star or star hint, and not a full screen tall: it pads like a normal section (`clamp(72px, 12vh, 140px)`). Colors follow the page's palette and light/dark version. The footer line sits under it.
 - **Build:** one shared contact block component for the home page and every subpage.
 
