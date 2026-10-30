@@ -33,7 +33,8 @@ The main design doc: principles and current state, one line per decision. Full s
 - **Tech stack:** label + heading + one line on the left; two looping rows (languages; frameworks & tools; three rows from 2026-10-16 to 2026-10-19) of logo + name pills, running edge to edge of the content column, edges fading out. Pause on hover.
 - **Experience:** collapsed by default; "+" opens a vertical timeline with four-point star markers (current role twinkles), animated as the line draws down and stars pop in one by one. Each role opens with its own "+", several at once. An open role shows its bullets plus tech tags (decided 2026-10-16).
 - **Projects (home):** 4 featured projects (Posting Triage, OpenStreetMap Route-Impact Pipeline, Secure File Sharing System, Character-Level GPT; updated 2026-10-29) as an editorial numbered index, collapsible like experience; each expands into a soft cell with a screenshot, summary, tags, a GitHub icon when the repo is public, "project page →" when the project has its own external page, and "view project →" only where a write-up exists. "all projects →" leads to /projects.
-- **Projects page (/projects):** every project as a small screenshot card in plain groups (no ranking tiers), with a total count; each card links to its proof (GitHub, project page, write-up). Layout not designed yet (decided 2026-10-30).
+- **Projects page (/projects):** 10 projects as small screenshot cards in two plain groups, "personal" and "coursework & clubs", strongest first, with a total count; each card links to its proof (GitHub, project page, write-up). Card layout not designed yet (decided 2026-10-30).
+- **Subpages:** one fixed look each: their own palette drawn as an abstract version of the sky (no coast), in a dark and a light version. Light/dark comes from the visitor's home page choice, else the device setting, with a small light/dark toggle. No dial, "my time" or visitor stars (visitor stars are home page only). Projects and write-ups: teal sea; scrapbook: blue hour (tentative). Full spec in `visual-system.md` → Subpages (decided 2026-10-30).
 - **Beyond code (home):** a small scrapbook preview: left text block with one intro line and "open the scrapbook →"; 6 draggable prints clustered around it (larger on the right) inside a framed area with crop marks, plus a drag hint and reset. Not collapsible.
 - **Footer:** one plain, quiet line, "designed and built by Jared Narvaez", left-aligned on the margin under connect (decided 2026-10-16).
 - **Connect:** contact block on the left (email with copy, LinkedIn · GitHub · Résumé) + leave a star: click open night sky to leave one gold "pixel cross" star; hover shows city + time; yours says "you". Needs a small database + one API route; stores city only, never IP.
@@ -49,7 +50,7 @@ The main design doc: principles and current state, one line per decision. Full s
 
 ## Not designed yet
 
-- /projects layout. Open: which sky it shows (follow the visitor's sky mode, a fixed time, or its own short golden hour → night scroll); where PASAE Website goes (its own group or under personal); order inside a group (newest first?); images for the 13 projects without one (diagrams or screenshots of the running program, no solution code).
+- /projects card layout.
 - Write-up page for Secure File Sharing System and Character-Level GPT (~300 words each, Jared writes them).
 - /scrapbook page (full scrapbook + interests in depth).
 - Live widgets in the hero "currently" line (now playing, location): which services, how they fetch.
@@ -65,6 +66,9 @@ If a step needs one of these, stop and say it needs design.
 - One-sentence purpose of the site.
 - "Load into focus" idea: page opens at max blur and settles. Don't build it unless decided.
 - Link labels: a card with both "project page →" and "view project →" reads as two links to the same thing; settle the wording with the /projects design.
+- Images for the 7 projects without one (RL Agents, TCP, RISC-V CPU, Neural Net Classifier in Assembly, Build Your Own World, PASAE Website, route-impact): diagrams or screenshots of the running program, no solution code.
+- Terms for Secure File Sharing System and Character-Level GPT, so every card shows "class · term".
+- What the home page's light/dark button means now that subpages carry the choice over (today it jumps to midday or midnight), and whether using the dial or "my time" counts as a light/dark choice.
 
 ## Copy
 

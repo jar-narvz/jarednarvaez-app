@@ -495,6 +495,25 @@ const starBrightness=t=>t<.35?0:t<.65?.3*(t-.35)/.3:.3+.7*(t-.65)/.35;
 - **Behavior:** static, no animation. Keeps the bottom-right corner clear for the leave-a-star hint.
 - **Reference:** footer options mockup, option A (https://claude.ai/artifact/MKUiG4qex5UYqGdSG4TYRg).
 
+## Subpages (decided 2026-10-30)
+
+- **What changes from the home page:** each subpage (/projects, the project write-ups, /scrapbook) holds one fixed look instead of the scroll sky: its own palette, drawn as the abstract scene below. The coast, scroll blending, the dial, "my time", the "sunset" pill and visitor stars stay on the home page.
+- **Abstract scene:** the home page's pipeline (tiny canvas → blur → 4px pixels → film grain) with no coast. A five-stop sky gradient fills the whole screen top to bottom (stops 0, 0.35, 0.55, 0.85, 1); the coast's five clouds drift the same way; a soft radial sun glow sits low on the right (x 500 of 680, radius 110 design units, the sun color at 0.9 fading to 0); the left vignette is the palette's (dark) or the day's cream haze (light). Phones get a tall 380×760 version with the clouds narrowed, like the tall coast. White stars appear at the palette's star strength and twinkle like the home page's. Lab code: `src/app/lab/projects/abstractScene.ts`.
+- **Which palette:** /projects and the write-ups use **teal sea**; /scrapbook uses **blue hour** (tentative until the scrapbook is designed and seen behind real photos). In order, one evening: home (golden hour → night) → projects (the sun just under the sea) → scrapbook (blue hour).
+- **Light and dark:** each palette has a dark and a light version. Dark uses the evening text theme (cream ink, Sun gold accent, plum tint and shadow); light uses the day text theme (navy ink, plum accent, cream tint, haze and glow).
+- **Which version shows:** the visitor's light/dark choice from the home page if they made one, else the device's setting (`prefers-color-scheme`, followed live). A small toggle flips it.
+- **Toggle:** the home nav's light/dark button in the same spot and style: a moon in light mode, a sun in dark mode; the new icon spins in (motion inventory).
+- **Palettes** (sky top → bottom; clouds in the scene's order). Teal sea's colors are new to the site; blue hour uses only existing ones.
+
+| Palette | Sky | Clouds | Sun glow | Vignette | Stars | Grain |
+|---|---|---|---|---|---|---|
+| Teal sea, dark | `#0E1E2A` `#123A44` `#1E5A5E` `#3E8A7E` `#E8B48A` | `#163640` `#1E4C52` `#2A6A68` `#4E9A88` `#C49A7A` | `#F7C27E`, y 300 | `#0A1A22` at 0.5 | 0.2 | 0.12 |
+| Teal sea, light | `#9CCBC4` `#B8DCD6` `#CFE6E2` `#E8F2EE` `#F4E2C4` | `#F6F4F0` ×4, `#F4E6D8` | `#FFFBEE`, y 300 | day cream haze | 0 | 0.07 |
+| Blue hour, dark *(tentative)* | `#07081A` `#141634` `#1C2550` `#3A4A7A` `#7A6A94` | `#1E1E40` `#26244E` `#2A2856` `#3A4A7A` `#6A6088` | `#C08A9A`, y 320 | plum `#2A1630` at 0.45 | 0.6 | 0.18 |
+| Blue hour, light *(tentative)* | `#8A9AC4` `#9CC2E6` `#C4DDF0` `#E2EEF6` `#FAD0A8` | `#F6F4F0` `#F6F4F0` `#F4C8C0` `#F6F4F0` `#F4C8C0` | `#FFE6C0`, y 300 | day cream haze | 0 | 0.07 |
+
+The sun glow's y is in the coast's 680×380 space (horizon 272); the abstract scene places it at y/272 × 80% of its height.
+
 ## Motion
 
 ### Motion inventory (every animation on the site)
@@ -514,6 +533,7 @@ const starBrightness=t=>t<.35?0:t<.65?.3*(t-.35)/.3:.3+.7*(t-.65)/.35;
 | Nav (phones) | Full-screen menu opens: backdrop fades in, links rise 10px and fade in one by one; closes with a fade | "menu" / "close" / link tap | Open 250ms fade; links 350ms ease, delay 60 + 40·*i* ms; close 200ms fade | Instant |
 | Nav *(after launch)* | "sunset" pill slides in / out | Leaving / returning to scroll mode | translateX 8px → 0 + fade, 300ms | Instant |
 | Nav *(after launch)* | Light/dark icon swap: the new icon (sun or moon) spins in | Sky turns dark / light | rotate −90° → 0, scale 0.6 → 1, fade; 350ms `cubic-bezier(.3,1.4,.5,1)` | Instant |
+| Subpages *(after launch)* | Light/dark toggle icon swap: the new icon (sun or moon) spins in; the background and text switch palette version | Toggle click | rotate −90° → 0, scale 0.6 → 1, fade; 350ms `cubic-bezier(.3,1.4,.5,1)` | Instant |
 | Nav *(after launch)* | Mini dial's gold dot travels around its ring to the current hour | Every frame | Follows the sky | Stays (it shows state) |
 | Nav *(after launch)* | Time dial grows down from the mini dial / shrinks back | Mini dial click / "close" / click outside | Open: scale 0 → 1 from top-right, 450ms `cubic-bezier(.3,1.3,.5,1)`. Close: scale → 0 + fade, 220ms ease-in | Instant |
 | Hero (and labels) | Sparkle twinkle | Always | Opacity 1 ↔ 0.5, 2.4s ease-in-out, infinite | Still |
