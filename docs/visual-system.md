@@ -514,6 +514,13 @@ const starBrightness=t=>t<.35?0:t<.65?.3*(t-.35)/.3:.3+.7*(t-.65)/.35;
 
 The sun glow's y is in the coast's 680×380 space (horizon 272); the abstract scene places it at y/272 × 80% of its height.
 
+### Subpage header and contact block (decided 2026-10-30)
+
+- **Header:** the home nav's type and placement: Schibsted lowercase links, 40px from the top, on the 96px screen margin (24px on phones), plum text shadow. Left: a back link to the home page (label still open: "← jared narvaez" or "← home"). Right: résumé · contact, 28px apart, then the light/dark toggle after the wider gap the home nav uses before its sky controls. Hides on scroll down and returns on scroll up like the home nav. On phones everything fits in one row, so there is no menu button.
+- **Links:** résumé opens the PDF like the home nav's; contact scrolls to the contact block on the same page.
+- **Contact block:** the home page's contact block (Connect → Contact block) unchanged: label with sparkle, "reach out!", the line, email with the copy pill, LinkedIn · GitHub · Résumé. No leave a star or star hint, and not a full screen tall: it pads like a normal section (`clamp(72px, 12vh, 140px)`). Colors follow the page's palette and light/dark version. The footer line sits under it.
+- **Build:** one shared contact block component for the home page and every subpage.
+
 ### /projects cards (decided 2026-10-30)
 
 - **Layout:** each group (h2: group name + count, a 1px rule at 22% ink under it) holds a grid of cards with 16px gaps: 3 columns on desktop (`lg`), 2 on tablets (`sm`), 1 on phones. Both groups keep 3 columns, so "personal" leaves its third slot empty.
@@ -541,6 +548,8 @@ The sun glow's y is in the coast's 680×380 space (horizon 272); the abstract sc
 | Nav (phones) | Full-screen menu opens: backdrop fades in, links rise 10px and fade in one by one; closes with a fade | "menu" / "close" / link tap | Open 250ms fade; links 350ms ease, delay 60 + 40·*i* ms; close 200ms fade | Instant |
 | Nav *(after launch)* | "sunset" pill slides in / out | Leaving / returning to scroll mode | translateX 8px → 0 + fade, 300ms | Instant |
 | Nav *(after launch)* | Light/dark icon swap: the new icon (sun or moon) spins in | Sky turns dark / light | rotate −90° → 0, scale 0.6 → 1, fade; 350ms `cubic-bezier(.3,1.4,.5,1)` | Instant |
+| Subpage header *(after launch)* | Hide on scroll down, return on scroll up | Scroll direction | translateY, 250ms (same as the home nav) | Instant |
+| Subpage contact block *(after launch)* | "copy" pill swaps to "copied" | Click | "copied" for 1.4s (same as connect) | Instant |
 | /projects *(after launch)* | Cards fade up as they scroll into view; each screenshot comes into focus | Card enters the viewport (once) | Card 450ms ease, opacity 0 → 1 + translateY 8px → 0, delay 150 + 160·*column* ms; screenshot `blur(5px) brightness(1.15)` → none, 800ms ease, 200ms after its card | Shown at once, sharp |
 | Subpages *(after launch)* | Light/dark toggle icon swap: the new icon (sun or moon) spins in; the background and text switch palette version | Toggle click | rotate −90° → 0, scale 0.6 → 1, fade; 350ms `cubic-bezier(.3,1.4,.5,1)` | Instant |
 | Nav *(after launch)* | Mini dial's gold dot travels around its ring to the current hour | Every frame | Follows the sky | Stays (it shows state) |
