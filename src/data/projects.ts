@@ -11,6 +11,7 @@ export type Project = {
   tags: string[]; // tech used
   image: { src: string; alt: string }; // 16:10 screenshot; src is a path under /public
   github?: string; // repo link, shown as an icon when the project is open
+  site?: string; // external project page, shown as "project page →" beside the GitHub icon
   featured?: boolean; // shown on the home page (2 for the MVP)
   order?: number; // home page order
 };
@@ -22,19 +23,21 @@ export const showProjectPages = false;
 // Screenshots are 16:10 PNGs (1600×1000) in public/.
 export const projects: Project[] = [
   {
-    // From posting-triage-site-kit (project.json → one_liner; diagrams/pipeline-dark.svg alt text).
+    // Summary matches the project page (site); image alt from posting-triage-site-kit
+    // (diagrams/pipeline-dark.svg alt text).
     slug: "posting-triage",
     title: "Posting Triage",
     type: "Personal project",
     year: "2026",
     summary:
-      "A tool that reads a job posting and answers APPLY, FLAG, SKIP, or DEAD, with a one-line reason quoted from the posting itself.",
+      "Reads a job posting and answers APPLY, FLAG, SKIP, or DEAD, with the line from the posting that decided it.",
     tags: ["FastAPI", "Docker", "AWS", "Claude API"],
     image: {
       src: "/posting-triage.png",
       alt: "Flowchart: posting URL, liveness check (removed → DEAD with careers page; unreadable → FLAG couldn't verify), Claude fills a form with an exact quote per field, code checks every quote is in the posting (if not, even after a retry → FLAG unless a verified field already SKIPs), then rules plus the profile give APPLY, FLAG or SKIP with the deciding quote.",
     },
     github: "https://github.com/jar-narvz/posting-triage",
+    site: "https://jar-narvz.github.io/posting-triage/",
     featured: true,
     order: 1,
   },
