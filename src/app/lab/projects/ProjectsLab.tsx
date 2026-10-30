@@ -1,11 +1,14 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
+import Link from "next/link";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { dayness, formatHour, hourName, isDarkHour } from "@/lib/sky/hours";
 import { SUN_GOLD } from "@/lib/sky/palette";
 import { getSkyMode } from "@/lib/sky/skyHour";
 import { textDayness, themeAt } from "@/lib/sky/theme";
+import { links } from "@/data/links";
+import { MarkPanel, Monogram, markQuery, useHideOnScroll, useMark, type Mark } from "../Monogram";
 import { CardList, LAYOUTS, type Layout } from "./Cards";
 import LabSky, { type LabBackground } from "./LabSky";
 import { GROUPS } from "./labProjects";
@@ -20,6 +23,8 @@ import { PALETTES, PLAIN } from "./palettes";
 // fakes the home choice, since this page isn't reached from the home page.
 // Teal sea won for /projects (2026-10-30); the "cards" row now compares card layouts (Cards.tsx)
 // and the "motion" row turns the proposed scroll-in animation on or off.
+// The header is the decided subpage header (2026-10-30): the "jn" mark at left (size and strength
+// from the logo lab), home · résumé · contact · light/dark toggle at right, hiding on scroll down.
 
 const BACKGROUNDS = ["home coast", "abstract", ...PALETTES.map((p) => p.name), "plain"] as const;
 type Choice = (typeof BACKGROUNDS)[number];
@@ -50,9 +55,10 @@ export default function ProjectsLab() {
   const [hour, setHour] = useState(SUNSET);
   const [start, setStart] = useState<Start>("device");
   const [flipped, setFlipped] = useState<boolean | null>(null);
-  const [layout, setLayout] = useState<Layout>("B rows");
+  const [layout, setLayout] = useState<Layout>("A grid");
   const [animate, setAnimate] = useState(true);
   const deviceDark = useDeviceDark();
+  const [mark, setMark] = useMark();
 
   // A real light/dark choice on the home page carries over (client-side navigation keeps it).
   useEffect(() => {
@@ -90,7 +96,7 @@ export default function ProjectsLab() {
   return (
     <div style={vars} className="text-ink">
       <LabSky background={background} />
-      {palette?.light && <LightDarkToggle dark={dark} onFlip={() => setFlipped(!dark)} />}
+      <SubpageHeader mark={mark} toggle={palette?.light ? { dark, onFlip: () => setFlipped(!dark) } : null} />
 
       <main className="pr-(--content-r) pb-48 pl-(--content-l) pt-24 [text-shadow:var(--text-shadow)]">
         <p className="text-[13px] text-ink/70">lab · /projects cards</p>
@@ -109,10 +115,20 @@ export default function ProjectsLab() {
             <CardList key={`${layout}-${animate}`} layout={layout} projects={group.projects} animate={animate} />
           </section>
         ))}
+
+        <section id="contact" className="mt-24 scroll-mt-24 border-t border-ink/22 pt-6 text-[15px] text-ink/70">
+          [contact block: the home page&apos;s, shared]
+        </section>
       </main>
 
       <div className="fixed inset-x-0 bottom-0 z-30 border-t border-ink/20 bg-tint/80 px-4 py-3 text-[13px] backdrop-blur-md">
+        <div className="mb-2">
+          <MarkPanel mark={mark} onChange={setMark} />
+        </div>
         <div className="mb-2 flex flex-wrap items-center justify-center gap-2">
+          <Link href={`/lab/logo${markQuery(mark)}`} className="mr-2 text-accent underline">
+            ← logo on the home page
+          </Link>
           <span className="text-ink/70">cards</span>
           {LAYOUTS.map((l) => (
             <Pill key={l} on={l === layout} onClick={() => setLayout(l)}>
@@ -215,6 +231,49 @@ export default function ProjectsLab() {
   );
 }
 
+/** The subpage header: the mark at left; home · résumé · contact · toggle at right (the home nav's
+ *  type, 28px apart, the toggle after the nav's wider 32px gap). Slides away on scroll down. */
+function SubpageHeader({ mark, toggle }: { mark: Mark; toggle: { dark: boolean; onFlip: () => void } | null }) {
+  const hidden = useHideOnScroll();
+  const reduceMotion = useReducedMotion();
+  const navLinks = [
+    { label: "home", href: "/" },
+    { label: "résumé", href: links.resume, newTab: true },
+    { label: "contact", href: "#contact" },
+  ];
+  return (
+    <motion.header
+      className="pointer-events-none fixed inset-x-0 top-0 z-20 flex items-center justify-between px-(--margin) pt-10"
+      animate={{ y: hidden ? "-100%" : 0 }}
+      transition={{ duration: reduceMotion ? 0 : 0.25, ease: "easeOut" }}
+    >
+      <Monogram mark={mark} />
+      <div className="pointer-events-auto flex items-center text-[14px] font-medium text-ink/82 [text-shadow:var(--text-shadow)]">
+        <nav aria-label="Main">
+          <ul className="flex items-center gap-7 max-sm:gap-5">
+            {navLinks.map((l) => (
+              <li key={l.label}>
+                <a
+                  href={l.href}
+                  {...(l.newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  className="transition-colors hover:text-ink"
+                >
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        {toggle && (
+          <div className="ml-8 max-sm:ml-5">
+            <LightDarkToggle dark={toggle.dark} onFlip={toggle.onFlip} />
+          </div>
+        )}
+      </div>
+    </motion.header>
+  );
+}
+
 /**
  * The subpage's small light/dark toggle, in the home nav's spot and style (SkyControls.tsx →
  * LightDarkButton): a moon in light mode, a sun in dark mode; the new icon spins in on a swap.
@@ -230,7 +289,7 @@ function LightDarkToggle({ dark, onFlip }: { dark: boolean; onFlip: () => void }
         setSwapped(true);
         onFlip();
       }}
-      className="fixed top-6 right-(--margin) z-20 grid cursor-pointer place-items-center p-1 text-ink/82 [filter:drop-shadow(var(--text-shadow))] hover:text-ink"
+      className="-m-1 grid cursor-pointer place-items-center p-1 text-ink/82 [filter:drop-shadow(var(--text-shadow))] hover:text-ink"
     >
       <motion.span
         key={dark ? "sun" : "moon"}
