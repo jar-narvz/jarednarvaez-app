@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "motion/react";
+import Monogram from "@/components/Monogram";
 import SkyControls, { shiftTransition } from "@/components/SkyControls";
 import { links } from "@/data/links";
 
 // The site nav: top-right, quiet (docs/visual-system.md → Hero layout: 14px, weight 500,
-// cream at ~82%, no monogram). Links in page order, lowercase, then the sky controls
-// (SkyControls: light/dark, mini dial, "sunset" pill), which stay visible on phones too.
+// cream at ~82%). Links in page order, lowercase, then the sky controls (SkyControls: light/dark,
+// mini dial, "sunset" pill), which stay visible on phones too. The "jn" mark sits at top left in
+// the same row, on the nav's text baseline, and scrolls back to the top (added 2026-10-30).
 //
 // Chosen on /lab (step 6, 2026-10-11): it hides while you scroll down and comes back when you
 // scroll up, so the controls stay reachable without covering text; on phones the links open
@@ -92,40 +94,46 @@ export default function Nav() {
       >
         {/* One layout group, so the links re-measure and glide too when the sky controls change. */}
         <LayoutGroup>
-          <div className="flex items-center justify-end">
-            <motion.nav
-              aria-label="Main"
-              // Glides with the sky controls when the "sunset" pill comes or goes.
-              layout="position"
-              transition={shiftTransition(!!reduceMotion)}
-              className={`pointer-events-auto text-[14px] font-medium text-ink/82 ${SHADOW}`}
-            >
-              {/* Desktop: the five links in a row. */}
-              <ul className="hidden items-center gap-7 md:flex">
-                {LINKS.map((link) => (
-                  <li key={link.label}>
-                    <a href={link.href} {...newTab(link.href)} className="transition-colors hover:text-ink">
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </motion.nav>
-
-            <div className={`pointer-events-auto flex items-center gap-3 text-[14px] font-medium text-ink/82 md:ml-8 ${SHADOW}`}>
-              {/* Phones: the links live behind this button, before the sky controls. */}
-              <motion.button
-                type="button"
+          <div className="flex items-baseline justify-between">
+            {/* Closes the phone menu too, so the page can scroll back up. */}
+            <Monogram href="#" onClick={() => setOpen(false)} />
+            <div className="flex items-center">
+              <motion.nav
+                aria-label="Main"
+                // Glides with the sky controls when the "sunset" pill comes or goes.
                 layout="position"
                 transition={shiftTransition(!!reduceMotion)}
-                className="mr-1 cursor-pointer md:hidden"
-                aria-expanded={open}
-                aria-controls="phone-menu"
-                onClick={() => setOpen((o) => !o)}
+                // Hidden on phones (its links live in the menu), so the row's baseline comes from
+                // the "menu" button and the mark lines up with it.
+                className={`pointer-events-auto hidden text-[14px] font-medium text-ink/82 md:block ${SHADOW}`}
               >
-                {open ? "close" : "menu"}
-              </motion.button>
-              <SkyControls dialOpen={dialOpen} onDialOpenChange={setDialOpen} />
+                {/* Desktop: the five links in a row. */}
+                <ul className="flex items-center gap-7">
+                  {LINKS.map((link) => (
+                    <li key={link.label}>
+                      <a href={link.href} {...newTab(link.href)} className="transition-colors hover:text-ink">
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </motion.nav>
+
+              <div className={`pointer-events-auto flex items-center gap-3 text-[14px] font-medium text-ink/82 md:ml-8 ${SHADOW}`}>
+                {/* Phones: the links live behind this button, before the sky controls. */}
+                <motion.button
+                  type="button"
+                  layout="position"
+                  transition={shiftTransition(!!reduceMotion)}
+                  className="mr-1 cursor-pointer md:hidden"
+                  aria-expanded={open}
+                  aria-controls="phone-menu"
+                  onClick={() => setOpen((o) => !o)}
+                >
+                  {open ? "close" : "menu"}
+                </motion.button>
+                <SkyControls dialOpen={dialOpen} onDialOpenChange={setDialOpen} />
+              </div>
             </div>
           </div>
         </LayoutGroup>
