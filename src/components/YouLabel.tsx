@@ -25,7 +25,10 @@ export default function YouLabel({ sectionRef }: { sectionRef: RefObject<HTMLEle
     const label = labelRef.current;
     if (!section || !label) return;
 
+    // Start off, matching `visible`: when Next hides the home page and brings it back, the label
+    // keeps the "on" it had when you left, and update() only writes changes.
     let visible = false;
+    label.dataset.on = "false";
     // While the label shows, no white stars behind it (starless.ts).
     let releaseStars: (() => void) | null = null;
 
@@ -65,6 +68,7 @@ export default function YouLabel({ sectionRef }: { sectionRef: RefObject<HTMLEle
       stopMine();
       label.removeEventListener("transitionend", clearDelay);
       releaseStars?.();
+      label.dataset.on = "false";
     };
   }, [sectionRef]);
 
