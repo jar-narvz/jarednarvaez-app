@@ -15,7 +15,7 @@ export type Project = {
   image: { src: string; alt: string }; // 16:10 screenshot; src is a path under /public
   github?: string; // repo link, shown as an icon when the project is open
   site?: string; // external project page, shown as "project page →" beside the GitHub icon
-  featured?: boolean; // shown on the home page (2 for the MVP)
+  featured?: boolean; // shown on the home page (2: Posting Triage and route-impact, decided 2026-10-30)
   order?: number; // home page order
 };
 
@@ -84,8 +84,6 @@ export const projects: Project[] = [
       src: "/secure-file-sharing.png",
       alt: "Flowchart of the secure file sharing system: user authentication, encrypted file storage as chunks, and sharing and revocation",
     },
-    featured: true,
-    order: 3,
   },
   {
     slug: "character-gpt",
@@ -101,8 +99,6 @@ export const projects: Project[] = [
       src: "/character-gpt.png",
       alt: "Flowchart of the character-level GPT: training data, transformer model and sampling, with generated text at iteration 0 and 9,900",
     },
-    featured: true,
-    order: 4,
   },
   // The rest of /projects, word for word from docs/content.md → More projects. No screenshots yet
   // (docs/design.md → still open), so their cards show the [screenshot] placeholder.
