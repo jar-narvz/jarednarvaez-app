@@ -16,7 +16,7 @@ The main design doc: principles and current state, one line per decision. Full s
 
 ## Decided
 
-- **Structure:** hybrid — home page hub + a /projects index of every project; written write-ups only for a few class projects (decided 2026-10-30).
+- **Structure:** hybrid — home page hub + a /projects index of every project; written write-ups only for a few class projects (decided 2026-10-30), plus detail pages for the featured home projects (decided 2026-10-30, design first).
 - **Home order:** hero → intro (about me) → tech stack → experience (PhysaFlow, VSPA, PASAE, KOSMOS) → projects → beyond code (scrapbook preview) → connect. No GitHub activity section. No fun / experimental section (cut 2026-10-12; playful ideas become easter eggs after launch).
 - **Signature ideas:** draggable photo scrapbook (beyond code), leave a star (connect: visitors add a gold pixel star to the night sky), live widgets like now playing and location (hero "currently" line).
 - **Sky:** fixed background shifting golden hour → sunset → dusk → night with stars as you scroll.
@@ -28,15 +28,15 @@ The main design doc: principles and current state, one line per decision. Full s
 - **Motion:** slow cloud drift, stars twinkle in at dusk. Reduce Motion freezes grain, stars and clouds; scroll blending stays on.
 - **Hero:** one focal point, the name. Editorial left: small round portrait above the stacked name, hero line and "currently" line below, on the left vignette. Right side open to the sun. No medium or large images.
 - **Page layout:** every section's content sits in a centered 1000px column, left-aligned inside (like Drew's site); the nav stays at the screen edges. Narrower screens fall back to the side margin (decided 2026-10-19).
-- **Nav:** about · experience · projects · résumé · contact (lowercase), top-right. Hides while scrolling down and returns on scroll up; on phones a "menu" button opens the links full screen. Sky controls sit beside the links (not shown until the sky modes are built).
+- **Nav:** about · experience · projects · résumé · contact (lowercase), top-right; "projects" goes to /projects, the others to home page sections (decided 2026-10-30). Hides while scrolling down and returns on scroll up; on phones a "menu" button opens the links full screen. Sky controls sit beside the links (not shown until the sky modes are built).
 - **Intro:** lead + paragraph on the left, quick facts (studying, leading, currently @, based in) as a row of four short columns underneath, left of the sun.
 - **Tech stack:** label + heading + one line on the left; two looping rows (languages; frameworks & tools; three rows from 2026-10-16 to 2026-10-19) of logo + name pills, running edge to edge of the content column, edges fading out. Pause on hover.
 - **Experience:** collapsed by default; "+" opens a vertical timeline with four-point star markers (current role twinkles), animated as the line draws down and stars pop in one by one. Each role opens with its own "+", several at once. An open role shows its bullets plus tech tags (decided 2026-10-16).
-- **Projects (home):** 4 featured projects (Posting Triage, OpenStreetMap Route-Impact Pipeline, Secure File Sharing System, Character-Level GPT; updated 2026-10-29) as an editorial numbered index, collapsible like experience; each expands into a soft cell with a screenshot, summary, tags, a GitHub icon when the repo is public, "project page →" when the project has its own external page, and "view project →" only where a write-up exists. "all projects →" leads to /projects.
+- **Projects (home):** 2 featured projects (Posting Triage, OpenStreetMap Route-Impact Pipeline; updated 2026-10-30) as an editorial numbered index, collapsible like experience; when the section opens, each project shows open (no per-project "+") in a soft cell with a screenshot, summary, tags, a GitHub icon when the repo is public, "project page →" when the project has its own external page, and "view project →" only where a write-up exists. The whole cell links to the project's detail page once it exists; its links and the screenshot (opens large) keep their own actions. "all projects →" leads to /projects.
 - **Projects page (/projects):** 10 projects as small screenshot cards in two plain groups, "personal" and "coursework & clubs", strongest first, with a total count; each card links to its proof (GitHub, project page, write-up). Cards are a grid with the screenshot on top (3 columns on desktop, 2 on tablets, 1 on phones) and fade up with a focus pull as they scroll into view; full spec in `visual-system.md` → Subpages (decided 2026-10-30).
 - **Subpages:** one fixed look each: their own palette drawn as an abstract version of the sky (no coast), in a dark and a light version. Light/dark comes from the visitor's home page choice, else the device setting, with a small light/dark toggle. No dial, "my time" or visitor stars (visitor stars are home page only). Projects and write-ups: teal sea; scrapbook: blue hour (tentative). Full spec in `visual-system.md` → Subpages (decided 2026-10-30).
 - **Mark:** a small "jn" monogram (Newsreader, italic n, 20px, nav-strength ink) at top left on every page, linking home; on the home page it scrolls to the top. Full spec in `visual-system.md` → Subpages (decided 2026-10-30).
-- **Subpage header and ending:** the mark at top left; home · résumé · contact · the light/dark toggle at top right. Every subpage ends with the home page's contact block (no leave a star, not a full screen tall) and the footer line, and the header's "contact" scrolls to it (decided 2026-10-30).
+- **Subpage header and ending:** the mark at top left; home · résumé · contact · the light/dark toggle at top right. Every subpage ends with the home page's contact block (no leave a star, not a full screen tall) and the footer line, and the header's "contact" scrolls to it (decided 2026-10-30). A full-width rule sits above the contact block (decided 2026-10-30).
 - **Beyond code (home):** a small scrapbook preview: left text block with one intro line and "open the scrapbook →"; 6 draggable prints clustered around it (larger on the right) inside a framed area with crop marks, plus a drag hint and reset. Not collapsible.
 - **Footer:** one plain, quiet line, "designed and built by Jared Narvaez", left-aligned on the margin under connect (decided 2026-10-16).
 - **Connect:** contact block on the left (email with copy, LinkedIn · GitHub · Résumé) + leave a star: click open night sky to leave one gold "pixel cross" star; hover shows city + time; yours says "you". Needs a small database + one API route; stores city only, never IP.
@@ -53,6 +53,7 @@ The main design doc: principles and current state, one line per decision. Full s
 ## Not designed yet
 
 - Write-up page for Secure File Sharing System and Character-Level GPT (~300 words each, Jared writes them).
+- Detail pages for the featured home projects (Posting Triage, route-impact): layout, and what they hold beyond the repo and the project page.
 - /scrapbook page (full scrapbook + interests in depth).
 - Live widgets in the hero "currently" line (now playing, location): which services, how they fetch.
 

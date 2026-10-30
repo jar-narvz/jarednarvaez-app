@@ -110,7 +110,7 @@ Blend channel by channel (straight RGB) between neighboring keyframes. Golden ho
 - **Placement:** editorial left, text block starts at the 96px left margin, vertically centered (slightly above middle). Sits on the left-side vignette. Right side left open to the sun and horizon.
 - **Order (top to bottom):** small round portrait (~84px, 2px cream border) → stacked name → hero line → "currently" line with sparkle.
 - **Supporting text (prototype values, tune later):** hero line Schibsted Grotesk 20px (was 18px; tuned 2026-10-19), cream at ~78%; "currently" line 14px in the accent color; nav top-right, 14px weight 500, cream at ~82%; the "jn" mark at top left (decided 2026-10-30, see Subpages → Mark).
-- **Nav:** about · experience · projects · résumé · contact, lowercase, 28px apart; sky controls (16px line icons) after a wider gap; right edge on the 96px margin, 40px from the top (24px side margin on phones); hides on scroll down, returns on scroll up (250ms slide); phone menu full screen, Newsreader 36px links over plum `#2A1630` at 60% with blur.
+- **Nav:** about · experience · projects · résumé · contact, lowercase, 28px apart ("projects" goes to /projects, decided 2026-10-30); sky controls (16px line icons) after a wider gap; right edge on the 96px margin, 40px from the top (24px side margin on phones); hides on scroll down, returns on scroll up (250ms slide); phone menu full screen, Newsreader 36px links over plum `#2A1630` at 60% with blur.
 - **Rule:** the name is the only focal point. Nothing in the hero should be bigger or brighter than it.
 - **Phone margin:** 24px side margin, a placeholder until the hero step.
 
@@ -242,7 +242,7 @@ Sparkle path (12px, `viewBox="-7 -7 14 14"`): `M0,-6.5C.9,-1 1,-1 6.5,0C1,1 .9,.
 
 ### What it is
 
-A short, curated overview of the most important projects (2: Secure File Sharing System and Character-Level GPT, decided 2026-10-16) on the home page, laid out as an **editorial numbered index** (01, 02, 03 with big serif titles). Like experience, the **whole section starts collapsed** behind a "+", and **each project expands** with its own "+" to show its details in a soft **cell**. **Several projects can be open at once.** Below the list, an "all projects →" link goes to the full projects page (`/projects`), and each open project has "view project →" linking to its own detail page (MDX). Sits around sunset → dusk on the scroll.
+A short, curated overview of the most important projects (2: Posting Triage and OpenStreetMap Route-Impact Pipeline, decided 2026-10-30) on the home page, laid out as an **editorial numbered index** (01, 02 with big serif titles). Like experience, the **whole section starts collapsed** behind a "+". **When it opens, every project shows open** in its soft **cell**, with no per-project "+" (decided 2026-10-30; replaces each project expanding on its own). The **whole cell links to the project's detail page** on the site once it exists; the GitHub icon, "project page →" and the screenshot (opens large) keep their own actions. Below the list, an "all projects →" link goes to the full projects page (`/projects`), and each open project has "view project →" linking to its own detail page (MDX). Sits around sunset → dusk on the scroll.
 
 **MVP:** `/projects` and the detail pages aren't designed yet, so hide "all projects →" and "view project →" until they exist (keep the data fields and a flag to turn them on).
 
@@ -257,9 +257,9 @@ A short, curated overview of the most important projects (2: Secure File Sharing
 
 ### Behavior
 
-- **Open section:** header "+" or anywhere on the header row (added 2026-10-19). **Close section:** click again; this also closes every open project.
-- **Open a project:** its "+" or anywhere on its row header. Projects toggle independently; several can be open.
-- **Links:** "view project →" → `/projects/[slug]`. "all projects →" → `/projects`. The nav's "projects" link scrolls to this section (open or not).
+- **Open section:** header "+" or anywhere on the header row (added 2026-10-19). **Close section:** click again.
+- **Projects:** shown open whenever the section is open (decided 2026-10-30; the per-project "+" and row toggle are gone).
+- **Links:** the whole cell → the project's detail page, once built (design first). "view project →" → `/projects/[slug]`. "all projects →" → `/projects`. The nav's "projects" link goes to `/projects` (decided 2026-10-30).
 
 ### Animation
 
@@ -270,15 +270,13 @@ A short, curated overview of the most important projects (2: Secure File Sharing
 | Section opens | Row *i* fades up (opacity 0 → 1, translateY 8px → 0) | 450ms | 150 + 160·*i* ms | ease |
 | Section opens | Closing rule draws, then "all projects →" fades in | 600ms / 400ms | after the last row (+100ms for the link) | same as above / ease |
 | Section closes | Everything in reverse, last row first | same | 60ms stagger | same |
-| Project opens / closes | Row toggle rotates 45°; details height 0 ↔ auto (CSS grid rows 0fr ↔ 1fr) | 450ms | 0 | `cubic-bezier(.4,0,.2,1)` |
-| Project opens | Cell fades in (opacity 0 → 1, translateY -4px → 0) | 300ms | 120ms | ease |
-| Project opens | Image focus pull: `blur(5px) brightness(1.15)` → none, like a memory coming into focus | 800ms | 200ms | ease |
+| Section opens | Each project's cell comes in with its row; its image focus pull: `blur(5px) brightness(1.15)` → none, like a memory coming into focus | 800ms (focus pull) | set when built (2026-10-30: projects no longer open on their own) | ease |
 
 Different from experience on purpose (rules draw sideways and images focus in, instead of a line drawing down with stars) so the two sections feel related, not copied.
 
 ### Accessibility
 
-- Same as experience: real `<button>`s with `aria-expanded` / `aria-controls`; labels "Show projects" / "Hide projects" and "Show details for {title}" / "Hide details for {title}". Row header click is a mouse convenience.
+- Same as experience: real `<button>`s with `aria-expanded` / `aria-controls`; labels "Show projects" / "Hide projects" (the per-project buttons are gone, 2026-10-30). The cell's whole-cell link is one real link named for the project, with its other links above it.
 - Collapsed content is `inert`/hidden once the close transition ends. 44px tap areas on phones.
 - Images need real `alt` text (what the screenshot shows), set in the data.
 - **Reduce Motion:** everything opens and closes instantly; images appear sharp (no focus pull).
@@ -525,6 +523,7 @@ The sun glow's y is in the coast's 680×380 space (horizon 272); the abstract sc
 
 - **Header:** the home nav's type and placement: Schibsted lowercase links, 40px from the top, on the 96px screen margin (24px on phones), plum text shadow. Left: the mark. Right: home · résumé · contact, 28px apart, then the light/dark toggle after the wider gap the home nav uses before its sky controls. Hides on scroll down and returns on scroll up like the home nav. On phones everything fits in one row, so there is no menu button.
 - **Links:** home goes to the home page; résumé opens the PDF like the home nav's; contact scrolls to the contact block on the same page.
+- **Rule (decided 2026-10-30):** a full-width 1px rule at 22% ink (the /projects group headings' rule) above the contact block; spacing around it set when built.
 - **Contact block:** the home page's contact block (Connect → Contact block) unchanged: label with sparkle, "reach out!", the line, email with the copy pill, LinkedIn · GitHub · Résumé. No leave a star or star hint, and not a full screen tall: it pads like a normal section (`clamp(72px, 12vh, 140px)`). Colors follow the page's palette and light/dark version. The footer line sits under it.
 - **Build:** one shared contact block component for the home page and every subpage.
 
@@ -567,7 +566,7 @@ The sun glow's y is in the coast's 680×380 space (horizon 272); the abstract sc
 | Experience | Section opens: rail line draws down, stars pop in one by one, rows fade up; closes in reverse bottom-up | Header row or "+" | See Experience → Animation (line 700ms; star 500ms pop at 170 + 180·*i*; row 450ms at 250 + 180·*i*; close 60ms stagger) | Instant, all stars lit |
 | Experience | Role opens: details slide open, bullets fade in, its star brightens with a glow; current role's star twinkles | Row "+" | Height 400ms; bullets 300ms after 100ms; twinkle 2.4s | Instant, no twinkle |
 | Projects | Section opens: rules draw left → right, rows fade up, closing rule then "all projects →" fade in | Header row or "+" | See Projects → Animation (rule 600ms; row 450ms at 150 + 160·*i*) | Instant |
-| Projects | Project opens: cell slides open and fades in; image focus pull (blur → sharp); title turns accent | Row "+" | Height 450ms; cell 300ms after 120ms; image 800ms after 200ms | Instant, image sharp |
+| Projects | Each cell comes in with its row; image focus pull (blur → sharp). Replaces "project opens" (2026-10-30: projects show open with the section) | Section opens | Image 800ms; delays set when built | Instant, image sharp |
 | Beyond code | Prints drop into place one by one (also on "reset") | Section enters view (once) / reset | 300ms `cubic-bezier(.3,1.4,.5,1)`, delay 120 + 90·*i* ms | Appear in place |
 | Beyond code | Print hover lift, grab (scale 1.05 + deeper shadow), drop (settles to a new random tilt ±6°) | Hover / drag | Hover shadow 200ms; drop 300ms overshoot | Drag works, no scale/tilt animation |
 | Connect *(after launch)* | Visitor stars twinkle; your star pulses gently | Always (when dark) | Visitor 0.6–1.0 of brightness; yours 0.88–1.0 | Still |
