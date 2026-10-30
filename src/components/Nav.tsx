@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "motion/react";
 import Monogram from "@/components/Monogram";
@@ -10,6 +11,7 @@ import { links } from "@/data/links";
 // cream at ~82%). Links in page order, lowercase, then the sky controls (SkyControls: light/dark,
 // mini dial, "sunset" pill), which stay visible on phones too. The "jn" mark sits at top left in
 // the same row, on the nav's text baseline, and scrolls back to the top (added 2026-10-30).
+// "projects" is the one link that leaves the page: it goes to /projects (decided 2026-10-30).
 //
 // Chosen on /lab (step 6, 2026-10-11): it hides while you scroll down and comes back when you
 // scroll up, so the controls stay reachable without covering text; on phones the links open
@@ -18,14 +20,35 @@ import { links } from "@/data/links";
 const LINKS = [
   { label: "about", href: "#about" },
   { label: "experience", href: "#experience" },
-  { label: "projects", href: "#projects" },
-  { label: "résumé", href: links.resume },
+  { label: "projects", href: "/projects" },
+  { label: "résumé", href: links.resume, newTab: true },
   { label: "contact", href: "#contact" },
 ];
 
-/** The résumé PDF opens in a new tab (as in connect) so the site stays open; section links stay put. */
-const newTab = (href: string) =>
-  href.startsWith("#") ? {} : { target: "_blank", rel: "noopener noreferrer" };
+/**
+ * One nav link. The résumé PDF opens in a new tab (as in connect) so the site stays open. /projects
+ * goes through Next's Link, so the page doesn't reload and the sky mode (kept in memory) carries
+ * over to its light/dark. Section links are plain in-page anchors.
+ */
+function NavLink({ link, className, onClick }: { link: (typeof LINKS)[number]; className?: string; onClick?: () => void }) {
+  if (link.href.startsWith("/") && !link.newTab) {
+    return (
+      <Link href={link.href} className={className} onClick={onClick}>
+        {link.label}
+      </Link>
+    );
+  }
+  return (
+    <a
+      href={link.href}
+      {...(link.newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      className={className}
+      onClick={onClick}
+    >
+      {link.label}
+    </a>
+  );
+}
 
 // The plum text shadow (shared with the hero in globals.css), so the nav stays readable
 // when it sits over dusk and night.
@@ -111,9 +134,7 @@ export default function Nav() {
                 <ul className="flex items-center gap-7">
                   {LINKS.map((link) => (
                     <li key={link.label}>
-                      <a href={link.href} {...newTab(link.href)} className="transition-colors hover:text-ink">
-                        {link.label}
-                      </a>
+                      <NavLink link={link} className="transition-colors hover:text-ink" />
                     </li>
                   ))}
                 </ul>
@@ -178,9 +199,7 @@ function PhoneMenu({ reduceMotion, onPick }: { reduceMotion: boolean; onPick: ()
             animate={{ opacity: 1, y: 0 }}
             transition={reduceMotion ? instant : { duration: LINK_S, ease: CSS_EASE, delay: linkDelay(i) }}
           >
-            <a href={link.href} {...newTab(link.href)} onClick={onPick}>
-              {link.label}
-            </a>
+            <NavLink link={link} onClick={onPick} />
           </motion.li>
         ))}
       </ul>
