@@ -1,17 +1,14 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
-import TagList from "@/components/TagList";
-import UnderlineLink from "@/components/UnderlineLink";
-import { GithubIcon } from "@/icons/lineIcons";
 import { dayness, formatHour, hourName, isDarkHour } from "@/lib/sky/hours";
 import { SUN_GOLD } from "@/lib/sky/palette";
 import { getSkyMode } from "@/lib/sky/skyHour";
 import { textDayness, themeAt } from "@/lib/sky/theme";
+import { CardList, LAYOUTS, type Layout } from "./Cards";
 import LabSky, { type LabBackground } from "./LabSky";
-import { GROUPS, type LabProject } from "./labProjects";
+import { GROUPS } from "./labProjects";
 import { PALETTES, PLAIN } from "./palettes";
 
 // Dev-only (2026-10-30): a mock /projects page for choosing the subpage background. The cards are
@@ -21,6 +18,8 @@ import { PALETTES, PLAIN } from "./palettes";
 // page's light/dark choice if the visitor made one, else from the device's setting, and the
 // visitor can flip it with a small toggle (Jared, 2026-10-30). The panel's "start from" row
 // fakes the home choice, since this page isn't reached from the home page.
+// Teal sea won for /projects (2026-10-30); the "cards" row now compares card layouts (Cards.tsx)
+// and the "motion" row turns the proposed scroll-in animation on or off.
 
 const BACKGROUNDS = ["home coast", "abstract", ...PALETTES.map((p) => p.name), "plain"] as const;
 type Choice = (typeof BACKGROUNDS)[number];
@@ -47,10 +46,12 @@ function useDeviceDark() {
 }
 
 export default function ProjectsLab() {
-  const [choice, setChoice] = useState<Choice>("blue hour");
+  const [choice, setChoice] = useState<Choice>("teal sea");
   const [hour, setHour] = useState(SUNSET);
   const [start, setStart] = useState<Start>("device");
   const [flipped, setFlipped] = useState<boolean | null>(null);
+  const [layout, setLayout] = useState<Layout>("B rows");
+  const [animate, setAnimate] = useState(true);
   const deviceDark = useDeviceDark();
 
   // A real light/dark choice on the home page carries over (client-side navigation keeps it).
@@ -92,7 +93,7 @@ export default function ProjectsLab() {
       {palette?.light && <LightDarkToggle dark={dark} onFlip={() => setFlipped(!dark)} />}
 
       <main className="pr-(--content-r) pb-48 pl-(--content-l) pt-24 [text-shadow:var(--text-shadow)]">
-        <p className="text-[13px] text-ink/70">lab · /projects background</p>
+        <p className="text-[13px] text-ink/70">lab · /projects cards</p>
         <h1 className="mt-2 font-serif text-[clamp(32px,4vw,40px)] leading-[1.1] font-normal tracking-[-0.015em]">
           [projects heading]
         </h1>
@@ -104,16 +105,28 @@ export default function ProjectsLab() {
               <span className="text-[15px] font-medium text-ink">{group.name}</span>
               {group.projects.length}
             </h2>
-            <ul role="list" className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {group.projects.map((p) => (
-                <Card key={p.title} project={p} />
-              ))}
-            </ul>
+            {/* Remount on a switch so the scroll-in animation plays again. */}
+            <CardList key={`${layout}-${animate}`} layout={layout} projects={group.projects} animate={animate} />
           </section>
         ))}
       </main>
 
       <div className="fixed inset-x-0 bottom-0 z-30 border-t border-ink/20 bg-tint/80 px-4 py-3 text-[13px] backdrop-blur-md">
+        <div className="mb-2 flex flex-wrap items-center justify-center gap-2">
+          <span className="text-ink/70">cards</span>
+          {LAYOUTS.map((l) => (
+            <Pill key={l} on={l === layout} onClick={() => setLayout(l)}>
+              {l}
+            </Pill>
+          ))}
+          <span className="ml-2 text-ink/70">motion</span>
+          <Pill on={animate} onClick={() => setAnimate(true)}>
+            on
+          </Pill>
+          <Pill on={!animate} onClick={() => setAnimate(false)}>
+            off
+          </Pill>
+        </div>
         <div className="flex flex-wrap items-center justify-center gap-2">
           <span className="text-ink/70">background</span>
           {BACKGROUNDS.map((b) => {
@@ -250,53 +263,17 @@ function SunIcon() {
   );
 }
 
-/** A plain card: image, title, class · term, summary, tags, links. Not a design proposal. */
-function Card({ project }: { project: LabProject }) {
+function Pill({ on, onClick, children }: { on: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
-    <li className="flex flex-col gap-3 rounded-[14px] border border-ink/30 bg-tint/34 p-3.5">
-      {project.image ? (
-        <Image
-          src={project.image.src}
-          alt={project.image.alt}
-          width={400}
-          height={250}
-          className="aspect-[16/10] w-full rounded-lg object-cover"
-        />
-      ) : (
-        <div
-          role="img"
-          aria-label={`[${project.title} screenshot]`}
-          className="grid aspect-[16/10] w-full place-items-center rounded-lg bg-[linear-gradient(135deg,#5E3A66,#A4527A)] text-[12px] text-cream"
-        >
-          [screenshot]
-        </div>
-      )}
-      <div>
-        <h3 className="font-serif text-[20px] leading-[1.2] font-normal">{project.title}</h3>
-        <p className="mt-0.5 text-[13px] text-ink/70">{project.meta}</p>
-      </div>
-      <p className="text-[15px] leading-[1.55]">{project.summary}</p>
-      <TagList tags={project.tags} />
-      {(project.github || project.site) && (
-        <div className="flex items-center gap-4">
-          {project.github && (
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${project.title} on GitHub`}
-              className="flex size-8 items-center justify-center rounded-full border border-ink/38 bg-tint/34 text-ink/82"
-            >
-              <GithubIcon size={15} />
-            </a>
-          )}
-          {project.site && (
-            <UnderlineLink href={project.site} newTab ariaLabel={`${project.title} project page, opens in a new tab`}>
-              project page →
-            </UnderlineLink>
-          )}
-        </div>
-      )}
-    </li>
+    <button
+      type="button"
+      aria-pressed={on}
+      onClick={onClick}
+      className={`cursor-pointer rounded-full border px-2.5 py-0.5 ${
+        on ? "border-accent text-accent" : "border-ink/35 text-ink/85"
+      }`}
+    >
+      {children}
+    </button>
   );
 }
