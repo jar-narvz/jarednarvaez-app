@@ -11,7 +11,7 @@ import { TEAL_SEA } from "@/lib/sky/subpagePalettes";
 // The /projects page: the subpage header, the heading with the project count, the two groups of
 // cards, then the shared contact block and the footer (docs/visual-system.md → Subpages). Teal sea
 // in its dark or light version: the visitor's home page choice, else the device's, until they flip
-// it with the header's toggle. Spacing is the lab mockup's (/lab/projects), which Jared approved.
+// it with the header's toggle. Spacing is the lab mockup's, which Jared approved.
 /** "coursework & clubs" → "group-coursework-clubs", for the heading's id. */
 const groupId = (name: string) => `group-${name.replace(/[^a-z0-9]+/g, "-")}`;
 

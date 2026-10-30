@@ -6,7 +6,7 @@ import { isDarkHour } from "./hours";
 import type { SkyMode } from "./skyHour";
 
 /** Pages with their own fixed background (SubpageSky). Everywhere else gets the home sky. */
-const SUBPAGES = ["/projects", "/lab/projects"];
+const SUBPAGES = ["/projects"];
 
 export function isSubpage(pathname: string) {
   return SUBPAGES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
