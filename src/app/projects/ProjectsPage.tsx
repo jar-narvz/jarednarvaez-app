@@ -25,7 +25,7 @@ export default function ProjectsPage() {
 
       <main className="pr-(--content-r) pl-(--content-l) pt-24 [text-shadow:var(--text-shadow)]">
         <h1 className="font-serif text-[clamp(32px,4vw,40px)] leading-[1.1] font-normal tracking-[-0.02em]">
-          [projects heading]
+          my projects
         </h1>
         <p className="mt-2 text-[15px] text-ink/80">{projects.length} projects</p>
 

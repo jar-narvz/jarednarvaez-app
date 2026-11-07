@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useInView, useReducedMotion } from "motion/react";
+import { useInView } from "motion/react";
 import { useRef, useSyncExternalStore } from "react";
 import ScreenshotViewer from "@/components/ScreenshotViewer";
 import TagList from "@/components/TagList";
 import UnderlineLink from "@/components/UnderlineLink";
-import { cardMeta, type Project } from "@/data/projects";
+import { cardMeta, SITE_LINK_LABEL, type Project } from "@/data/projects";
 import { GithubIcon } from "@/icons/lineIcons";
 
 // /projects cards (docs/visual-system.md → Subpages → /projects cards, decided 2026-10-30): a grid,
@@ -44,6 +44,25 @@ function useColumns() {
   );
 }
 
+const REDUCE = "(prefers-reduced-motion: reduce)";
+
+/**
+ * Reduce Motion, false on the server and while hydrating, then the real value. Motion's
+ * useReducedMotion is already true on the first client render, which doesn't match the server's
+ * HTML; React leaves the mismatched class alone, so the cards would stay at opacity 0.
+ */
+function useReduceMotion() {
+  return useSyncExternalStore(
+    (onChange) => {
+      const query = window.matchMedia(REDUCE);
+      query.addEventListener("change", onChange);
+      return () => query.removeEventListener("change", onChange);
+    },
+    () => window.matchMedia(REDUCE).matches,
+    () => false,
+  );
+}
+
 export default function ProjectCards({ projects }: { projects: Project[] }) {
   const columns = useColumns();
   return (
@@ -58,8 +77,8 @@ export default function ProjectCards({ projects }: { projects: Project[] }) {
 function Card({ project, index, delayMs }: { project: Project; index: number; delayMs: number }) {
   const ref = useRef<HTMLLIElement>(null);
   const inView = useInView(ref, { once: true, margin: "0px 0px -10% 0px" });
-  const reduceMotion = useReducedMotion();
-  const shown = inView || !!reduceMotion;
+  const reduceMotion = useReduceMotion();
+  const shown = inView || reduceMotion;
 
   return (
     <li
@@ -91,8 +110,8 @@ function Card({ project, index, delayMs }: { project: Project; index: number; de
             </a>
           )}
           {project.site && (
-            <UnderlineLink href={project.site} newTab ariaLabel={`${project.title} project page, opens in a new tab`}>
-              project page →
+            <UnderlineLink href={project.site} newTab ariaLabel={`${project.title} link, opens in a new tab`}>
+              {SITE_LINK_LABEL}
             </UnderlineLink>
           )}
         </div>
@@ -118,6 +137,10 @@ function Screenshot({
     focused ? "filter-none" : "blur-[5px] brightness-115"
   }`;
 
+  if (project.demo) {
+    return <Demo demo={project.demo} className={focusPull} style={style} />;
+  }
+
   if (project.image.src) {
     return (
       <ScreenshotViewer src={project.image.src} alt={project.image.alt} className="w-full rounded-lg">
@@ -142,6 +165,42 @@ function Screenshot({
       className={`grid place-items-center text-[12px] text-cream ${focusPull}`}
     >
       [screenshot]
+    </div>
+  );
+}
+
+/**
+ * A demo GIF (Jared, 2026-11-06, lab option C): it loops while the card is on screen, phones too,
+ * and shows its still otherwise, since a GIF can't be paused. It restarts each time it returns.
+ * Letterboxed in the 16:10 frame; opens large like a screenshot. Reduce Motion: the still only.
+ */
+function Demo({
+  demo,
+  className,
+  style,
+}: {
+  demo: NonNullable<Project["demo"]>;
+  className: string;
+  style: React.CSSProperties;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref);
+  const reduceMotion = useReduceMotion();
+  const src = reduceMotion ? demo.poster : demo.src;
+
+  return (
+    <div ref={ref}>
+      <ScreenshotViewer src={src} alt={demo.alt} contain className="w-full rounded-lg">
+        <Image
+          src={inView ? src : demo.poster}
+          alt={demo.alt}
+          width={400}
+          height={250}
+          unoptimized
+          style={style}
+          className={`bg-[#141414] object-contain ${className}`}
+        />
+      </ScreenshotViewer>
     </div>
   );
 }

@@ -13,8 +13,9 @@ export type Project = {
   summary: string; // 1–2 lines
   tags: string[]; // tech used
   image: { src: string; alt: string }; // 16:10 screenshot; src is a path under /public
+  demo?: { src: string; poster: string; alt: string }; // /projects card: a GIF that loops while on screen, in place of `image`
   github?: string; // repo link, shown as an icon when the project is open
-  site?: string; // external project page, shown as "project page →" beside the GitHub icon
+  site?: string; // external page (project page, live demo, live site), shown as SITE_LINK_LABEL beside the GitHub icon
   featured?: boolean; // shown on the home page (2: Posting Triage and route-impact, decided 2026-10-30)
   order?: number; // home page order
 };
@@ -30,7 +31,11 @@ export const PROJECT_GROUPS: ProjectGroup[] = ["personal", "coursework & clubs"]
 export const showAllProjectsLink = true;
 export const showWriteUps = false;
 
-// Screenshots are 16:10 PNGs (1600×1000) in public/.
+// The one label for every external link, on the home page and /projects (Jared, 2026-11-06: a
+// general word, so it fits a project page, a live demo and a live site alike).
+export const SITE_LINK_LABEL = "visit →";
+
+// Screenshots are 16:10 images in public/.
 export const projects: Project[] = [
   {
     // Summary matches the project page (site); image alt from posting-triage-site-kit
@@ -47,6 +52,11 @@ export const projects: Project[] = [
       src: "/posting-triage.png",
       alt: "Flowchart: posting URL, liveness check (removed → DEAD with careers page; unreadable → FLAG couldn't verify), Claude fills a form with an exact quote per field, code checks every quote is in the posting (if not, even after a retry → FLAG unless a verified field already SKIPs), then rules plus the profile give APPLY, FLAG or SKIP with the deciding quote.",
     },
+    demo: {
+      src: "/posting-triage-demo.gif",
+      poster: "/posting-triage-demo-poster.png",
+      alt: "Terminal demo: Posting Triage sorts four job postings into APPLY, FLAG, SKIP and DEAD.",
+    },
     github: "https://github.com/jar-narvz/posting-triage",
     site: "https://jar-narvz.github.io/posting-triage/",
     featured: true,
@@ -62,11 +72,11 @@ export const projects: Project[] = [
     summary: "Measures how a day of OpenStreetMap edits changes navigation in Northern California.",
     tags: ["Python", "DuckDB", "SQL"],
     image: {
-      // [screenshot] placeholder: no image yet, so the card shows a gradient.
-      src: "",
-      alt: "[route-impact screenshot]",
+      src: "/route-impact.png",
+      alt: "The route-impact fault playground: a dark map of the Bay Area with the Bay Bridge broken in red and rerouted trips in white, beside a panel reading 2 broken, 169 slowed, +2,859 added minutes.",
     },
     github: "https://github.com/jar-narvz/route-impact",
+    site: "https://jar-narvz.github.io/route-impact/site/playground/",
     featured: true,
     order: 2,
   },
@@ -76,13 +86,14 @@ export const projects: Project[] = [
     type: "Class project",
     year: "2025",
     group: "coursework & clubs",
-    classLabel: "CS 161", // term still open (docs/design.md → still open), so the card shows the year
+    classLabel: "CS 161",
+    term: "Fall 2025",
     summary:
-      "An encrypted file store in Go that stays safe on an untrusted server, with sharing, revocation and fast appends",
+      "An encrypted file store in Go that stays safe on an untrusted server, with sharing, revocation and fast appends.",
     tags: ["Go", "AES-CTR", "HMAC", "RSA"],
     image: {
       src: "/secure-file-sharing.png",
-      alt: "Flowchart of the secure file sharing system: user authentication, encrypted file storage as chunks, and sharing and revocation",
+      alt: "Flowchart of the secure file sharing system: logging in, storing and loading encrypted chunks, then sharing a file and removing access",
     },
   },
   {
@@ -91,17 +102,18 @@ export const projects: Project[] = [
     type: "Class project",
     year: "2026",
     group: "coursework & clubs",
-    classLabel: "CS 188", // term still open, as above
+    classLabel: "CS 188",
+    term: "Spring 2026",
     summary:
-      "Neural nets in PyTorch, from 97%+ MNIST to an RNN language ID and a transformer that writes Shakespeare",
+      "Neural nets in PyTorch, from 97%+ MNIST to an RNN language ID and a transformer that writes Shakespeare.",
     tags: ["Python", "PyTorch", "Transformers"],
     image: {
       src: "/character-gpt.png",
-      alt: "Flowchart of the character-level GPT: training data, transformer model and sampling, with generated text at iteration 0 and 9,900",
+      alt: "Flowchart of the character-level GPT: training data, the transformer model, then sampling, with a line of generated text from iteration 9,900",
     },
   },
-  // The rest of /projects, word for word from docs/content.md → More projects. No screenshots yet
-  // (docs/design.md → still open), so their cards show the [screenshot] placeholder.
+  // The rest of /projects, from docs/content.md → More projects, plus a closing period on each
+  // summary (Jared, 2026-11-06). Cards without an image show the [screenshot] placeholder.
   {
     slug: "reliable-transport",
     title: "Reliable Transport (TCP)",
@@ -109,9 +121,12 @@ export const projects: Project[] = [
     classLabel: "CS 168",
     term: "Spring 2026",
     summary:
-      "A subset of TCP: handshake, sliding window, out-of-order reassembly, teardown and RFC 6298 retransmission timers",
+      "A subset of TCP: handshake, sliding window, out-of-order reassembly, teardown and RFC 6298 retransmission timers.",
     tags: ["Python", "TCP"],
-    image: { src: "", alt: "[Reliable Transport (TCP) screenshot]" },
+    image: {
+      src: "/reliable-transport.png",
+      alt: "Flowchart of the TCP implementation: connect and send within the window, receive in order, then retransmit on timeout and close",
+    },
   },
   {
     slug: "rl-agents",
@@ -120,9 +135,16 @@ export const projects: Project[] = [
     classLabel: "CS 188",
     term: "Spring 2026",
     summary:
-      "Value iteration and Q-learning agents that learn Gridworld, a crawler robot and Pacman, which wins after 50 episodes",
+      "Value iteration and Q-learning agents that learn Gridworld, a crawler robot and Pacman, which wins after 50 episodes.",
     tags: ["Python", "Q-learning", "MDPs"],
-    image: { src: "", alt: "[Reinforcement Learning Agents screenshot]" },
+    image: { src: "/rl-agents-demo-poster.png", alt: "Pacman playing a mediumClassic maze after training" },
+    demo: {
+      // Recorded from the running project: Q-learning on MazeGrid, then Pacman after 50 training
+      // episodes (the spec's ApproximateQAgent command; 55 of 60 test games won across 6 seeds).
+      src: "/rl-agents-demo.gif",
+      poster: "/rl-agents-demo-poster.png",
+      alt: "Demo: a Q-learning agent fills in a maze's Q-values, then a trained Pacman clears a maze and wins.",
+    },
   },
   {
     slug: "risc-v-cpu",
@@ -131,9 +153,12 @@ export const projects: Project[] = [
     classLabel: "CS 61C",
     term: "Spring 2025",
     summary:
-      "A CPU that runs real RISC-V instructions, built in Logisim from the ALU, register file, immediate generator and control logic",
+      "A CPU that runs real RISC-V instructions, built in Logisim from the ALU, register file, immediate generator and control logic.",
     tags: ["Logisim", "RISC-V"],
-    image: { src: "", alt: "[RISC-V CPU screenshot]" },
+    image: {
+      src: "/risc-v-cpu.png",
+      alt: "Flowchart of the two-stage RISC-V CPU: fetch, then decode and execute, then memory and writeback",
+    },
   },
   {
     slug: "build-your-own-world",
@@ -142,20 +167,12 @@ export const projects: Project[] = [
     classLabel: "CS 61B",
     term: "Spring 2024",
     summary:
-      "A tile-based exploration game in Java: seeded rooms and hallways, a playable avatar, save/load and custom tile art",
+      "A tile-based exploration game in Java: seeded rooms and hallways, a playable avatar, save/load and custom tile art.",
     tags: ["Java", "Procedural generation"],
-    image: { src: "", alt: "[Build Your Own World screenshot]" },
-  },
-  {
-    slug: "nn-classifier-assembly",
-    title: "Neural Net Classifier in Assembly",
-    group: "coursework & clubs",
-    classLabel: "CS 61C",
-    term: "Spring 2025",
-    summary:
-      "A neural-net classifier in RISC-V assembly: matrix multiply, ReLU, argmax and matrix file I/O written by hand",
-    tags: ["RISC-V Assembly"],
-    image: { src: "", alt: "[Neural Net Classifier in Assembly screenshot]" },
+    image: {
+      src: "/build-your-own-world.png",
+      alt: "A generated world from the game: brown rooms and hallways with textured walls, and the yellow star avatar",
+    },
   },
   {
     slug: "pasae-website",
@@ -164,9 +181,13 @@ export const projects: Project[] = [
     classLabel: "PASAE (Webmaster)",
     term: "2024–2025",
     summary:
-      "Updated the homepage, events, core team and archive pages of PASAE's public site, pasae.berkeley.edu",
+      "Updated the homepage, events, core team and archive pages of PASAE's public site, pasae.berkeley.edu.",
     tags: ["HTML", "SCSS", "JavaScript", "PHP"],
-    image: { src: "", alt: "[PASAE Website screenshot]" },
+    image: {
+      src: "/pasae-website.jpg",
+      alt: "The PASAE website's home page: the navigation over a group photo of members on the UC Berkeley campus",
+    },
+    site: "https://pasae.berkeley.edu/",
   },
 ];
 

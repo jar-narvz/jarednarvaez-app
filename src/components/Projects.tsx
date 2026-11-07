@@ -12,6 +12,7 @@ import {
   projectsSection,
   showAllProjectsLink,
   showWriteUps,
+  SITE_LINK_LABEL,
   type Project,
 } from "@/data/projects";
 import { GithubIcon } from "@/icons/lineIcons";
@@ -176,9 +177,9 @@ function ProjectRow({
                   <UnderlineLink
                     href={project.site}
                     newTab
-                    ariaLabel={`${project.title} project page, opens in a new tab`}
+                    ariaLabel={`${project.title} link, opens in a new tab`}
                   >
-                    project page →
+                    {SITE_LINK_LABEL}
                   </UnderlineLink>
                 )}
               </div>
