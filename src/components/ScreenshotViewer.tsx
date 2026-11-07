@@ -21,12 +21,15 @@ export default function ScreenshotViewer({
   src,
   alt,
   className = "",
+  contain = false,
   children,
 }: {
   src: string;
   alt: string;
   /** Classes for the thumbnail button (its size and shape). */
   className?: string;
+  /** Letterbox the image in the 16:10 frame instead of cropping it (a demo that isn't 16:10). */
+  contain?: boolean;
   /** The thumbnail. */
   children: React.ReactNode;
 }) {
@@ -97,7 +100,14 @@ export default function ScreenshotViewer({
                   transition={motionFor}
                   className="relative aspect-[16/10] w-[min(1200px,100%,calc(85svh*1.6))] overflow-hidden rounded-[14px] shadow-[0_20px_60px_rgba(20,10,30,0.5)]"
                 >
-                  <Image src={src} alt={alt} fill sizes="(max-width: 1280px) 100vw, 1200px" className="object-cover" />
+                  <Image
+                    src={src}
+                    alt={alt}
+                    fill
+                    sizes="(max-width: 1280px) 100vw, 1200px"
+                    unoptimized={contain}
+                    className={contain ? "bg-[#141414] object-contain" : "object-cover"}
+                  />
                 </motion.div>
 
                 <button

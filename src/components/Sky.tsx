@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { accentAt, grainAt, keyframeAt, mixColor, smoothstep } from "@/lib/sky/blend";
 import {
@@ -19,6 +20,7 @@ import { coastScene, tallCoastScene, type DrawnSky } from "@/lib/sky/scene";
 import { getVisitorSky, loadVisitorStars, onMyStarChange, publishSkyFrame } from "@/lib/stars/live";
 import { getSkyMode, localHour, onSkyModeChange, publishShownHour, takeGlide } from "@/lib/sky/skyHour";
 import { onStarlessChange, textBoxes } from "@/lib/sky/starless";
+import { isSubpage } from "@/lib/sky/subpageTheme";
 import { textDayness, themeAt } from "@/lib/sky/theme";
 import { GRAIN_FRAME_MS, grainFrames } from "@/lib/sky/texture";
 
@@ -37,12 +39,16 @@ function scrollProgress() {
 // moving film grain on top. Clouds drift and stars twinkle on their own, so the sky repaints every
 // frame (except under Reduce Motion). Clicking a sky control glides the sky to its new hour the
 // shorter way around the clock (GLIDE_S, smoothstep); Reduce Motion jumps instead.
+// It lives in the root layout so its mode survives navigation, but on subpages (isSubpage) it
+// stops and hides: SubpageSky draws their fixed look and writes their text theme instead.
 export default function Sky() {
   const frameRef = useRef<HTMLDivElement>(null);
   const skyRef = useRef<HTMLCanvasElement>(null);
   const grainRef = useRef<HTMLCanvasElement>(null);
+  const home = !isSubpage(usePathname());
 
   useEffect(() => {
+    if (!home) return;
     const frame = frameRef.current;
     const sky = skyRef.current;
     const grain = grainRef.current;
@@ -246,13 +252,14 @@ export default function Sky() {
       cancelAnimationFrame(pending);
       reducedMotion.removeEventListener("change", updateMotion);
     };
-  }, []);
+  }, [home]);
 
   // h-lvh: the tallest viewport height on phones, so the sky doesn't jump when the URL bar hides.
   return (
     <div
       ref={frameRef}
       aria-hidden="true"
+      hidden={!home}
       className="pointer-events-none fixed inset-x-0 top-0 -z-10 h-lvh overflow-hidden"
     >
       <canvas ref={skyRef} className="absolute top-0 left-0 [image-rendering:pixelated]" />

@@ -7,8 +7,9 @@ import { skyToPixel } from "@/lib/sky/visitorStars";
 import { getMyStar, getSkyFrame, getStarLevel, onMyStarChange, onSkyPaint } from "@/lib/stars/live";
 
 // The small "you" label just right of the visitor's own star (docs/visual-system.md → Connect →
-// Leave a star): Sun gold (the accent), Schibsted 13px. Shown while connect is on screen and the
-// stars are visible. Right after placing it fades in over 300ms, starting 350ms in (Motion
+// Leave a star): Sun gold (the accent), Schibsted 13px. Shown while the stars are visible and the
+// label sits over connect, i.e. below its top edge, so it never lands on the projects above it
+// (decided 2026-10-30). Right after placing it fades in over 300ms, starting 350ms in (Motion
 // inventory); otherwise it fades with the sky. Instant under Reduce Motion. Updated after each sky
 // paint by writing its style, not React state.
 
@@ -25,19 +26,25 @@ export default function YouLabel({ sectionRef }: { sectionRef: RefObject<HTMLEle
     const label = labelRef.current;
     if (!section || !label) return;
 
+    // Start off, matching `visible`: when Next hides the home page and brings it back, the label
+    // keeps the "on" it had when you left, and update() only writes changes.
     let visible = false;
+    label.dataset.on = "false";
     // While the label shows, no white stars behind it (starless.ts).
     let releaseStars: (() => void) | null = null;
 
     const update = () => {
       const mine = getMyStar();
+      let y = 0;
       if (mine) {
         const p = skyToPixel(mine.star, getSkyFrame());
+        y = (p.y + 0.5) * PIXEL;
         label.style.left = `${(p.x + 0.5) * PIXEL}px`;
-        label.style.top = `${(p.y + 0.5) * PIXEL}px`;
+        label.style.top = `${y}px`;
       }
       const r = section.getBoundingClientRect();
-      const next = !!mine && getStarLevel() > MIN_LEVEL && r.bottom > 0 && r.top < window.innerHeight;
+      const overConnect = y > r.top && y < r.bottom;
+      const next = !!mine && getStarLevel() > MIN_LEVEL && overConnect;
       if (next === visible) return;
       visible = next;
       label.dataset.on = String(next);
@@ -65,6 +72,7 @@ export default function YouLabel({ sectionRef }: { sectionRef: RefObject<HTMLEle
       stopMine();
       label.removeEventListener("transitionend", clearDelay);
       releaseStars?.();
+      label.dataset.on = "false";
     };
   }, [sectionRef]);
 

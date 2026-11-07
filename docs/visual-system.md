@@ -109,8 +109,8 @@ Blend channel by channel (straight RGB) between neighboring keyframes. Golden ho
 
 - **Placement:** editorial left, text block starts at the 96px left margin, vertically centered (slightly above middle). Sits on the left-side vignette. Right side left open to the sun and horizon.
 - **Order (top to bottom):** small round portrait (~84px, 2px cream border) → stacked name → hero line → "currently" line with sparkle.
-- **Supporting text (prototype values, tune later):** hero line Schibsted Grotesk 20px (was 18px; tuned 2026-10-19), cream at ~78%; "currently" line 14px in the accent color; nav top-right, 14px weight 500, cream at ~82%, no monogram.
-- **Nav:** about · experience · projects · résumé · contact, lowercase, 28px apart; sky controls (16px line icons) after a wider gap; right edge on the 96px margin, 40px from the top (24px side margin on phones); hides on scroll down, returns on scroll up (250ms slide); phone menu full screen, Newsreader 36px links over plum `#2A1630` at 60% with blur.
+- **Supporting text (prototype values, tune later):** hero line Schibsted Grotesk 20px (was 18px; tuned 2026-10-19), cream at ~78%; "currently" line 14px in the accent color; nav top-right, 14px weight 500, cream at ~82%; the "jn" mark at top left (decided 2026-10-30, see Subpages → Mark).
+- **Nav:** about · experience · projects · résumé · contact, lowercase, 28px apart ("projects" goes to /projects, decided 2026-10-30); sky controls (16px line icons) after a wider gap; right edge on the 96px margin, 40px from the top (24px side margin on phones); hides on scroll down, returns on scroll up (250ms slide); phone menu full screen, Newsreader 36px links over plum `#2A1630` at 60% with blur.
 - **Rule:** the name is the only focal point. Nothing in the hero should be bigger or brighter than it.
 - **Phone margin:** 24px side margin, a placeholder until the hero step.
 
@@ -242,7 +242,7 @@ Sparkle path (12px, `viewBox="-7 -7 14 14"`): `M0,-6.5C.9,-1 1,-1 6.5,0C1,1 .9,.
 
 ### What it is
 
-A short, curated overview of the most important projects (2: Secure File Sharing System and Character-Level GPT, decided 2026-10-16) on the home page, laid out as an **editorial numbered index** (01, 02, 03 with big serif titles). Like experience, the **whole section starts collapsed** behind a "+", and **each project expands** with its own "+" to show its details in a soft **cell**. **Several projects can be open at once.** Below the list, an "all projects →" link goes to the full projects page (`/projects`), and each open project has "view project →" linking to its own detail page (MDX). Sits around sunset → dusk on the scroll.
+A short, curated overview of the most important projects (2: Posting Triage and OpenStreetMap Route-Impact Pipeline, decided 2026-10-30) on the home page, laid out as an **editorial numbered index** (01, 02 with big serif titles). Like experience, the **whole section starts collapsed** behind a "+". **When it opens, every project shows open** in its soft **cell**, with no per-project "+" (decided 2026-10-30; replaces each project expanding on its own). The **whole cell links to the project's detail page** on the site once it exists; the GitHub icon, "project page →" and the screenshot (opens large) keep their own actions. Below the list, an "all projects →" link goes to the full projects page (`/projects`), and each open project has "view project →" linking to its own detail page (MDX). Sits around sunset → dusk on the scroll.
 
 **MVP:** `/projects` and the detail pages aren't designed yet, so hide "all projects →" and "view project →" until they exist (keep the data fields and a flag to turn them on).
 
@@ -257,9 +257,9 @@ A short, curated overview of the most important projects (2: Secure File Sharing
 
 ### Behavior
 
-- **Open section:** header "+" or anywhere on the header row (added 2026-10-19). **Close section:** click again; this also closes every open project.
-- **Open a project:** its "+" or anywhere on its row header. Projects toggle independently; several can be open.
-- **Links:** "view project →" → `/projects/[slug]`. "all projects →" → `/projects`. The nav's "projects" link scrolls to this section (open or not).
+- **Open section:** header "+" or anywhere on the header row (added 2026-10-19). **Close section:** click again.
+- **Projects:** shown open whenever the section is open (decided 2026-10-30; the per-project "+" and row toggle are gone).
+- **Links:** the whole cell → the project's detail page, once built (design first). "view project →" → `/projects/[slug]`. "all projects →" → `/projects`. The nav's "projects" link goes to `/projects` (decided 2026-10-30).
 
 ### Animation
 
@@ -270,15 +270,13 @@ A short, curated overview of the most important projects (2: Secure File Sharing
 | Section opens | Row *i* fades up (opacity 0 → 1, translateY 8px → 0) | 450ms | 150 + 160·*i* ms | ease |
 | Section opens | Closing rule draws, then "all projects →" fades in | 600ms / 400ms | after the last row (+100ms for the link) | same as above / ease |
 | Section closes | Everything in reverse, last row first | same | 60ms stagger | same |
-| Project opens / closes | Row toggle rotates 45°; details height 0 ↔ auto (CSS grid rows 0fr ↔ 1fr) | 450ms | 0 | `cubic-bezier(.4,0,.2,1)` |
-| Project opens | Cell fades in (opacity 0 → 1, translateY -4px → 0) | 300ms | 120ms | ease |
-| Project opens | Image focus pull: `blur(5px) brightness(1.15)` → none, like a memory coming into focus | 800ms | 200ms | ease |
+| Section opens | Each project's cell comes in with its row; its image focus pull: `blur(5px) brightness(1.15)` → none, like a memory coming into focus | 800ms (focus pull) | set when built (2026-10-30: projects no longer open on their own) | ease |
 
 Different from experience on purpose (rules draw sideways and images focus in, instead of a line drawing down with stars) so the two sections feel related, not copied.
 
 ### Accessibility
 
-- Same as experience: real `<button>`s with `aria-expanded` / `aria-controls`; labels "Show projects" / "Hide projects" and "Show details for {title}" / "Hide details for {title}". Row header click is a mouse convenience.
+- Same as experience: real `<button>`s with `aria-expanded` / `aria-controls`; labels "Show projects" / "Hide projects" (the per-project buttons are gone, 2026-10-30). The cell's whole-cell link is one real link named for the project, with its other links above it.
 - Collapsed content is `inert`/hidden once the close transition ends. 44px tap areas on phones.
 - Images need real `alt` text (what the screenshot shows), set in the data.
 - **Reduce Motion:** everything opens and closes instantly; images appear sharp (no focus pull).
@@ -438,7 +436,7 @@ The page ends at full night. On the left, a contact block. The open sky to the r
 
 ### Leave a star (after launch)
 
-- **Look (option B, "pixel cross"):** built on the sky's 4px pixel grid, drawn into the sky canvas after the blur like the white stars. A Sun gold `#FFD48A` center pixel at full strength plus the four touching pixels (up, down, left, right) at ~38%. Twinkles gently (each star 0.6–1.0 of its brightness, own phase). The visitor's own star adds four faint pixels two steps out (~25%) and pulses slightly, with a small "you" label in Sun gold (Schibsted 13px) just to its right.
+- **Look (option B, "pixel cross"):** built on the sky's 4px pixel grid, drawn into the sky canvas after the blur like the white stars. A Sun gold `#FFD48A` center pixel at full strength plus the four touching pixels (up, down, left, right) at ~38%. Twinkles gently (each star 0.6–1.0 of its brightness, own phase). The visitor's own star adds four faint pixels two steps out (~25%) and pulses slightly, with a small "you" label in Sun gold (Schibsted 13px) just to its right, shown only where it sits over connect (below its top edge), so it never lands on the projects above (decided 2026-10-30).
 - **Placing:** only inside the connect section, only when the sky is dark (see below), and only on open sky: not over the contact block, and not below ~90% of the way down to the horizon (clamped above the water). Click places the star at that spot. **One star per visitor.**
 - **Hover (connect only):** within ~3 sky pixels of a visitor star, show a small label above it: `City, Region · Mon YYYY · h:mm am/pm` (the visitor's local time when it was left; e.g. "Manila, PH · Oct 2026 · 8:15 pm"). Your own reads "you · City · just now" (or the saved date on later visits). Cursor becomes a pointer over a star; crosshair over open sky while placing is possible.
 - **Phones:** no hover, so tapping a star in connect shows its label for ~2s; tapping open sky places your star.
@@ -495,6 +493,47 @@ const starBrightness=t=>t<.35?0:t<.65?.3*(t-.35)/.3:.3+.7*(t-.65)/.35;
 - **Behavior:** static, no animation. Keeps the bottom-right corner clear for the leave-a-star hint.
 - **Reference:** footer options mockup, option A (https://claude.ai/artifact/MKUiG4qex5UYqGdSG4TYRg).
 
+## Subpages (decided 2026-10-30)
+
+- **What changes from the home page:** each subpage (/projects, the project write-ups, /scrapbook) holds one fixed look instead of the scroll sky: its own palette, drawn as the abstract scene below. The coast, scroll blending, the dial, "my time", the "sunset" pill and visitor stars stay on the home page.
+- **Abstract scene:** the home page's pipeline (tiny canvas → blur → 4px pixels → film grain) with no coast. A five-stop sky gradient fills the whole screen top to bottom (stops 0, 0.35, 0.55, 0.85, 1); the coast's five clouds drift the same way; a soft radial sun glow sits low on the right (x 500 of 680, radius 110 design units, the sun color at 0.9 fading to 0); the left vignette is the palette's (dark) or the day's cream haze (light). Phones get a tall 380×760 version with the clouds narrowed, like the tall coast. White stars appear at the palette's star strength and twinkle like the home page's. Code: `src/lib/sky/abstractScene.ts`.
+- **Which palette:** /projects and the write-ups use **teal sea**; /scrapbook uses **blue hour** (tentative until the scrapbook is designed and seen behind real photos). In order, one evening: home (golden hour → night) → projects (the sun just under the sea) → scrapbook (blue hour).
+- **Light and dark:** each palette has a dark and a light version. Dark uses the evening text theme (cream ink, Sun gold accent, plum tint and shadow); light uses the day text theme (navy ink, plum accent, cream tint, haze and glow).
+- **Which version shows:** the visitor's light/dark choice from the home page if they made one, else the device's setting (`prefers-color-scheme`, followed live). A small toggle flips it.
+- **Toggle:** the home nav's light/dark button in the same spot and style: a moon in light mode, a sun in dark mode; the new icon spins in (motion inventory).
+- **Palettes** (sky top → bottom; clouds in the scene's order). Teal sea's colors are new to the site; blue hour uses only existing ones.
+
+| Palette | Sky | Clouds | Sun glow | Vignette | Stars | Grain |
+|---|---|---|---|---|---|---|
+| Teal sea, dark | `#0E1E2A` `#123A44` `#1E5A5E` `#3E8A7E` `#E8B48A` | `#163640` `#1E4C52` `#2A6A68` `#4E9A88` `#C49A7A` | `#F7C27E`, y 300 | `#0A1A22` at 0.5 | 0.2 | 0.12 |
+| Teal sea, light | `#9CCBC4` `#B8DCD6` `#CFE6E2` `#E8F2EE` `#F4E2C4` | `#F6F4F0` ×4, `#F4E6D8` | `#FFFBEE`, y 300 | day cream haze | 0 | 0.07 |
+| Blue hour, dark *(tentative)* | `#07081A` `#141634` `#1C2550` `#3A4A7A` `#7A6A94` | `#1E1E40` `#26244E` `#2A2856` `#3A4A7A` `#6A6088` | `#C08A9A`, y 320 | plum `#2A1630` at 0.45 | 0.6 | 0.18 |
+| Blue hour, light *(tentative)* | `#8A9AC4` `#9CC2E6` `#C4DDF0` `#E2EEF6` `#FAD0A8` | `#F6F4F0` `#F6F4F0` `#F4C8C0` `#F6F4F0` `#F4C8C0` | `#FFE6C0`, y 300 | day cream haze | 0 | 0.07 |
+
+The sun glow's y is in the coast's 680×380 space (horizon 272); the abstract scene places it at y/272 × 80% of its height.
+
+### Mark (decided 2026-10-30)
+
+- **Look:** "jn" in Newsreader 400, lowercase, the n in italic (like the hero surname), 20px, letter-spacing -0.03em, line-height 1, ink at 82% (the nav links' strength; full ink on hover), plum text shadow.
+- **Where:** top left on every page (home and subpages), on the nav's screen margin (96px, 24px on phones) and 40px from the top, in the same row as the nav, aligned on its text baseline. It hides on scroll down and returns on scroll up with the nav.
+- **Link:** on the home page it scrolls back to the top; on subpages it goes to the home page. Accessible name "jared narvaez, home".
+- **Favicon:** still open (whether the mark, drawn from the letter outlines, replaces the placeholder sparkle).
+
+### Subpage header and contact block (decided 2026-10-30)
+
+- **Header:** the home nav's type and placement: Schibsted lowercase links, 40px from the top, on the 96px screen margin (24px on phones), plum text shadow. Left: the mark. Right: home · résumé · contact, 28px apart, then the light/dark toggle after the wider gap the home nav uses before its sky controls. Hides on scroll down and returns on scroll up like the home nav. On phones everything fits in one row, so there is no menu button.
+- **Links:** home goes to the home page; résumé opens the PDF like the home nav's; contact scrolls to the contact block on the same page.
+- **Rule (decided 2026-10-30):** a full-width 1px rule at 22% ink (the /projects group headings' rule) above the contact block; spacing around it set when built.
+- **Contact block:** the home page's contact block (Connect → Contact block) unchanged: label with sparkle, "reach out!", the line, email with the copy pill, LinkedIn · GitHub · Résumé. No leave a star or star hint, and not a full screen tall: it pads like a normal section (`clamp(72px, 12vh, 140px)`). Colors follow the page's palette and light/dark version. The footer line sits under it.
+- **Build:** one shared contact block component for the home page and every subpage.
+
+### /projects cards (decided 2026-10-30)
+
+- **Layout:** each group (h2: group name + count, a 1px rule at 22% ink under it) holds a grid of cards with 16px gaps: 3 columns on desktop (`lg`), 2 on tablets (`sm`), 1 on phones. Both groups keep 3 columns, so "personal" leaves its third slot empty.
+- **Card:** the home projects cell's material (tint at 34%, 1px border at 30% ink, 14px radius, 14px padding), a column with 12px gaps: screenshot (full card width, 16:10, 8px radius) → title (Newsreader 20px, line-height 1.2) with class · term under it (13px, 70% ink) → summary (Schibsted 15px, line-height 1.55) → tags (the site's small pills) → links (the 32px GitHub circle, then "project page →" / write-up link as underline links). No whole-card link, since a card can have several links.
+- **Placeholders:** projects without an image show the home page's `[screenshot]` gradients, cycling through the three.
+- **Motion:** see the motion inventory. Each card fades up once as it scrolls into view (opacity 0 → 1, translateY 8px → 0, 450ms ease), delayed 150 + 160·*c* ms where *c* is its column among the columns showing (so on phones every card waits 150ms); 200ms after its card starts, the screenshot comes into focus (`blur(5px) brightness(1.15)` → none, 800ms ease). Reduce Motion: cards and screenshots show at once, sharp.
+
 ## Motion
 
 ### Motion inventory (every animation on the site)
@@ -514,6 +553,10 @@ const starBrightness=t=>t<.35?0:t<.65?.3*(t-.35)/.3:.3+.7*(t-.65)/.35;
 | Nav (phones) | Full-screen menu opens: backdrop fades in, links rise 10px and fade in one by one; closes with a fade | "menu" / "close" / link tap | Open 250ms fade; links 350ms ease, delay 60 + 40·*i* ms; close 200ms fade | Instant |
 | Nav *(after launch)* | "sunset" pill slides in / out | Leaving / returning to scroll mode | translateX 8px → 0 + fade, 300ms | Instant |
 | Nav *(after launch)* | Light/dark icon swap: the new icon (sun or moon) spins in | Sky turns dark / light | rotate −90° → 0, scale 0.6 → 1, fade; 350ms `cubic-bezier(.3,1.4,.5,1)` | Instant |
+| Subpage header *(after launch)* | Hide on scroll down, return on scroll up | Scroll direction | translateY, 250ms (same as the home nav) | Instant |
+| Subpage contact block *(after launch)* | "copy" pill swaps to "copied" | Click | "copied" for 1.4s (same as connect) | Instant |
+| /projects *(after launch)* | Cards fade up as they scroll into view; each screenshot comes into focus | Card enters the viewport (once) | Card 450ms ease, opacity 0 → 1 + translateY 8px → 0, delay 150 + 160·*column* ms; screenshot `blur(5px) brightness(1.15)` → none, 800ms ease, 200ms after its card | Shown at once, sharp |
+| Subpages *(after launch)* | Light/dark toggle icon swap: the new icon (sun or moon) spins in; the background and text switch palette version | Toggle click | rotate −90° → 0, scale 0.6 → 1, fade; 350ms `cubic-bezier(.3,1.4,.5,1)` | Instant |
 | Nav *(after launch)* | Mini dial's gold dot travels around its ring to the current hour | Every frame | Follows the sky | Stays (it shows state) |
 | Nav *(after launch)* | Time dial grows down from the mini dial / shrinks back | Mini dial click / "close" / click outside | Open: scale 0 → 1 from top-right, 450ms `cubic-bezier(.3,1.3,.5,1)`. Close: scale → 0 + fade, 220ms ease-in | Instant |
 | Hero (and labels) | Sparkle twinkle | Always | Opacity 1 ↔ 0.5, 2.4s ease-in-out, infinite | Still |
@@ -522,7 +565,7 @@ const starBrightness=t=>t<.35?0:t<.65?.3*(t-.35)/.3:.3+.7*(t-.65)/.35;
 | Experience | Section opens: rail line draws down, stars pop in one by one, rows fade up; closes in reverse bottom-up | Header row or "+" | See Experience → Animation (line 700ms; star 500ms pop at 170 + 180·*i*; row 450ms at 250 + 180·*i*; close 60ms stagger) | Instant, all stars lit |
 | Experience | Role opens: details slide open, bullets fade in, its star brightens with a glow; current role's star twinkles | Row "+" | Height 400ms; bullets 300ms after 100ms; twinkle 2.4s | Instant, no twinkle |
 | Projects | Section opens: rules draw left → right, rows fade up, closing rule then "all projects →" fade in | Header row or "+" | See Projects → Animation (rule 600ms; row 450ms at 150 + 160·*i*) | Instant |
-| Projects | Project opens: cell slides open and fades in; image focus pull (blur → sharp); title turns accent | Row "+" | Height 450ms; cell 300ms after 120ms; image 800ms after 200ms | Instant, image sharp |
+| Projects | Each cell comes in with its row; image focus pull (blur → sharp). Replaces "project opens" (2026-10-30: projects show open with the section) | Section opens | Image 800ms; delays set when built | Instant, image sharp |
 | Beyond code | Prints drop into place one by one (also on "reset") | Section enters view (once) / reset | 300ms `cubic-bezier(.3,1.4,.5,1)`, delay 120 + 90·*i* ms | Appear in place |
 | Beyond code | Print hover lift, grab (scale 1.05 + deeper shadow), drop (settles to a new random tilt ±6°) | Hover / drag | Hover shadow 200ms; drop 300ms overshoot | Drag works, no scale/tilt animation |
 | Connect *(after launch)* | Visitor stars twinkle; your star pulses gently | Always (when dark) | Visitor 0.6–1.0 of brightness; yours 0.88–1.0 | Still |
