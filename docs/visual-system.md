@@ -514,10 +514,10 @@ The sun glow's y is in the coast's 680×380 space (horizon 272); the abstract sc
 
 ### Mark (decided 2026-10-30)
 
-- **Look:** "jn" in Newsreader 400, lowercase, the n in italic (like the hero surname), 20px, letter-spacing -0.03em, line-height 1, ink at 82% (the nav links' strength; full ink on hover), plum text shadow.
+- **Look:** "jn" in Newsreader 400, lowercase, both letters upright (the n was italic until 2026-11-07; changed to match the favicon), 20px, letter-spacing -0.03em, line-height 1, ink at 82% (the nav links' strength; full ink on hover), plum text shadow.
 - **Where:** top left on every page (home and subpages), on the nav's screen margin (96px, 24px on phones) and 40px from the top, in the same row as the nav, aligned on its text baseline. It hides on scroll down and returns on scroll up with the nav.
 - **Link:** on the home page it scrolls back to the top; on subpages it goes to the home page. Accessible name "jared narvaez, home".
-- **Favicon:** still open (whether the mark, drawn from the letter outlines, replaces the placeholder sparkle).
+- **Favicon:** the mark, drawn from the letter outlines (Newsreader 400 at optical size 20, both letters upright like the mark, its ink box (j dot to j tail) centered in a 32-unit square, no background), replaces the placeholder sparkle. Navy `#1F1A3A` in light browsers, cream `#FFF6EA` in dark ones, swapped by a `prefers-color-scheme` rule inside the SVG (option C, decided 2026-11-07). Rejected: A Sun gold with no background (nearly invisible on light tabs), B cream on a night plum rounded square; letters: upright j + italic n (the mark's old look), both italic, and connected scripts (Great Vibes, Pinyon Script, Dancing Script; thin and hard to read at 16px).
 
 ### Subpage header and contact block (decided 2026-10-30)
 
