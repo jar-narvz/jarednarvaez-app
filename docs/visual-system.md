@@ -242,7 +242,7 @@ Sparkle path (12px, `viewBox="-7 -7 14 14"`): `M0,-6.5C.9,-1 1,-1 6.5,0C1,1 .9,.
 
 ### What it is
 
-A short, curated overview of the most important projects (2: Posting Triage and OpenStreetMap Route-Impact Pipeline, decided 2026-10-30) on the home page, laid out as an **editorial numbered index** (01, 02 with big serif titles). Like experience, the **whole section starts collapsed** behind a "+". **When it opens, every project shows open** in its soft **cell**, with no per-project "+" (decided 2026-10-30; replaces each project expanding on its own). The **whole project row (the title header and the cell) links to the project's detail page** on the site once it is published (Claude's call, awaiting Jared's OK (spec said the cell); the title sits in the row header, outside the cell); the GitHub icon, "visit →" and the screenshot (opens large) keep their own actions. There is no "view project →" label. Below the list, an "all projects →" link goes to the full projects page (`/projects`). Sits around sunset → dusk on the scroll.
+A short, curated overview of the most important projects (2: Posting Triage and OpenStreetMap Route-Impact Pipeline, decided 2026-10-30) on the home page, laid out as an **editorial numbered index** (01, 02 with big serif titles). Like experience, the **whole section starts collapsed** behind a "+". **When it opens, every project shows open** in its soft **cell**, with no per-project "+" (decided 2026-10-30; replaces each project expanding on its own). The **cell links to the project's detail page** on the site once it is published (Jared, 2026-11-08: the cell only, not the title header); the GitHub icon, "visit →" and the screenshot (opens large) keep their own actions. There is no "view project →" label. Below the list, an "all projects →" link goes to the full projects page (`/projects`). Sits around sunset → dusk on the scroll.
 
 **MVP:** The row links to a detail page only when that project's `story.published` is true (`src/data/projects.ts`).
 
@@ -259,7 +259,7 @@ A short, curated overview of the most important projects (2: Posting Triage and 
 
 - **Open section:** header "+" or anywhere on the header row (added 2026-10-19). **Close section:** click again.
 - **Projects:** shown open whenever the section is open (decided 2026-10-30; the per-project "+" and row toggle are gone).
-- **Links:** the whole project row (header and cell) → `/projects/[slug]` once published; no label (Claude's call, awaiting Jared's OK; spec said the cell). "all projects →" → `/projects`. The nav's "projects" link goes to `/projects` (decided 2026-10-30).
+- **Links:** the cell → `/projects/[slug]` once published; no label (Jared, 2026-11-08: the cell only). "all projects →" → `/projects`. The nav's "projects" link goes to `/projects` (decided 2026-10-30).
 
 ### Animation
 
