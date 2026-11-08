@@ -242,16 +242,16 @@ Sparkle path (12px, `viewBox="-7 -7 14 14"`): `M0,-6.5C.9,-1 1,-1 6.5,0C1,1 .9,.
 
 ### What it is
 
-A short, curated overview of the most important projects (2: Posting Triage and OpenStreetMap Route-Impact Pipeline, decided 2026-10-30) on the home page, laid out as an **editorial numbered index** (01, 02 with big serif titles). Like experience, the **whole section starts collapsed** behind a "+". **When it opens, every project shows open** in its soft **cell**, with no per-project "+" (decided 2026-10-30; replaces each project expanding on its own). The **whole cell links to the project's detail page** on the site once it exists; the GitHub icon, "project page →" and the screenshot (opens large) keep their own actions. Below the list, an "all projects →" link goes to the full projects page (`/projects`), and each open project has "view project →" linking to its own detail page (MDX). Sits around sunset → dusk on the scroll.
+A short, curated overview of the most important projects (2: Posting Triage and OpenStreetMap Route-Impact Pipeline, decided 2026-10-30) on the home page, laid out as an **editorial numbered index** (01, 02 with big serif titles). Like experience, the **whole section starts collapsed** behind a "+". **When it opens, every project shows open** in its soft **cell**, with no per-project "+" (decided 2026-10-30; replaces each project expanding on its own). The **whole project row (the title header and the cell) links to the project's detail page** on the site once it is published (Claude's call, awaiting Jared's OK (spec said the cell); the title sits in the row header, outside the cell); the GitHub icon, "visit →" and the screenshot (opens large) keep their own actions. There is no "view project →" label. Below the list, an "all projects →" link goes to the full projects page (`/projects`). Sits around sunset → dusk on the scroll.
 
-**MVP:** `/projects` and the detail pages aren't designed yet, so hide "all projects →" and "view project →" until they exist (keep the data fields and a flag to turn them on).
+**MVP:** The row links to a detail page only when that project's `story.published` is true (`src/data/projects.ts`).
 
 ### Layout
 
 - **Header (left, 96px margin):** "projects" label with sparkle (13px, accent) → Newsreader heading (~40px). The same 30px round "+" toggle as experience at the right end of the header row.
 - **Content column:** ~640px wide (placeholder, tune with real content), left of the sun, on the site-wide vignette.
 - **Project row header:** a grid of four columns: number (`01`, Schibsted 13px, ~60% cream, tabular numerals, ~36px column) · title (Newsreader ~30px, letter-spacing -0.015em) · type and year stacked, right-aligned (Schibsted 13px, ~70% cream) · "+" toggle (30px). 14px gaps, ~14px vertical padding. A 1px cream rule at ~22% sits above each row and one closes the list. Title turns accent color on hover and while its row is open.
-- **Expanded details (the cell):** indented to start under the title (~50px). Cell = the same material as the tech stack pills: dark plum tint at ~34% (cream tint in the day theme), 1px cream border at ~30%, 14px radius, 14px padding. Inside, a row: **image** (plain screenshot, ~200×124 at 16:10, 8px radius, no frame or tilt) + text column: summary (Schibsted ~15px, line-height 1.55, 1–2 lines) → tech tags (same pills as elsewhere, small) → "view project →" link (accent, Sun gold underline).
+- **Expanded details (the cell):** indented to start under the title (~50px). Cell = the same material as the tech stack pills: dark plum tint at ~34% (cream tint in the day theme), 1px cream border at ~30%, 14px radius, 14px padding. Inside, a row: **image** (plain screenshot, ~200×124 at 16:10, 8px radius, no frame or tilt) + text column: summary (Schibsted ~15px, line-height 1.55, 1–2 lines) → tech tags (same pills as elsewhere, small) → links (the GitHub circle, "visit →").
 - **Below the list:** "all projects →" link (accent, Sun gold underline), 18px under the last rule.
 - **Phones:** the type/year column drops under the title; inside the cell the image stacks above the text at full cell width.
 
@@ -259,7 +259,7 @@ A short, curated overview of the most important projects (2: Posting Triage and 
 
 - **Open section:** header "+" or anywhere on the header row (added 2026-10-19). **Close section:** click again.
 - **Projects:** shown open whenever the section is open (decided 2026-10-30; the per-project "+" and row toggle are gone).
-- **Links:** the whole cell → the project's detail page, once built (design first). "view project →" → `/projects/[slug]`. "all projects →" → `/projects`. The nav's "projects" link goes to `/projects` (decided 2026-10-30).
+- **Links:** the whole project row (header and cell) → `/projects/[slug]` once published; no label (Claude's call, awaiting Jared's OK; spec said the cell). "all projects →" → `/projects`. The nav's "projects" link goes to `/projects` (decided 2026-10-30).
 
 ### Animation
 
@@ -537,9 +537,26 @@ The sun glow's y is in the coast's 680×380 space (horizon 272); the abstract sc
 ### /projects cards (decided 2026-10-30)
 
 - **Layout:** each group (h2: group name + count, a 1px rule at 22% ink under it) holds a grid of cards with 16px gaps: 3 columns on desktop (`lg`), 2 on tablets (`sm`), 1 on phones. Both groups keep 3 columns, so "personal" leaves its third slot empty.
-- **Card:** the home projects cell's material (tint at 34%, 1px border at 30% ink, 14px radius, 14px padding), a column with 12px gaps: screenshot (full card width, 16:10, 8px radius) → title (Newsreader 20px, line-height 1.2) with class · term under it (13px, 70% ink) → summary (Schibsted 15px, line-height 1.55) → tags (the site's small pills) → links (the 32px GitHub circle, then "project page →" / write-up link as underline links). No whole-card link, since a card can have several links.
+- **Card:** the home projects cell's material (tint at 34%, 1px border at 30% ink, 14px radius, 14px padding), a column with 12px gaps: screenshot (full card width, 16:10, 8px radius) → title (Newsreader 20px, line-height 1.2) with class · term under it (13px, 70% ink) → summary (Schibsted 15px, line-height 1.55) → tags (the site's small pills) → links (the 32px GitHub circle, then "visit →" as an underline link). The four projects with a detail page or write-up are whole-card links to `/projects/[slug]` once published (decided 2026-11-08; no label), with the GitHub circle and "visit →" keeping their own actions; the other five cards have no whole-card link, since a card can have several links.
 - **Placeholders:** projects without an image show the home page's `[screenshot]` gradients, cycling through the three.
 - **Motion:** see the motion inventory. Each card fades up once as it scrolls into view (opacity 0 → 1, translateY 8px → 0, 450ms ease), delayed 150 + 160·*c* ms where *c* is its column among the columns showing (so on phones every card waits 150ms); 200ms after its card starts, the screenshot comes into focus (`blur(5px) brightness(1.15)` → none, 800ms ease). Reduce Motion: cards and screenshots show at once, sharp.
+
+### Project detail pages (decided 2026-11-08)
+
+- **Pages:** `/projects/[slug]` for `posting-triage` and `route-impact` (personal, link row: GitHub circle + "visit →") and `secure-file-sharing` and `character-gpt` (write-ups: CS 161 and CS 188, no link row, class code stays private). One design for all four. Content is MDX holding only the essay; everything else comes from the project's entry in `src/data/projects.ts`.
+- **Look:** the subpage look (teal sea, header, then the 1px rule at 22% ink, contact block and footer line). Text readable in both versions, desktop and phone width.
+- **Top to bottom:** subpage header → "← all projects" (small text link to `/projects`, Schibsted ~14px at the meta line's strength) → title (Newsreader, the /projects h1 style: `clamp(32px,4vw,40px)`, line-height 1.1, -0.02em) → meta line → link row → intro line → lead screenshot → essay → rule, contact block, footer line.
+- **Meta line:** personal: `personal · {year} · {n} min read`; coursework: `{class} · {term} · {n} min read`. 13px at 70% ink. Reading time computed from the MDX word count (200 words/min, rounded up), not typed by hand.
+- **Link row:** the 32px GitHub circle, then "visit →", only for links the project has.
+- **Intro line (option A):** one or two sentences Jared writes, Newsreader italic ~18px, line-height 1.5, ~88% ink, directly under the link row. For the write-ups it says what the page is. Placeholder until Jared writes it.
+- **Lead screenshot:** full column width, 16:10, 8px radius (the /projects screenshot style); opens large on click like the home cells' screenshots. Defaults to the project's `image`, loads eagerly (above the fold). Missing image: the `[screenshot]` gradient placeholder, labeled.
+- **Essay:** Jared's three parts in order (why he built it → how it connects to him → his design choices), each with a short heading phrase he writes (Newsreader ~26px, 48px above). Body Schibsted 17px, line-height 1.7, 680px max column, centered in the content column. All copy is `[placeholder]` until Jared writes it.
+- **Inline pictures:** only where relevant, at the moment the text discusses it, with a one-line caption (13px at 70% ink).
+- **Rejected vs. chosen pair:** two images side by side (rejected left, dimmed; chosen right), each with a one-line caption; stacked on phones, rejected first. The dimmed image must still read as an image on the light sea.
+- **Edge cases:** no rejected version: text or a single figure. Long titles (route-impact) wrap on phones without breaking the meta line.
+- **Publishing:** each project's `story.published` flag in `src/data/projects.ts` (not MDX frontmatter). Unpublished pages render in dev and 404 in production; their home and /projects cards don't link.
+- **Motion:** see the motion inventory: each image focuses in once on scroll into view. Text does not animate.
+- **Not on these pages:** the README, setup or eval numbers; interactive demos; a table of contents, comments or "next project" link; quiz blocks.
 
 ## Motion
 
@@ -563,6 +580,7 @@ The sun glow's y is in the coast's 680×380 space (horizon 272); the abstract sc
 | Subpage header *(after launch)* | Hide on scroll down, return on scroll up | Scroll direction | translateY, 250ms (same as the home nav) | Instant |
 | Subpage contact block *(after launch)* | "copy" pill swaps to "copied" | Click | "copied" for 1.4s (same as connect) | Instant |
 | /projects *(after launch)* | Cards fade up as they scroll into view; each screenshot comes into focus | Card enters the viewport (once) | Card 450ms ease, opacity 0 → 1 + translateY 8px → 0, delay 150 + 160·*column* ms; screenshot `blur(5px) brightness(1.15)` → none, 800ms ease, 200ms after its card | Shown at once, sharp |
+| Project detail pages | Each image (lead screenshot, inline pictures, pair images) comes into focus once; reuses the /projects screenshot focus pull | Image enters the viewport (once) | `blur(5px) brightness(1.15)` → none, 800ms ease | Shown sharp at once |
 | Subpages *(after launch)* | Light/dark toggle icon swap: the new icon (sun or moon) spins in; the background and text switch palette version | Toggle click | rotate −90° → 0, scale 0.6 → 1, fade; 350ms `cubic-bezier(.3,1.4,.5,1)` | Instant |
 | Nav *(after launch)* | Mini dial's gold dot travels around its ring to the current hour | Every frame | Follows the sky | Stays (it shows state) |
 | Nav *(after launch)* | Time dial grows down from the mini dial / shrinks back | Mini dial click / "close" / click outside | Open: scale 0 → 1 from top-right, 450ms `cubic-bezier(.3,1.3,.5,1)`. Close: scale → 0 + fade, 220ms ease-in | Instant |
