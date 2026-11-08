@@ -1,8 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useInView } from "motion/react";
 import { useRef, useSyncExternalStore } from "react";
+import { isLinkedStory } from "@/lib/story";
+import { useReduceMotion } from "@/lib/useReduceMotion";
 import ScreenshotViewer from "@/components/ScreenshotViewer";
 import TagList from "@/components/TagList";
 import UnderlineLink from "@/components/UnderlineLink";
@@ -44,25 +47,6 @@ function useColumns() {
   );
 }
 
-const REDUCE = "(prefers-reduced-motion: reduce)";
-
-/**
- * Reduce Motion, false on the server and while hydrating, then the real value. Motion's
- * useReducedMotion is already true on the first client render, which doesn't match the server's
- * HTML; React leaves the mismatched class alone, so the cards would stay at opacity 0.
- */
-function useReduceMotion() {
-  return useSyncExternalStore(
-    (onChange) => {
-      const query = window.matchMedia(REDUCE);
-      query.addEventListener("change", onChange);
-      return () => query.removeEventListener("change", onChange);
-    },
-    () => window.matchMedia(REDUCE).matches,
-    () => false,
-  );
-}
-
 export default function ProjectCards({ projects }: { projects: Project[] }) {
   const columns = useColumns();
   return (
@@ -79,18 +63,33 @@ function Card({ project, index, delayMs }: { project: Project; index: number; de
   const inView = useInView(ref, { once: true, margin: "0px 0px -10% 0px" });
   const reduceMotion = useReduceMotion();
   const shown = inView || reduceMotion;
+  // Published story: the whole card opens it (stretched title link). The GitHub circle, the site
+  // link and the screenshot sit above it (z-10) and keep their own actions.
+  const linked = isLinkedStory(project);
+  const lift = linked ? "relative z-10" : "";
 
   return (
     <li
       ref={ref}
       style={{ transitionDelay: `${delayMs}ms` }}
-      className={`flex flex-col gap-3 rounded-[14px] border border-ink/30 bg-tint/34 p-3.5 transition-[opacity,translate] duration-450 ease-[ease] motion-reduce:transition-none ${
+      className={`${linked ? "relative " : ""}flex flex-col gap-3 rounded-[14px] border border-ink/30 bg-tint/34 p-3.5 transition-[opacity,translate] duration-450 ease-[ease] motion-reduce:transition-none ${
         shown ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
       }`}
     >
-      <Screenshot project={project} index={index} focused={shown} delayMs={delayMs + FOCUS_LAG_MS} />
+      <Screenshot project={project} index={index} focused={shown} delayMs={delayMs + FOCUS_LAG_MS} lift={lift} />
       <div>
-        <h3 className="font-serif text-[20px] leading-[1.2] font-normal">{project.title}</h3>
+        {linked ? (
+          <h3 className="font-serif text-[20px] leading-[1.2] font-normal">
+            <Link
+              href={`/projects/${project.slug}`}
+              className="outline-none after:absolute after:inset-0 after:rounded-[14px] focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-accent"
+            >
+              {project.title}
+            </Link>
+          </h3>
+        ) : (
+          <h3 className="font-serif text-[20px] leading-[1.2] font-normal">{project.title}</h3>
+        )}
         <p className="mt-0.5 text-[13px] text-ink/70">{cardMeta(project)}</p>
       </div>
       <p className="text-[15px] leading-[1.55]">{project.summary}</p>
@@ -104,15 +103,23 @@ function Card({ project, index, delayMs }: { project: Project; index: number; de
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${project.title} on GitHub`}
-              className="flex size-8 items-center justify-center rounded-full border border-ink/38 bg-tint/34 text-ink/82 transition-colors duration-200 ease-out hover:border-accent/60 hover:text-accent motion-reduce:transition-none"
+              className={`${linked ? "relative z-10 " : ""}flex size-8 items-center justify-center rounded-full border border-ink/38 bg-tint/34 text-ink/82 transition-colors duration-200 ease-out hover:border-accent/60 hover:text-accent motion-reduce:transition-none`}
             >
               <GithubIcon size={15} />
             </a>
           )}
           {project.site && (
-            <UnderlineLink href={project.site} newTab ariaLabel={`${project.title} link, opens in a new tab`}>
-              {SITE_LINK_LABEL}
-            </UnderlineLink>
+            linked ? (
+              <span className="relative z-10">
+                <UnderlineLink href={project.site} newTab ariaLabel={`${project.title} link, opens in a new tab`}>
+                  {SITE_LINK_LABEL}
+                </UnderlineLink>
+              </span>
+            ) : (
+              <UnderlineLink href={project.site} newTab ariaLabel={`${project.title} link, opens in a new tab`}>
+                {SITE_LINK_LABEL}
+              </UnderlineLink>
+            )
           )}
         </div>
       )}
@@ -126,11 +133,14 @@ function Screenshot({
   index,
   focused,
   delayMs,
+  lift,
 }: {
   project: Project;
   index: number;
   focused: boolean;
   delayMs: number;
+  /** "relative z-10" when the card links to its story, so the viewer stays clickable above the link. */
+  lift: string;
 }) {
   const style = { transitionDelay: `${delayMs}ms` };
   const focusPull = `aspect-[16/10] w-full rounded-lg transition-[filter] duration-800 ease-[ease] motion-reduce:transition-none ${
@@ -138,12 +148,12 @@ function Screenshot({
   }`;
 
   if (project.demo) {
-    return <Demo demo={project.demo} className={focusPull} style={style} />;
+    return <Demo demo={project.demo} className={focusPull} style={style} lift={lift} />;
   }
 
   if (project.image.src) {
     return (
-      <ScreenshotViewer src={project.image.src} alt={project.image.alt} className="w-full rounded-lg">
+      <ScreenshotViewer src={project.image.src} alt={project.image.alt} className={`${lift ? "relative z-10 " : ""}w-full rounded-lg`}>
         <Image
           src={project.image.src}
           alt={project.image.alt}
@@ -178,10 +188,12 @@ function Demo({
   demo,
   className,
   style,
+  lift,
 }: {
   demo: NonNullable<Project["demo"]>;
   className: string;
   style: React.CSSProperties;
+  lift: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref);
@@ -190,7 +202,7 @@ function Demo({
 
   return (
     <div ref={ref}>
-      <ScreenshotViewer src={src} alt={demo.alt} contain className="w-full rounded-lg">
+      <ScreenshotViewer src={src} alt={demo.alt} contain className={`${lift ? "relative z-10 " : ""}w-full rounded-lg`}>
         <Image
           src={inView ? src : demo.poster}
           alt={demo.alt}

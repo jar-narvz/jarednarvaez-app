@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import Collapse from "@/components/Collapse";
 import CollapsibleHeader from "@/components/CollapsibleHeader";
@@ -11,12 +12,12 @@ import {
   featuredProjects,
   projectsSection,
   showAllProjectsLink,
-  showWriteUps,
   SITE_LINK_LABEL,
   type Project,
 } from "@/data/projects";
 import { GithubIcon } from "@/icons/lineIcons";
 import { staggerDelay } from "@/lib/stagger";
+import { isLinkedStory } from "@/lib/story";
 
 // Projects (docs/visual-system.md → Projects): an editorial numbered index, collapsed by default
 // like experience but animated differently on purpose. Opening, the rule above row i draws left →
@@ -117,6 +118,10 @@ function ProjectRow({
   delayMs: number;
 }) {
   const ruleDelayMs = sectionOpen ? delayMs - RULE_LEAD_MS : delayMs;
+  // Published story: the row (header + cell) opens it through a stretched title link. The GitHub
+  // circle, the site link and the screenshot sit above it (z-10) and keep their own actions.
+  const linked = isLinkedStory(project);
+  const lift = linked ? "relative z-10" : "";
 
   return (
     <li>
@@ -125,7 +130,7 @@ function ProjectRow({
 
       <div
         style={{ transitionDelay: `${delayMs}ms` }}
-        className={`transition-[opacity,translate] duration-450 ease-[ease] motion-reduce:transition-none ${
+        className={`${linked ? "relative " : ""}transition-[opacity,translate] duration-450 ease-[ease] motion-reduce:transition-none ${
           sectionOpen ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
         }`}
       >
@@ -137,7 +142,16 @@ function ProjectRow({
           {/* Ink, turning accent on hover only: with every project open, the spec's "accent while
               open" would leave every title gold (decided 2026-10-30). */}
           <h3 className="font-serif text-[clamp(24px,3vw,30px)] leading-[1.15] font-normal tracking-[-0.015em] transition-colors duration-300 group-hover:text-accent motion-reduce:transition-none">
-            {project.title}
+            {linked ? (
+              <Link
+                href={`/projects/${project.slug}`}
+                className="outline-none after:absolute after:inset-0 after:rounded-[14px] focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-accent"
+              >
+                {project.title}
+              </Link>
+            ) : (
+              project.title
+            )}
           </h3>
           <p className="text-right text-[13px] leading-[1.4] text-ink/70 max-sm:col-start-2 max-sm:row-start-2 max-sm:text-left">
             {project.type}
@@ -154,6 +168,7 @@ function ProjectRow({
             index={index}
             focused={sectionOpen}
             delayMs={sectionOpen ? delayMs + FOCUS_LAG_MS : delayMs}
+            lift={lift}
           />
           <div className="min-w-0">
             <p className="text-[15px] leading-[1.55]">{project.summary}</p>
@@ -167,27 +182,27 @@ function ProjectRow({
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`${project.title} on GitHub`}
-                    className="flex size-8 items-center justify-center rounded-full border border-ink/38 bg-tint/34 text-ink/82 transition-colors duration-200 ease-out hover:border-accent/60 hover:text-accent motion-reduce:transition-none"
+                    className={`${linked ? "relative z-10 " : ""}flex size-8 items-center justify-center rounded-full border border-ink/38 bg-tint/34 text-ink/82 transition-colors duration-200 ease-out hover:border-accent/60 hover:text-accent motion-reduce:transition-none`}
                   >
                     <GithubIcon size={15} />
                   </a>
                 )}
                 {project.site && (
                   // External project page, visible without hovering; not the /projects detail page.
-                  <UnderlineLink
-                    href={project.site}
-                    newTab
-                    ariaLabel={`${project.title} link, opens in a new tab`}
-                  >
-                    {SITE_LINK_LABEL}
-                  </UnderlineLink>
+                  (() => {
+                    const siteLink = (
+                      <UnderlineLink
+                        href={project.site}
+                        newTab
+                        ariaLabel={`${project.title} link, opens in a new tab`}
+                      >
+                        {SITE_LINK_LABEL}
+                      </UnderlineLink>
+                    );
+                    return linked ? <span className="relative z-10">{siteLink}</span> : siteLink;
+                  })()
                 )}
               </div>
-            )}
-            {showWriteUps && (
-              <p className="mt-3">
-                <UnderlineLink href={`/projects/${project.slug}`}>view project →</UnderlineLink>
-              </p>
             )}
           </div>
         </div>
@@ -203,11 +218,14 @@ function ProjectImage({
   index,
   focused,
   delayMs,
+  lift,
 }: {
   project: Project;
   index: number;
   focused: boolean;
   delayMs: number;
+  /** "relative z-10" when the row links to its story, so the viewer stays clickable above the link. */
+  lift: string;
 }) {
   const size = "w-50 max-w-full flex-none rounded-lg max-sm:w-full";
   const style = { transitionDelay: `${delayMs}ms` };
@@ -217,7 +235,7 @@ function ProjectImage({
 
   if (project.image.src) {
     return (
-      <ScreenshotViewer src={project.image.src} alt={project.image.alt} className={size}>
+      <ScreenshotViewer src={project.image.src} alt={project.image.alt} className={`${lift ? "relative z-10 " : ""}${size}`}>
         <Image
           src={project.image.src}
           alt={project.image.alt}

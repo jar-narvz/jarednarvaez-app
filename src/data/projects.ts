@@ -2,6 +2,14 @@
 // page (featured only, by `order`) and /projects (all, in list order: strongest first within each
 // group, decided 2026-10-30). Copy from docs/content.md → Projects and More projects.
 
+// A project's detail page (/projects/[slug]). `published` gates the link to it; the page itself
+// can exist as a draft first.
+export type Story = {
+  published: boolean;
+  intro: string; // one line under the title
+  image?: { src: string; alt: string }; // page header image, in place of `image`
+};
+
 export type Project = {
   slug: string; // detail page: /projects/[slug] (MDX)
   title: string;
@@ -18,6 +26,7 @@ export type Project = {
   site?: string; // external page (project page, live demo, live site), shown as SITE_LINK_LABEL beside the GitHub icon
   featured?: boolean; // shown on the home page (2: Posting Triage and route-impact, decided 2026-10-30)
   order?: number; // home page order
+  story?: Story; // detail page at /projects/[slug]
 };
 
 export type ProjectGroup = "personal" | "coursework & clubs";
@@ -26,10 +35,9 @@ export type ProjectGroup = "personal" | "coursework & clubs";
 export const PROJECT_GROUPS: ProjectGroup[] = ["personal", "coursework & clubs"];
 
 // "all projects →" under the home projects list links to /projects (on since 2026-10-30, when
-// /projects was built); "view project →" stays hidden until a write-up exists (Secure File
-// Sharing and Character-Level GPT, later).
+// /projects was built). Cards link to /projects/[slug] once that project's `story.published`
+// is true.
 export const showAllProjectsLink = true;
-export const showWriteUps = false;
 
 // The one label for every external link, on the home page and /projects (Jared, 2026-11-06: a
 // general word, so it fits a project page, a live demo and a live site alike).
@@ -61,6 +69,10 @@ export const projects: Project[] = [
     site: "https://jar-narvz.github.io/posting-triage/",
     featured: true,
     order: 1,
+    story: {
+      published: false,
+      intro: "[intro line: where to go for how it works, trying it and the numbers; this page is the story]",
+    },
   },
   {
     // Summary from the route-impact README's one-liner; tags from the v3.5 résumé.
@@ -79,6 +91,10 @@ export const projects: Project[] = [
     site: "https://jar-narvz.github.io/route-impact/site/playground/",
     featured: true,
     order: 2,
+    story: {
+      published: false,
+      intro: "[intro line: where to go for how it works, trying it and the numbers; this page is the story]",
+    },
   },
   {
     slug: "secure-file-sharing",
@@ -95,6 +111,10 @@ export const projects: Project[] = [
       src: "/secure-file-sharing.png",
       alt: "Flowchart of the secure file sharing system: logging in, storing and loading encrypted chunks, then sharing a file and removing access",
     },
+    story: {
+      published: false,
+      intro: "[intro line: what this page is]",
+    },
   },
   {
     slug: "character-gpt",
@@ -110,6 +130,10 @@ export const projects: Project[] = [
     image: {
       src: "/character-gpt.png",
       alt: "Flowchart of the character-level GPT: training data, the transformer model, then sampling, with a line of generated text from iteration 9,900",
+    },
+    story: {
+      published: false,
+      intro: "[intro line: what this page is]",
     },
   },
   // The rest of /projects, from docs/content.md → More projects, plus a closing period on each
