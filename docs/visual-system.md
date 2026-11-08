@@ -517,7 +517,7 @@ The sun glow's y is in the coast's 680×380 space (horizon 272); the abstract sc
 - **Look:** "jn" in Newsreader 400, lowercase, the n in italic (like the hero surname), 20px, letter-spacing -0.03em, line-height 1, ink at 82% (the nav links' strength; full ink on hover), plum text shadow.
 - **Where:** top left on every page (home and subpages), on the nav's screen margin (96px, 24px on phones) and 40px from the top, in the same row as the nav, aligned on its text baseline. It hides on scroll down and returns on scroll up with the nav.
 - **Link:** on the home page it scrolls back to the top; on subpages it goes to the home page. Accessible name "jared narvaez, home".
-- **Favicon:** still open (whether the mark, drawn from the letter outlines, replaces the placeholder sparkle).
+- **Favicon:** the mark, drawn from the letter outlines, replaces the placeholder sparkle (decided 2026-11-07). Exact colors and sizes not specified yet.
 
 ### Subpage header and contact block (decided 2026-10-30)
 
