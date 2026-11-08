@@ -521,11 +521,18 @@ The sun glow's y is in the coast's 680×380 space (horizon 272); the abstract sc
 
 ### Subpage header and contact block (decided 2026-10-30)
 
-- **Header:** the home nav's type and placement: Schibsted lowercase links, 40px from the top, on the 96px screen margin (24px on phones), plum text shadow. Left: the mark. Right: home · résumé · contact, 28px apart, then the light/dark toggle after the wider gap the home nav uses before its sky controls. Hides on scroll down and returns on scroll up like the home nav. On phones everything fits in one row, so there is no menu button.
+- **Header:** the home nav's type and placement: Schibsted lowercase links, 40px from the top, on the 96px screen margin (24px on phones), plum text shadow. Left: the mark. Right: home · projects · résumé · contact (projects added 2026-11-08), 28px apart, then the light/dark toggle after the wider gap the home nav uses before its sky controls. Hides on scroll down and returns on scroll up like the home nav. On phones (below 768px, like the home nav) the links move into the home nav's full-screen menu behind a "menu" button, with the toggle still in the row (decided 2026-11-08: five items don't fit in one row at 320px).
 - **Links:** home goes to the home page; résumé opens the PDF like the home nav's; contact scrolls to the contact block on the same page.
 - **Rule (decided 2026-10-30):** a full-width 1px rule at 22% ink (the /projects group headings' rule) above the contact block; spacing around it set when built.
 - **Contact block:** the home page's contact block (Connect → Contact block) unchanged: label with sparkle, "reach out!", the line, email with the copy pill, LinkedIn · GitHub · Résumé. No leave a star or star hint, and not a full screen tall: it pads like a normal section (`clamp(72px, 12vh, 140px)`). Colors follow the page's palette and light/dark version. The footer line sits under it.
 - **Build:** one shared contact block component for the home page and every subpage.
+
+### /resume (decided 2026-11-08)
+
+- **Layout:** like /projects: the subpage header, teal sea, then "my résumé" (the /projects heading style, at the content column's left) with two round icon buttons at the column's right (download, open the PDF in a new tab; 36px, the project cards' GitHub circle material, 16px line icons). Below it the PDF centered in the column, with an "open the pdf →" link under its left edge, then the rule, contact block and footer line.
+- **Viewer (option B):** each PDF page drawn by pdf.js (`react-pdf`) at the column's width, capped at 816px (a letter page at 100%), as a white sheet with 4px corners and a soft plum shadow (`0 6px 16px` at 35%, the scrapbook prints' shadow). Text stays selectable and the PDF's links stay clickable. A blank sheet holds the space while it loads. pdf.js loads only on this page. No animation.
+- **The PDF:** `public/Jared-Narvaez-Resume.pdf`, a fixed name so outside links (GitHub profile) keep working when it's swapped.
+- **Links:** the home nav's "résumé", the subpage header's "résumé", the hero's résumé button and the contact block's "Résumé" all open /resume in the same tab.
 
 ### /projects cards (decided 2026-10-30)
 

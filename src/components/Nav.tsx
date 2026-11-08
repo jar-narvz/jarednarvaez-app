@@ -17,21 +17,23 @@ import { links } from "@/data/links";
 // scroll up, so the controls stay reachable without covering text; on phones the links open
 // in a full-screen menu.
 
-const LINKS = [
+export type NavItem = { label: string; href: string };
+
+const LINKS: NavItem[] = [
   { label: "about", href: "#about" },
   { label: "experience", href: "#experience" },
   { label: "projects", href: "/projects" },
-  { label: "résumé", href: links.resume, newTab: true },
+  { label: "résumé", href: links.resume },
   { label: "contact", href: "#contact" },
 ];
 
 /**
- * One nav link. The résumé PDF opens in a new tab (as in connect) so the site stays open. /projects
- * goes through Next's Link, so the page doesn't reload and the sky mode (kept in memory) carries
- * over to its light/dark. Section links are plain in-page anchors.
+ * One nav link. Pages on the site ("/", /projects, /resume) go through Next's Link, so the page
+ * doesn't reload and the sky mode (kept in memory) carries over to their light/dark. Section links
+ * are plain in-page anchors. Shared with the subpage header.
  */
-function NavLink({ link, className, onClick }: { link: (typeof LINKS)[number]; className?: string; onClick?: () => void }) {
-  if (link.href.startsWith("/") && !link.newTab) {
+export function NavLink({ link, className, onClick }: { link: NavItem; className?: string; onClick?: () => void }) {
+  if (link.href.startsWith("/")) {
     return (
       <Link href={link.href} className={className} onClick={onClick}>
         {link.label}
@@ -39,12 +41,7 @@ function NavLink({ link, className, onClick }: { link: (typeof LINKS)[number]; c
     );
   }
   return (
-    <a
-      href={link.href}
-      {...(link.newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className={className}
-      onClick={onClick}
-    >
+    <a href={link.href} className={className} onClick={onClick}>
       {link.label}
     </a>
   );
@@ -83,23 +80,7 @@ export default function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // While the phone menu is open: Escape closes it, and the page can't scroll underneath.
-  // It also closes if the screen widens to the desktop nav (e.g. a phone turned sideways),
-  // since the "close" button disappears at that width.
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
-    const desktop = window.matchMedia("(min-width: 768px)");
-    const onWiden = () => desktop.matches && setOpen(false);
-    document.addEventListener("keydown", onKey);
-    desktop.addEventListener("change", onWiden);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      desktop.removeEventListener("change", onWiden);
-      document.body.style.overflow = "";
-    };
-  }, [open]);
+  usePhoneMenu(open, setOpen);
 
   // The nav stays put while the phone menu or the time dial is open.
   const isHidden = hidden && !open && !dialOpen;
@@ -164,10 +145,32 @@ export default function Nav() {
           inside a transformed parent would be pinned to the header instead of the screen. It sits
           under the header (z-10 vs z-20) so the "close" button stays on top. */}
       <AnimatePresence>
-        {open && <PhoneMenu reduceMotion={!!reduceMotion} onPick={() => setOpen(false)} />}
+        {open && <PhoneMenu links={LINKS} reduceMotion={!!reduceMotion} onPick={() => setOpen(false)} />}
       </AnimatePresence>
     </>
   );
+}
+
+/**
+ * While a phone menu is open: Escape closes it, and the page can't scroll underneath. It also
+ * closes if the screen widens to the desktop nav (e.g. a phone turned sideways), since the "close"
+ * button disappears at that width. Shared with the subpage header.
+ */
+export function usePhoneMenu(open: boolean, setOpen: (open: boolean) => void) {
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const desktop = window.matchMedia("(min-width: 768px)");
+    const onWiden = () => desktop.matches && setOpen(false);
+    document.addEventListener("keydown", onKey);
+    desktop.addEventListener("change", onWiden);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      desktop.removeEventListener("change", onWiden);
+      document.body.style.overflow = "";
+    };
+  }, [open, setOpen]);
 }
 
 // Phone menu timings (Motion inventory): the backdrop fades in over 250ms and out over 200ms;
@@ -179,8 +182,9 @@ const LINK_S = 0.45;
 const linkDelay = (i: number) => (80 + 60 * i) / 1000;
 const CSS_EASE = [0.25, 0.1, 0.25, 1] as const; // CSS `ease`, as in the mockup
 
-// Phones: big links stacked on the left over a darkened, blurred sky.
-function PhoneMenu({ reduceMotion, onPick }: { reduceMotion: boolean; onPick: () => void }) {
+// Phones: big links stacked on the left over a darkened, blurred sky. Shared with the subpage
+// header, which passes its own links.
+export function PhoneMenu({ links, reduceMotion, onPick }: { links: NavItem[]; reduceMotion: boolean; onPick: () => void }) {
   // Reduce Motion: the menu and its links appear and disappear instantly.
   const instant = { duration: 0 };
   return (
@@ -192,7 +196,7 @@ function PhoneMenu({ reduceMotion, onPick }: { reduceMotion: boolean; onPick: ()
       exit={{ opacity: 0, transition: reduceMotion ? instant : { duration: MENU_CLOSE_S, ease: "easeOut" } }}
     >
       <ul className={`flex flex-col gap-5 font-serif text-[36px] leading-none text-ink ${SHADOW}`}>
-        {LINKS.map((link, i) => (
+        {links.map((link, i) => (
           <motion.li
             key={link.label}
             initial={{ opacity: 0, y: 10 }}

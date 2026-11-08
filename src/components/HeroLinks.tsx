@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { links } from "@/data/links";
 import { FileTextIcon, GithubIcon, LinkedinIcon, MailIcon } from "@/icons/lineIcons";
 
@@ -13,20 +14,30 @@ const HERO_LINKS = [
   { label: "Email", href: `mailto:${links.email}`, Icon: MailIcon },
 ];
 
+const BUTTON =
+  "flex size-11 items-center justify-center rounded-full border border-ink/38 bg-tint/34 text-ink/82 transition-colors duration-200 ease-out hover:border-accent/60 hover:text-accent motion-reduce:transition-none";
+
 export default function HeroLinks() {
   return (
     <ul role="list" className="flex flex-wrap gap-3">
       {HERO_LINKS.map(({ label, href, Icon }) => (
         <li key={label}>
-          <a
-            href={href}
-            // Email opens a mail draft in place; the rest open in a new tab so the site stays open.
-            {...(href.startsWith("mailto:") ? {} : { target: "_blank", rel: "noopener noreferrer" })}
-            aria-label={label}
-            className="flex size-11 items-center justify-center rounded-full border border-ink/38 bg-tint/34 text-ink/82 transition-colors duration-200 ease-out hover:border-accent/60 hover:text-accent motion-reduce:transition-none"
-          >
-            <Icon size={18} />
-          </a>
+          {href.startsWith("/") ? (
+            // The /resume page opens in place, through Link so the sky mode carries over.
+            <Link href={href} aria-label={label} className={BUTTON}>
+              <Icon size={18} />
+            </Link>
+          ) : (
+            <a
+              href={href}
+              // Email opens a mail draft in place; the rest open in a new tab so the site stays open.
+              {...(href.startsWith("mailto:") ? {} : { target: "_blank", rel: "noopener noreferrer" })}
+              aria-label={label}
+              className={BUTTON}
+            >
+              <Icon size={18} />
+            </a>
+          )}
         </li>
       ))}
     </ul>
