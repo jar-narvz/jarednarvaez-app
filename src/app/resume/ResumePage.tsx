@@ -11,8 +11,9 @@ import { TEAL_SEA } from "@/lib/sky/subpagePalettes";
 
 // The /resume page (decided 2026-11-08): the subpage header, "my résumé" with download and
 // open-in-a-new-tab buttons, the PDF drawn as paper by pdf.js (option B), an "open the pdf →"
-// fallback, then the shared contact block and the footer, like /projects. The viewer is capped at
-// 816px, a letter page at 100% (8.5in at 96px per inch).
+// fallback, then the shared contact block and the footer, like /projects. The heading row spans the
+// content column like /projects' heading; the viewer is capped at 816px, a letter page at 100%
+// (8.5in at 96px per inch), and centered in the column (Jared, 2026-11-08).
 
 // pdf.js loads only here and only in the browser, never in the home page's bundle.
 const PdfPages = dynamic(() => import("@/components/PdfPages"), { ssr: false });
@@ -70,7 +71,7 @@ export default function ResumePage() {
       <SubpageHeader dark={dark} onFlip={flip} />
 
       <main className="pr-(--content-r) pl-(--content-l) pt-24 [text-shadow:var(--text-shadow)]">
-        <div className={`flex items-end justify-between gap-4 ${VIEWER_MAX}`}>
+        <div className="flex items-end justify-between gap-4">
           <h1 className="font-serif text-[clamp(32px,4vw,40px)] leading-[1.1] font-normal tracking-[-0.02em]">
             my résumé
           </h1>
@@ -84,15 +85,16 @@ export default function ResumePage() {
           </div>
         </div>
 
-        <div className={`mt-8 ${VIEWER_MAX} [text-shadow:none]`}>
-          <PdfPages file={FILE} />
+        <div className={`mx-auto mt-8 ${VIEWER_MAX}`}>
+          <div className="[text-shadow:none]">
+            <PdfPages file={FILE} />
+          </div>
+          <p className="mt-4">
+            <UnderlineLink href={FILE} newTab>
+              open the pdf →
+            </UnderlineLink>
+          </p>
         </div>
-
-        <p className="mt-4">
-          <UnderlineLink href={FILE} newTab>
-            open the pdf →
-          </UnderlineLink>
-        </p>
 
         {/* The home page's contact block under a full-width rule, spaced like /projects. */}
         <section

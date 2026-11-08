@@ -45,6 +45,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${newsreader.variable} ${schibstedGrotesk.variable} ${plexMono.variable} antialiased`}
+      // Some phone browsers add their own attribute to <html> before React loads (seen on Jared's
+      // phone, 2026-11-08), which React flags as a mismatch. This covers only <html>'s own
+      // attributes, not anything inside it.
+      suppressHydrationWarning
     >
       <body className="font-sans text-ink">
         <Sky />

@@ -5,10 +5,33 @@ import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
-// The /resume viewer (option B, chosen 2026-11-08): each PDF page drawn by pdf.js as a sheet of paper on the sky. The text layer keeps the
-// text selectable and the annotation layer keeps the PDF's links clickable. Loaded only on this
-// page that uses it (next/dynamic, no server render), so pdf.js never reaches the home page's bundle.
-pdfjs.GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/build/pdf.worker.min.mjs", import.meta.url).toString();
+// The /resume viewer (option B, chosen 2026-11-08): each PDF page drawn by pdf.js as a sheet of
+// paper on the sky. The text layer keeps the text selectable and the annotation layer keeps the
+// PDF's links clickable. Loaded only on the page that uses it (next/dynamic, no server render), so
+// pdf.js never reaches the home page's bundle.
+// The legacy worker, like the legacy library (aliased in next.config.ts): it carries fallbacks for
+// JavaScript features phone browsers don't have yet.
+pdfjs.GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/legacy/build/pdf.worker.min.mjs", import.meta.url).toString();
+
+// pdf.js reads each page's text with `for await` over a ReadableStream, which Safari's engine (all
+// iPhone browsers) doesn't support yet and the legacy build doesn't patch, so the text layer
+// crashed on Jared's phone (2026-11-08). Same behavior as the built-in version: read chunks until
+// done, then let go of the stream.
+type IterableStream = ReadableStream & { [Symbol.asyncIterator]?: () => AsyncIterator<unknown> };
+if (typeof ReadableStream !== "undefined" && !(ReadableStream.prototype as IterableStream)[Symbol.asyncIterator]) {
+  (ReadableStream.prototype as IterableStream)[Symbol.asyncIterator] = async function* (this: ReadableStream) {
+    const reader = this.getReader();
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) return;
+        yield value;
+      }
+    } finally {
+      reader.releaseLock();
+    }
+  };
+}
 
 const LETTER = 11 / 8.5; // page height / width
 
