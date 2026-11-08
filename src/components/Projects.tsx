@@ -118,8 +118,9 @@ function ProjectRow({
   delayMs: number;
 }) {
   const ruleDelayMs = sectionOpen ? delayMs - RULE_LEAD_MS : delayMs;
-  // Published story: the row (header + cell) opens it through a stretched title link. The GitHub
-  // circle, the site link and the screenshot sit above it (z-10) and keep their own actions.
+  // Published story: the cell opens it through a link stretched over the cell (Jared, 2026-11-08:
+  // the cell only, not the row header). The GitHub circle, the site link and the screenshot sit
+  // above it (z-10) and keep their own actions.
   const linked = isLinkedStory(project);
   const lift = linked ? "relative z-10" : "";
 
@@ -130,7 +131,7 @@ function ProjectRow({
 
       <div
         style={{ transitionDelay: `${delayMs}ms` }}
-        className={`${linked ? "relative " : ""}transition-[opacity,translate] duration-450 ease-[ease] motion-reduce:transition-none ${
+        className={`transition-[opacity,translate] duration-450 ease-[ease] motion-reduce:transition-none ${
           sectionOpen ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
         }`}
       >
@@ -142,16 +143,7 @@ function ProjectRow({
           {/* Ink, turning accent on hover only: with every project open, the spec's "accent while
               open" would leave every title gold (decided 2026-10-30). */}
           <h3 className="font-serif text-[clamp(24px,3vw,30px)] leading-[1.15] font-normal tracking-[-0.015em] transition-colors duration-300 group-hover:text-accent motion-reduce:transition-none">
-            {linked ? (
-              <Link
-                href={`/projects/${project.slug}`}
-                className="outline-none after:absolute after:inset-0 after:rounded-[14px] focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-accent"
-              >
-                {project.title}
-              </Link>
-            ) : (
-              project.title
-            )}
+            {project.title}
           </h3>
           <p className="text-right text-[13px] leading-[1.4] text-ink/70 max-sm:col-start-2 max-sm:row-start-2 max-sm:text-left">
             {project.type}
@@ -162,7 +154,16 @@ function ProjectRow({
 
         {/* The cell: same material as the tech stack pills, indented to start under the title. It
             fades up with its row. */}
-        <div className="mt-0.5 mb-4.5 ml-12.5 flex gap-4.5 rounded-[14px] border border-ink/30 bg-tint/34 p-3.5 max-sm:ml-0 max-sm:flex-col">
+        <div
+          className={`${linked ? "relative " : ""}mt-0.5 mb-4.5 ml-12.5 flex gap-4.5 rounded-[14px] border border-ink/30 bg-tint/34 p-3.5 max-sm:ml-0 max-sm:flex-col`}
+        >
+          {linked && (
+            <Link
+              href={`/projects/${project.slug}`}
+              aria-label={project.title}
+              className="absolute inset-0 rounded-[14px] outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            />
+          )}
           <ProjectImage
             project={project}
             index={index}
