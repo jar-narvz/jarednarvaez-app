@@ -527,6 +527,13 @@ The sun glow's y is in the coast's 680×380 space (horizon 272); the abstract sc
 - **Contact block:** the home page's contact block (Connect → Contact block) unchanged: label with sparkle, "reach out!", the line, email with the copy pill, LinkedIn · GitHub · Résumé. No leave a star or star hint, and not a full screen tall: it pads like a normal section (`clamp(72px, 12vh, 140px)`). Colors follow the page's palette and light/dark version. The footer line sits under it.
 - **Build:** one shared contact block component for the home page and every subpage.
 
+### /resume (decided 2026-11-08)
+
+- **Layout:** like /projects: the subpage header, teal sea, then "my résumé" (the /projects heading style) with two round icon buttons at right (download, open the PDF in a new tab; 36px, the project cards' GitHub circle material, 16px line icons). Below it the PDF, then an "open the pdf →" link, then the rule, contact block and footer line.
+- **Viewer (option B):** each PDF page drawn by pdf.js (`react-pdf`) at the column's width, capped at 816px (a letter page at 100%), as a white sheet with 4px corners and a soft plum shadow (`0 6px 16px` at 35%, the scrapbook prints' shadow). Text stays selectable and the PDF's links stay clickable. A blank sheet holds the space while it loads. pdf.js loads only on this page. No animation.
+- **The PDF:** `public/Jared-Narvaez-Resume.pdf`, a fixed name so outside links (GitHub profile) keep working when it's swapped.
+- **Links:** the home nav's "résumé", the subpage header's "résumé", the hero's résumé button and the contact block's "Résumé" all open /resume in the same tab.
+
 ### /projects cards (decided 2026-10-30)
 
 - **Layout:** each group (h2: group name + count, a 1px rule at 22% ink under it) holds a grid of cards with 16px gaps: 3 columns on desktop (`lg`), 2 on tablets (`sm`), 1 on phones. Both groups keep 3 columns, so "personal" leaves its third slot empty.

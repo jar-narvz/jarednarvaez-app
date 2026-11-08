@@ -21,17 +21,17 @@ const LINKS = [
   { label: "about", href: "#about" },
   { label: "experience", href: "#experience" },
   { label: "projects", href: "/projects" },
-  { label: "résumé", href: links.resume, newTab: true },
+  { label: "résumé", href: links.resume },
   { label: "contact", href: "#contact" },
 ];
 
 /**
- * One nav link. The résumé PDF opens in a new tab (as in connect) so the site stays open. /projects
- * goes through Next's Link, so the page doesn't reload and the sky mode (kept in memory) carries
- * over to its light/dark. Section links are plain in-page anchors.
+ * One nav link. /projects and /resume go through Next's Link, so the page doesn't reload and the
+ * sky mode (kept in memory) carries over to their light/dark. Section links are plain in-page
+ * anchors.
  */
 function NavLink({ link, className, onClick }: { link: (typeof LINKS)[number]; className?: string; onClick?: () => void }) {
-  if (link.href.startsWith("/") && !link.newTab) {
+  if (link.href.startsWith("/")) {
     return (
       <Link href={link.href} className={className} onClick={onClick}>
         {link.label}
@@ -39,12 +39,7 @@ function NavLink({ link, className, onClick }: { link: (typeof LINKS)[number]; c
     );
   }
   return (
-    <a
-      href={link.href}
-      {...(link.newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className={className}
-      onClick={onClick}
-    >
+    <a href={link.href} className={className} onClick={onClick}>
       {link.label}
     </a>
   );

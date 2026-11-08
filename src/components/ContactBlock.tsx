@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState, type Ref } from "react";
 import SectionHeading from "@/components/SectionHeading";
 import SectionLabel from "@/components/SectionLabel";
@@ -35,14 +36,21 @@ export default function ContactBlock({ ref }: { ref?: Ref<HTMLDivElement> }) {
       <ul role="list" className="mt-3.5 flex gap-4 text-[14px]">
         {CONTACT_LINKS.map((link) => (
           <li key={link.label}>
-            <a
-              href={link.href}
-              // External destinations open in a new tab; "#" placeholders stay put.
-              {...(link.href.startsWith("#") ? {} : { target: "_blank", rel: "noopener noreferrer" })}
-              className="border-b border-underline pb-px"
-            >
-              {link.label}
-            </a>
+            {link.href.startsWith("/") ? (
+              // Pages on this site (the /resume page) open in place.
+              <Link href={link.href} className="border-b border-underline pb-px">
+                {link.label}
+              </Link>
+            ) : (
+              <a
+                href={link.href}
+                // External destinations open in a new tab; "#" placeholders stay put.
+                {...(link.href.startsWith("#") ? {} : { target: "_blank", rel: "noopener noreferrer" })}
+                className="border-b border-underline pb-px"
+              >
+                {link.label}
+              </a>
+            )}
           </li>
         ))}
       </ul>

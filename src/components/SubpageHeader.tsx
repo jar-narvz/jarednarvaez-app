@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import Monogram from "@/components/Monogram";
 import { MoonIcon, SunIcon } from "@/components/SkyControls";
@@ -14,7 +15,8 @@ import { links } from "@/data/links";
 
 const LINKS = [
   { label: "home", href: "/" },
-  { label: "résumé", href: links.resume, newTab: true },
+  // Through Next's Link, so the light/dark choice carries over to /resume.
+  { label: "résumé", href: links.resume, client: true },
   { label: "contact", href: "#contact" },
 ];
 
@@ -54,13 +56,15 @@ export default function SubpageHeader({ dark, onFlip }: { dark: boolean; onFlip:
             <ul className="flex items-center gap-7 max-sm:gap-5">
               {LINKS.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
-                    {...(link.newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                    className="transition-colors hover:text-ink"
-                  >
-                    {link.label}
-                  </a>
+                  {"client" in link ? (
+                    <Link href={link.href} className="transition-colors hover:text-ink">
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <a href={link.href} className="transition-colors hover:text-ink">
+                      {link.label}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>

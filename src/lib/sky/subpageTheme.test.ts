@@ -4,6 +4,7 @@ import { homeChoice, isSubpage, startsDark } from "./subpageTheme";
 describe("isSubpage", () => {
   it("covers /projects and its write-ups", () => {
     expect(isSubpage("/projects")).toBe(true);
+    expect(isSubpage("/resume")).toBe(true);
     expect(isSubpage("/projects/secure-file-sharing")).toBe(true);
   });
 
