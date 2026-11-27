@@ -81,6 +81,29 @@ export const projects: Project[] = [
     order: 2,
   },
   {
+    // Summary is the repo's GitHub description (plus a closing period); tags from the README's
+    // "How it works" (Rust CLI and TUI, SwiftUI menu-bar app). Demo is the README's VHS GIF,
+    // recorded from synthetic fixtures (fixtures/sessions-phase14), so no real prompts show.
+    slug: "multi-link",
+    title: "multi-link",
+    type: "Personal project",
+    year: "2026",
+    group: "personal",
+    summary:
+      "See every Claude Code and Codex session on your Mac in one place: which ones need you, and which Claude session handed work to which Codex run.",
+    tags: ["Rust", "SwiftUI"],
+    image: {
+      src: "/multi-link-demo-poster.png",
+      alt: "multi-link's terminal dashboard home screen: each repo's Claude and Codex sessions, which one is waiting on you, and its latest hand-off.",
+    },
+    demo: {
+      src: "/multi-link-demo.gif",
+      poster: "/multi-link-demo-poster.png",
+      alt: "Demo: multi-link's terminal dashboard goes from the home screen to a repo timeline where a Claude session hands a step to Codex, that step's graph, and the live grid of every agent.",
+    },
+    github: "https://github.com/jar-narvz/multi-link",
+  },
+  {
     slug: "secure-file-sharing",
     title: "Secure File Sharing System",
     type: "Class project",
